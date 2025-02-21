@@ -1,15 +1,33 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SavePlayerMovements : MonoBehaviour
 {
     public Transform player;
+    public List<Vector3> allPositions;
+    public List<Quaternion> allQuaternions;
+    public bool isRecording=false;
+
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        if(Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.LeftShift) )
-            Debug.Log("xyz: "+player.position);
-        else if(Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.LeftShift) )
-            Debug.Log("xyz: "+player.position);
+        if(isRecording)
+        {
+            allPositions.Add(player.position);
+            allQuaternions.Add(player.rotation);
+        }
+    }
+
+
+    public void StartRecording(){
+        isRecording = true;
+        allPositions = new List<Vector3>();
+        allQuaternions = new List<Quaternion>();
+    }
+
+
+    public void StopRecording(){
+        isRecording = false;
     }
 }
