@@ -24,16 +24,16 @@ public class UIManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape) && cursorlocked)
         {
-            Cursor.lockState = CursorLockMode.None;
             cursorlocked=false;
+            Cursor.lockState = CursorLockMode.None;
             gameScreen.SetActive(false);
             escapeScreen.SetActive(true);
             Debug.Log("Open");
         }
-        else
+        else if(Input.GetKeyDown(KeyCode.Escape))
         {
-            Cursor.lockState = CursorLockMode.Locked;
             cursorlocked=true;
+            Cursor.lockState = CursorLockMode.Locked;
             escapeScreen.SetActive(false);
             gameScreen.SetActive(true);
             Debug.Log("Close");
@@ -48,8 +48,8 @@ public class UIManager : MonoBehaviour
 
     public void ReturnToGame()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         cursorlocked=true;
+        Cursor.lockState = CursorLockMode.Locked;
         escapeScreen.SetActive(false);
         gameScreen.SetActive(true);
     }
