@@ -7,13 +7,21 @@ public class ReplayMovements : MonoBehaviour
     private List<Quaternion> recordedQuaternions;
     private int currentIndex;
     public SavePlayerMovements savePlayerMovements;
+    public float yOffset=1f;
+    public Vector3 initialPosition = new Vector3(0,0,0);
     private Coroutine replay=null;
+
+    private void Start(){
+        Vector3 position = initialPosition;
+        position.y += yOffset;
+        transform.position = position;
+    }
 
     public void StartReplaying()
     {
         if(replay == null)
         {
-            Debug.Log("Replay");
+            //Debug.Log("Replay");
             recordedPositions = savePlayerMovements.allPositions;
             recordedQuaternions = savePlayerMovements.allQuaternions;
             replay = StartCoroutine(ReplayMovement());
@@ -25,7 +33,9 @@ public class ReplayMovements : MonoBehaviour
         currentIndex=0;
         while (currentIndex < recordedPositions.Count)
         {
-            transform.position = recordedPositions[currentIndex];
+            Vector3 position = recordedPositions[currentIndex];
+            position.y += yOffset;
+            transform.position = position;
             transform.rotation = recordedQuaternions[currentIndex];
             currentIndex++;
             //Debug.Log("WTF");
@@ -39,7 +49,7 @@ public class ReplayMovements : MonoBehaviour
         {
             StopCoroutine(replay);
             replay=null;
-            Debug.Log("Stopped");
+            //Debug.Log("Stopped");
         }
     }
 }

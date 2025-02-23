@@ -23,7 +23,10 @@ public class PersonLook : MonoBehaviour
         if(uIManager.cursorlocked)
         {
             // Get smooth velocity.
-            Vector2 mouseDelta = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
+            Vector2 mouseDelta = new Vector2();
+            if (Cursor.lockState == CursorLockMode.Locked) // Только если мышь заблокирована
+                mouseDelta = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
+
             Vector2 rawFrameVelocity = Vector2.Scale(mouseDelta, Vector2.one * sensitivity);
             frameVelocity = Vector2.Lerp(frameVelocity, rawFrameVelocity, 1 / smoothing);
             velocity += frameVelocity;
@@ -32,6 +35,7 @@ public class PersonLook : MonoBehaviour
             // Rotate camera up-down and controller left-right from velocity.
             transform.localRotation = Quaternion.AngleAxis(-velocity.y, Vector3.right);
             character.localRotation = Quaternion.AngleAxis(velocity.x, Vector3.up);
+            Debug.Log("Rotate");
         }
     }
 }
