@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class ReplayMovements : MonoBehaviour
 {
-    private List<Vector3> recordedPositions;
-    private List<Quaternion> recordedQuaternions;
+    public List<Vector3> recordedPositions;
+    public List<Quaternion> recordedQuaternions;
     private int currentIndex;
     public SavePlayerMovements savePlayerMovements;
-    public float yOffset=1f;
-    public Vector3 initialPosition = new Vector3(0,0,0);
+    public float yOffset;
+    public Vector3 initialPosition;
     private Coroutine replay=null;
 
     private void Start(){
@@ -17,13 +17,17 @@ public class ReplayMovements : MonoBehaviour
         transform.position = position;
     }
 
+    public void getData()
+    {
+        recordedPositions = savePlayerMovements.allPositions;
+        recordedQuaternions = savePlayerMovements.allQuaternions;
+    }
+
     public void StartReplaying()
     {
         if(replay == null)
         {
             //Debug.Log("Replay");
-            recordedPositions = savePlayerMovements.allPositions;
-            recordedQuaternions = savePlayerMovements.allQuaternions;
             replay = StartCoroutine(ReplayMovement());
         }
     }
@@ -44,7 +48,7 @@ public class ReplayMovements : MonoBehaviour
         StopReplay();
     }
 
-    public void StopReplay(){
+    public void StopReplaying(){
         if(replay!=null)
         {
             StopCoroutine(replay);

@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
     public bool cursorlocked;
     public GameObject gameScreen, escapeScreen;
     public SavePlayerMovements savePlayerMovements;
-    public TMP_Text isRecordingText;
+    public TMP_Text isRecordingText, lastFirstRoundText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     
@@ -52,5 +52,11 @@ public class UIManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         escapeScreen.SetActive(false);
         gameScreen.SetActive(true);
+    }
+
+
+    public void OutputRoundStatus(String output)
+    {
+        lastFirstRoundText.text = output;
     }
 }
