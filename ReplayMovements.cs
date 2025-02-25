@@ -7,14 +7,13 @@ public class ReplayMovements : MonoBehaviour
     public List<Quaternion> recordedQuaternions;
     private int currentIndex;
     public SavePlayerMovements savePlayerMovements;
-    public float yOffset;
+    public float yOffset, zOffset;
     public Vector3 initialPosition;
+    public Quaternion initialRotation;
     private Coroutine replay=null;
 
     private void Start(){
-        Vector3 position = initialPosition;
-        position.y += yOffset;
-        transform.position = position;
+        Reset();
     }
 
     public void getData()
@@ -45,7 +44,11 @@ public class ReplayMovements : MonoBehaviour
             //Debug.Log("WTF");
             yield return new WaitForFixedUpdate(); // Повторяем с той же частотой
         }
-        StopReplay();
+        
+        while(true)
+        {
+            yield return new WaitForFixedUpdate();
+        }
     }
 
     public void StopReplaying(){
@@ -55,5 +58,16 @@ public class ReplayMovements : MonoBehaviour
             replay=null;
             //Debug.Log("Stopped");
         }
+
+        Reset();
+    }
+
+    public void Reset()
+    {
+        Vector3 position = initialPosition;
+        position.y += yOffset;
+        position.z += zOffset;
+        transform.position = position;
+        transform.rotation = initialRotation;
     }
 }

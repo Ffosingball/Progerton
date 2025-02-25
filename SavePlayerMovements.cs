@@ -7,6 +7,7 @@ public class SavePlayerMovements : MonoBehaviour
     public List<Vector3> allPositions;
     public List<Quaternion> allQuaternions;
     public bool isRecording=false;
+    public ReplayManager replayManager;
 
 
     // Update is called once per frame
@@ -29,5 +30,6 @@ public class SavePlayerMovements : MonoBehaviour
 
     public void StopRecording(){
         isRecording = false;
+        replayManager.resetData();
     }
 }

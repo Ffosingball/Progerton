@@ -55,7 +55,7 @@ public class UIManager : MonoBehaviour
     }
 
 
-    public void OutputRoundStatus(String output)
+    public void OutputRoundStatus(string output)
     {
         lastFirstRoundText.text = output;
     }
