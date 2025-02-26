@@ -2,7 +2,7 @@ using UnityEngine;
 
 /*This class checks if someone inside the trigger*/
 
-public class TriggerZone : MonoBehaviour
+public class TriggerBehaviour : MonoBehaviour
 {
     [SerializeField]
     private string targetTag = "Player"; // tag of object which we find
@@ -10,8 +10,12 @@ public class TriggerZone : MonoBehaviour
     private Material triggerOn;  
     [SerializeField]
     private Material triggerOff;
-    
-    private bool isInside = false;
+    [SerializeField]
+    private int correspondingFlag; //this field stores which flag in the array of all flags
+    //this trigger changes
+
+    public TriggersManager triggersManager;
+
     private int numOfObjectsInside=0; //This is required for correct working of the trigger
 
 
@@ -25,7 +29,7 @@ public class TriggerZone : MonoBehaviour
     {
         if (other.CompareTag(targetTag)) // Check tag of the object
         {
-            isInside = true;
+            triggersManager.setFlag(correspondingFlag, true);
             GetComponent<Renderer>().material = triggerOn;
             numOfObjectsInside++;
         }
@@ -39,7 +43,7 @@ public class TriggerZone : MonoBehaviour
             numOfObjectsInside--;
             if (numOfObjectsInside == 0) //Check if somebody still there
             {
-                isInside = false;
+                triggersManager.setFlag(correspondingFlag, false);
                 GetComponent<Renderer>().material = triggerOff;
             }
         }
