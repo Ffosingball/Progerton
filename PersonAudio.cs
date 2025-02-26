@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using UnityEngine;
 
+/*This class manages audio of moving of the character on the ground*/
+
 public class PersonAudio : MonoBehaviour
 {
     [Header("Step")]
@@ -27,6 +29,7 @@ public class PersonAudio : MonoBehaviour
         stepAudio = GetOrCreateAudioSource("Step Audio");
         runningAudio = GetOrCreateAudioSource("Running Audio");
     }
+
 
     void FixedUpdate()
     {
@@ -93,6 +96,7 @@ public class PersonAudio : MonoBehaviour
         result.transform.SetParent(transform, false);
         return result;
     }
+
 
     static void PlayRandomClip(AudioSource audio, AudioClip[] clips)
     {

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/*This class manages all ui changes*/
 
 public class UIManager : MonoBehaviour
 {
@@ -13,16 +14,17 @@ public class UIManager : MonoBehaviour
     private TMP_Text isRecordingText;
     [SerializeField]
     private TMP_Text lastFirstRoundText;
+    [SerializeField]
+    private TMP_Text roundText;
 
     public SavePlayerMovements savePlayerMovements;
 
     private bool cursorlocked;
 
 
+    //Getter for cursorLocked
     public bool getCursorlocked(){return cursorlocked;}
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     
     void Start()
     {
@@ -31,10 +33,10 @@ public class UIManager : MonoBehaviour
         cursorlocked=true;
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape) && cursorlocked)
+        if(Input.GetKeyDown(KeyCode.Escape) && cursorlocked)//open pause menu
         {
             cursorlocked=false;
             Cursor.lockState = CursorLockMode.None;
@@ -42,15 +44,12 @@ public class UIManager : MonoBehaviour
             escapeScreen.SetActive(true);
             //Debug.Log("Open");
         }
-        else if(Input.GetKeyDown(KeyCode.Escape))
+        else if(Input.GetKeyDown(KeyCode.Escape)) //return to game
         {
-            cursorlocked=true;
-            Cursor.lockState = CursorLockMode.Locked;
-            escapeScreen.SetActive(false);
-            gameScreen.SetActive(true);
-            //Debug.Log("Close");
+            ReturnToGame();
         }
 
+        //Check status and return
         if(savePlayerMovements.isRecording)
             isRecordingText.text = "Recording...";
         else
@@ -58,6 +57,7 @@ public class UIManager : MonoBehaviour
     }
 
 
+    //Unpause the game
     public void ReturnToGame()
     {
         cursorlocked=true;
@@ -70,5 +70,11 @@ public class UIManager : MonoBehaviour
     public void OutputRoundStatus(string output)
     {
         lastFirstRoundText.text = output;
+    }
+
+
+    public void OutputRoundNumber(string rText)
+    {
+        roundText.text = rText;
     }
 }

@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+/*This class manages camera rotation of the character on the ground*/
+
 public class PersonLook : MonoBehaviour
 {
     [SerializeField]
@@ -20,9 +22,10 @@ public class PersonLook : MonoBehaviour
         character = GetComponentInParent<FirstPersonMovement>().transform;
     }
 
+
     void Update()
     {
-        if(uIManager.getCursorlocked())
+        if(uIManager.getCursorlocked()) //Check that cursor is locked
         {
             // Get smooth velocity.
             Vector2 mouseDelta = new Vector2();

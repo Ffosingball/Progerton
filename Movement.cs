@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+/*This class manages movement of the character on the ground*/
+
 public class Movement : MonoBehaviour
 {
     [SerializeField]
@@ -16,17 +18,20 @@ public class Movement : MonoBehaviour
     
     public UIManager uIManager;
 
-
-    public bool getIsRunning(){return IsRunning;}
-
     private Rigidbody rigidbody;
     private bool IsRunning { get; private set; }
+
+
+    //Getter for IsRunning
+    public bool getIsRunning(){return IsRunning;}
+
 
     void Awake()
     {
         // Get the rigidbody on this.
         rigidbody = GetComponent<Rigidbody>();
     }
+
 
     void FixedUpdate()
     {

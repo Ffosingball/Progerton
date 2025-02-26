@@ -1,23 +1,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*This class records player movements and stores them*/
+
 public class SavePlayerMovements : MonoBehaviour
 {
     public Transform player;
-    public ReplayManager replayManager;
 
     private List<Vector3> allPositions;
     private List<Quaternion> allQuaternions;
     private bool isRecording=false;
 
 
+    //All getters and setters
     public void setAllPositions(List<Vector3> allPositions){this.allPositions = allPositions;}
     public void setAllQuaternions(List<Quaternion> allQuaternions){this.allQuaternions = allQuaternions;}
     public List<Vector3> getAllPositions(){return allPositions;}
     public List<Quaternion> getAllQuaternions(){return allQuaternions;}
 
 
-    // Update is called once per frame
+    //Records position of the player with fixedUpdate speed
     void FixedUpdate()
     {
         if(isRecording)
@@ -37,6 +39,5 @@ public class SavePlayerMovements : MonoBehaviour
 
     public void StopRecording(){
         isRecording = false;
-        replayManager.resetData();
     }
 }
