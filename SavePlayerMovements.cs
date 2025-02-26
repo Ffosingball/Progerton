@@ -4,10 +4,17 @@ using UnityEngine;
 public class SavePlayerMovements : MonoBehaviour
 {
     public Transform player;
-    public List<Vector3> allPositions;
-    public List<Quaternion> allQuaternions;
-    public bool isRecording=false;
     public ReplayManager replayManager;
+
+    private List<Vector3> allPositions;
+    private List<Quaternion> allQuaternions;
+    private bool isRecording=false;
+
+
+    public void setAllPositions(List<Vector3> allPositions){this.allPositions = allPositions;}
+    public void setAllQuaternions(List<Quaternion> allQuaternions){this.allQuaternions = allQuaternions;}
+    public List<Vector3> getAllPositions(){return allPositions;}
+    public List<Quaternion> getAllQuaternions(){return allQuaternions;}
 
 
     // Update is called once per frame

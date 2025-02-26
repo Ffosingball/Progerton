@@ -2,9 +2,14 @@ using UnityEngine;
 
 public class TriggerZone : MonoBehaviour
 {
-    public string targetTag = "Player"; // Тег объекта, который мы ищем
+    [SerializeField]
+    private string targetTag = "Player"; // Тег объекта, который мы ищем
+    [SerializeField]
+    private Material triggerOn;
+    [SerializeField]
+    private Material triggerOff;
+    
     private bool isInside = false; // Флаг, находится ли объект внутри триггера
-    public Material triggerOn, triggerOff;
     private int numOfObjectsInside=0;
 
     void Start(){

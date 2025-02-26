@@ -3,19 +3,24 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    public float speed = 5;
-
+    [SerializeField]
+    private float speed = 5;
     [Header("Running")]
-    public bool IsRunning { get; private set; }
-    public float runSpeed = 9;
-    public KeyCode runningKey = KeyCode.LeftShift;
-
-    Rigidbody rigidbody;
+    [SerializeField]
+    private float runSpeed = 9;
+    [SerializeField]
+    private KeyCode runningKey = KeyCode.LeftShift;
     /// <summary> Functions to override movement speed. Will use the last added override. </summary>
-    public List<System.Func<float>> speedOverrides = new List<System.Func<float>>();
+    [SerializeField]
+    private List<System.Func<float>> speedOverrides = new List<System.Func<float>>();
+    
     public UIManager uIManager;
 
 
+    public bool getIsRunning(){return IsRunning;}
+
+    private Rigidbody rigidbody;
+    private bool IsRunning { get; private set; }
 
     void Awake()
     {
@@ -25,7 +30,7 @@ public class Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(uIManager.cursorlocked)
+        if(uIManager.getCursorlocked())
         {
             // Update IsRunning from input.
             IsRunning = Input.GetKey(runningKey);

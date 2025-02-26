@@ -5,10 +5,22 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    public bool cursorlocked;
-    public GameObject gameScreen, escapeScreen;
+    [SerializeField]
+    private GameObject gameScreen;
+    [SerializeField]
+    private GameObject escapeScreen;
+    [SerializeField]
+    private TMP_Text isRecordingText;
+    [SerializeField]
+    private TMP_Text lastFirstRoundText;
+
     public SavePlayerMovements savePlayerMovements;
-    public TMP_Text isRecordingText, lastFirstRoundText;
+
+    private bool cursorlocked;
+
+
+    public bool getCursorlocked(){return cursorlocked;}
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     

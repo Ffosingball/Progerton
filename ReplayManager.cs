@@ -3,16 +3,25 @@ using UnityEngine;
 
 public class ReplayManager : MonoBehaviour
 {
-    public int numOfRounds;
-    private int currentRound=-1;
-    private List<GameObject> allReplayers;
-    public float yOffset=1f, zOffset=1f;
-    public Vector3 initialPosition = new Vector3(0,0,0); 
-    public Quaternion initialRotation;
-    public GameObject replayerPrefab;
+    [SerializeField]
+    private int numOfRounds=3;
+    [SerializeField]
+    private float yOffset=1f;
+    [SerializeField]
+    private float zOffset=1f;
+    [SerializeField]
+    private Vector3 initialPosition = new Vector3(0,0,0); 
+    [SerializeField]
+    private Quaternion initialRotation;
+    [SerializeField]
+    private GameObject replayerPrefab;
+
     public SavePlayerMovements savePlayerMovements;
     public UIManager uIManager;
+
     private bool isReplaying=false;
+    private int currentRound=-1;
+    private List<GameObject> allReplayers;
 
 
     private void Start()
@@ -36,6 +45,8 @@ public class ReplayManager : MonoBehaviour
         }
         else
         {
+            uIManager.OutputRoundNumber("Round "+currentRound);
+
             GameObject newReplay = Instantiate(replayerPrefab, new Vector3(0,0,0), Quaternion.Euler(0,0,0));
             ReplayMovements newRep = newReplay.GetComponent<ReplayMovements>();
             newRep.savePlayerMovements = savePlayerMovements;
@@ -63,12 +74,14 @@ public class ReplayManager : MonoBehaviour
         }
         else
         {
+            uIManager.OutputRoundNumber("Round "+currentRound);
+
             Destroy(allReplayers[currentRound+1]);
             allReplayers.RemoveAt(currentRound+1);
 
             ReplayMovements rep = allReplayers[currentRound].GetComponent<ReplayMovements>();
-            savePlayerMovements.allPositions = rep.recordedPositions;
-            savePlayerMovements.allQuaternions = rep.recordedQuaternions;
+            savePlayerMovements.setAllPositions(rep.getRecordedPositions());
+            savePlayerMovements.setAllQuaternions(rep.getRecordedQuaternions());
         }
     }
 

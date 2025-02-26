@@ -3,13 +3,15 @@
 public class PersonLook : MonoBehaviour
 {
     [SerializeField]
-    Transform character;
-    public float sensitivity = 2;
-    public float smoothing = 1.5f;
+    private float sensitivity = 2;
+    [SerializeField]
+    private float smoothing = 1.5f;
 
-    Vector2 velocity;
-    Vector2 frameVelocity;
     public UIManager uIManager;
+
+    private Vector2 velocity;
+    private Vector2 frameVelocity;
+    private Transform character;
 
 
     void Reset()
@@ -20,7 +22,7 @@ public class PersonLook : MonoBehaviour
 
     void Update()
     {
-        if(uIManager.cursorlocked)
+        if(uIManager.getCursorlocked())
         {
             // Get smooth velocity.
             Vector2 mouseDelta = new Vector2();

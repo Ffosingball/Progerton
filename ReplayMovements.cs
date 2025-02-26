@@ -3,14 +3,17 @@ using UnityEngine;
 
 public class ReplayMovements : MonoBehaviour
 {
-    public List<Vector3> recordedPositions;
-    public List<Quaternion> recordedQuaternions;
+    private List<Vector3> recordedPositions;
+    private List<Quaternion> recordedQuaternions;
     private int currentIndex;
-    public SavePlayerMovements savePlayerMovements;
-    public float yOffset, zOffset;
-    public Vector3 initialPosition;
-    public Quaternion initialRotation;
+    private SavePlayerMovements savePlayerMovements;
+    private float yOffset, zOffset;
+    private Vector3 initialPosition;
+    private Quaternion initialRotation;
     private Coroutine replay=null;
+
+    public List<Vector3> getRecordedPositions(){return recordedPositions;}
+    public List<Quaternion> getRecordedQuaternions(){return recordedQuaternions;}
 
     private void Start(){
         Reset();
@@ -18,8 +21,8 @@ public class ReplayMovements : MonoBehaviour
 
     public void getData()
     {
-        recordedPositions = savePlayerMovements.allPositions;
-        recordedQuaternions = savePlayerMovements.allQuaternions;
+        recordedPositions = savePlayerMovements.getAllPositions();
+        recordedQuaternions = savePlayerMovements.getAllQuaternions();
     }
 
     public void StartReplaying()

@@ -3,19 +3,21 @@ using UnityEngine;
 
 public class PersonAudio : MonoBehaviour
 {
-    public Movement character;
-
     [Header("Step")]
-    public AudioSource stepAudio;
-    public AudioSource runningAudio;
+    [SerializeField]
+    private AudioSource stepAudio;
+    [SerializeField]
+    private AudioSource runningAudio;
     [Tooltip("Minimum velocity for moving audio to play")]
     /// <summary> "Minimum velocity for moving audio to play" </summary>
-    public float velocityThreshold = .01f;
-    Vector2 lastCharacterPosition;
-    Vector2 CurrentCharacterPosition => new Vector2(character.transform.position.x, character.transform.position.z);
+    [SerializeField]
+    private float velocityThreshold = .01f;
 
+    private Vector2 lastCharacterPosition;
+    private Vector2 CurrentCharacterPosition => new Vector2(character.transform.position.x, character.transform.position.z);
+    private Movement character;
 
-    AudioSource[] MovingAudios => new AudioSource[] { stepAudio, runningAudio };
+    private AudioSource[] MovingAudios => new AudioSource[] { stepAudio, runningAudio };
 
 
     void Reset()
@@ -32,7 +34,7 @@ public class PersonAudio : MonoBehaviour
         float velocity = Vector3.Distance(CurrentCharacterPosition, lastCharacterPosition);
         if (velocity >= velocityThreshold)
         {
-            if (character.IsRunning)
+            if (character.getIsRunning())
             {
                 SetPlayingMovingAudio(runningAudio);
             }
