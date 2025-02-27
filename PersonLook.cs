@@ -16,13 +16,6 @@ public class PersonLook : MonoBehaviour
     private Vector2 frameVelocity;
 
 
-    void Reset()
-    {
-        // Get the character from the FirstPersonMovement in parents.
-        character = GetComponentInParent<FirstPersonMovement>().transform;
-    }
-
-
     void Update()
     {
         if(uIManager.getCursorlocked()) //Check that cursor is locked

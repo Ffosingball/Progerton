@@ -7,6 +7,7 @@ public class TriggersManager : MonoBehaviour
     [SerializeField]
     private int numOfTriggers = 3;
     private bool[] flags;
+    private bool endGame=false;
 
 
     //set all flags to false
@@ -24,5 +25,7 @@ public class TriggersManager : MonoBehaviour
     //getters and setters for particular flag
     public bool getFlag(int index){return flags[index];}
     public void setFlag(int index, bool flag){flags[index]=flag;}
+    public bool getEndGame(){return endGame;}
+    public void setEndGame(bool endGame){this.endGame=endGame;}
 
 }
