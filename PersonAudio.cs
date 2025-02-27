@@ -15,9 +15,10 @@ public class PersonAudio : MonoBehaviour
     [SerializeField]
     private float velocityThreshold = .01f;
 
+    public Movement character;
+
     private Vector2 lastCharacterPosition;
     private Vector2 CurrentCharacterPosition => new Vector2(character.transform.position.x, character.transform.position.z);
-    private Movement character;
 
     private AudioSource[] MovingAudios => new AudioSource[] { stepAudio, runningAudio };
 

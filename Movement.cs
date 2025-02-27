@@ -19,7 +19,7 @@ public class Movement : MonoBehaviour
     public UIManager uIManager;
 
     private Rigidbody rigidbody;
-    private bool IsRunning { get; private set; }
+    private bool IsRunning;
 
 
     //Getter for IsRunning

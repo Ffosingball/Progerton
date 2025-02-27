@@ -50,7 +50,7 @@ public class UIManager : MonoBehaviour
         }
 
         //Check status and return
-        if(savePlayerMovements.isRecording)
+        if(savePlayerMovements.getIsRecording())
             isRecordingText.text = "Recording...";
         else
             isRecordingText.text = "...";

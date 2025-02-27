@@ -15,7 +15,7 @@ public class ReplayManager : MonoBehaviour
     [SerializeField]
     private Vector3 initialPosition = new Vector3(0,0,0); //Initial position for reapeter to appear
     [SerializeField]
-    private Quaternion initialRotation = Quaternion.Euler(0, 0, 0);;  //Initial rotation of repeater
+    private Quaternion initialRotation = Quaternion.Euler(0, 0, 0);  //Initial rotation of repeater
     [SerializeField]
     private GameObject replayerPrefab;  //Prefab of the object which will replay players movements
 
@@ -45,12 +45,6 @@ public class ReplayManager : MonoBehaviour
 
         currentRound++;
 
-        if(currentRound!=0)//If its not the first round then 
-        {
-            //set repeater from previous true and reset its data
-            allReplayers[currentRound].SetActive(true);
-            resetData(currentRound-1);
-        }
         if(currentRound==numOfRounds)//Check if its the last round
         {
             uIManager.OutputRoundStatus("This is the last Round!");
@@ -58,6 +52,13 @@ public class ReplayManager : MonoBehaviour
         }
         else
         {
+            if(currentRound!=0)//If its not the first round then 
+            {
+                //set repeater from previous true and reset its data
+                allReplayers[currentRound-1].SetActive(true);
+                resetData(currentRound-1);
+            }
+
             uIManager.OutputRoundNumber("Round "+(currentRound+1));
 
             //Instantiate new repeater
@@ -65,10 +66,10 @@ public class ReplayManager : MonoBehaviour
             //Get its logic and set all required fields
             ReplayMovements newRep = newReplay.GetComponent<ReplayMovements>();
             newRep.savePlayerMovements = savePlayerMovements;
-            newRep.zOffset = zOffset*currentRound;
-            newRep.yOffset = yOffset;
-            newRep.initialPosition = initialPosition;
-            newRep.initialRotation = initialRotation;
+            newRep.setZOffset(zOffset*currentRound);
+            newRep.setYOffset(yOffset);
+            newRep.setInitialPosition(initialPosition);
+            newRep.setInitialRotation(initialRotation);
 
             newReplay.SetActive(false);
 

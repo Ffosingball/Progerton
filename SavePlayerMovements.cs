@@ -17,6 +17,7 @@ public class SavePlayerMovements : MonoBehaviour
     public void setAllQuaternions(List<Quaternion> allQuaternions){this.allQuaternions = allQuaternions;}
     public List<Vector3> getAllPositions(){return allPositions;}
     public List<Quaternion> getAllQuaternions(){return allQuaternions;}
+    public bool getIsRecording(){return isRecording;}
 
 
     //Records position of the player with fixedUpdate speed

@@ -14,9 +14,9 @@ public class TriggersManager : MonoBehaviour
     {
         flags = new bool[numOfTriggers];
 
-        foreach(bool flag in flags)
+        for(int i = 0; i < flags.Length; i++)
         {
-            flag=false;
+            flags[i]=false;
         }
     }
 

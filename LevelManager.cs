@@ -20,9 +20,9 @@ public class LevelManager : MonoBehaviour
 
 
     //changes mode from recording to the camera
-    public bool ChangeMode(){}
+    public void ChangeMode(){}
 
 
     //starts countdown, then starts timer and recording
-    public bool StartRound(){}
+    public void StartRound(){}
 }

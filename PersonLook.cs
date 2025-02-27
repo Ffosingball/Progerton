@@ -10,10 +10,10 @@ public class PersonLook : MonoBehaviour
     private float smoothing = 1.5f;
 
     public UIManager uIManager;
+    public Transform character;
 
     private Vector2 velocity;
     private Vector2 frameVelocity;
-    private Transform character;
 
 
     void Reset()

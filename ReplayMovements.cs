@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class ReplayMovements : MonoBehaviour
 {
+    public SavePlayerMovements savePlayerMovements;
+
     private List<Vector3> recordedPositions;
     private List<Quaternion> recordedQuaternions;
     private int currentIndex; //for the loop in the coroutune
-    private SavePlayerMovements savePlayerMovements;
     private float yOffset, zOffset;
     private Vector3 initialPosition;
     private Quaternion initialRotation;
@@ -18,6 +19,12 @@ public class ReplayMovements : MonoBehaviour
     //getters
     public List<Vector3> getRecordedPositions(){return recordedPositions;}
     public List<Quaternion> getRecordedQuaternions(){return recordedQuaternions;}
+
+    //setters
+    public void setZOffset(float zOffset){this.zOffset=zOffset;}
+    public void setYOffset(float yOffset){this.yOffset=yOffset;}
+    public void setInitialPosition(Vector3 initialPosition){this.initialPosition=initialPosition;}
+    public void setInitialRotation(Quaternion initialRotation){this.initialRotation=initialRotation;}
 
 
     private void Start(){
@@ -47,23 +54,28 @@ public class ReplayMovements : MonoBehaviour
     //on the fixedUpdate speed
     private IEnumerator<WaitForFixedUpdate> ReplayMovement()
     {
-        currentIndex=0;
-        while (currentIndex < recordedPositions.Count)
+        if(recordedPositions!=null)
         {
-            Vector3 position = recordedPositions[currentIndex];
-            position.y += yOffset;
-            transform.position = position;
-            transform.rotation = recordedQuaternions[currentIndex];
-            currentIndex++;
-            //Debug.Log("WTF");
-            yield return new WaitForFixedUpdate(); // Повторяем с той же частотой
+            currentIndex=0;
+            while (currentIndex < recordedPositions.Count)
+            {
+                Vector3 position = recordedPositions[currentIndex];
+                position.y += yOffset;
+                transform.position = position;
+                transform.rotation = recordedQuaternions[currentIndex];
+                currentIndex++;
+                //Debug.Log("WTF");
+                yield return new WaitForFixedUpdate(); // Повторяем с той же частотой
+            }
         }
 
+        //Debug.Log("Finished");
         //When it finishes all recorded movements than just waits on the 
         //same place
         while(true)
         {
             yield return new WaitForFixedUpdate();
+            //Debug.Log("Loop");
         }
     }
 
