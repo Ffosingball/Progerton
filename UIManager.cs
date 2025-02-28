@@ -11,13 +11,24 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject escapeScreen;
     [SerializeField]
+    private GameObject levelOverviewScreen;
+    [SerializeField]
+    private GameObject countdownScreen;
+    [SerializeField]
+    private GameObject changeModeScreen;
+    [SerializeField]
     private TMP_Text isRecordingText;
     [SerializeField]
     private TMP_Text lastFirstRoundText;
     [SerializeField]
     private TMP_Text roundText;
+    [SerializeField]
+    private TMP_Text countdownText;
+    [SerializeField]
+    private TMP_Text timerText;
 
     public SavePlayerMovements savePlayerMovements;
+    public LevelManager levelManager;
 
     private bool cursorlocked;
 
@@ -40,8 +51,8 @@ public class UIManager : MonoBehaviour
         {
             cursorlocked=false;
             Cursor.lockState = CursorLockMode.None;
-            gameScreen.SetActive(false);
             escapeScreen.SetActive(true);
+            Time.timeScale = 0f;
             //Debug.Log("Open");
         }
         else if(Input.GetKeyDown(KeyCode.Escape)) //return to game
@@ -63,7 +74,7 @@ public class UIManager : MonoBehaviour
         cursorlocked=true;
         Cursor.lockState = CursorLockMode.Locked;
         escapeScreen.SetActive(false);
-        gameScreen.SetActive(true);
+        Time.timeScale = 1f;
     }
 
 
@@ -76,5 +87,60 @@ public class UIManager : MonoBehaviour
     public void OutputRoundNumber(string rText)
     {
         roundText.text = rText;
+    }
+
+
+    public void outputCountdown(float countdownTime)
+    {
+        countdownText.text = countdownTime+"";
+    }
+
+
+    public void outputTimer(float time)
+    {
+        timerText.text = time+"";
+    }
+
+
+    public void setLevelOverviewScreen()
+    {
+        gameScreen.SetActive(false);
+        levelOverviewScreen.SetActive(true);
+    }
+
+
+    public void setCountdownScreen()
+    {
+        levelOverviewScreen.SetActive(false);
+        countdownScreen.SetActive(true);
+    }
+
+
+    public void setGameScreen()
+    {
+        countdownScreen.SetActive(false);
+        gameScreen.SetActive(true);
+    }
+
+
+    public void changeModeWarning()
+    {
+        Time.timeScale = 0f;
+        changeModeScreen.SetActive(true);
+    }
+
+
+    public void noChangeMode()
+    {
+        Time.timeScale = 1f;
+        changeModeScreen.SetActive(false);
+    }
+
+
+    public void yesChangeMode()
+    {
+        Time.timeScale = 1f;
+        changeModeScreen.SetActive(false);
+        levelManager.setOverviewMode();
     }
 }

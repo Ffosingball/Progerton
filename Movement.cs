@@ -17,6 +17,7 @@ public class Movement : MonoBehaviour
     private List<System.Func<float>> speedOverrides = new List<System.Func<float>>();
     
     public UIManager uIManager;
+    public LevelManager levelManager;
 
     private Rigidbody rigidbody;
     private bool IsRunning;
@@ -35,7 +36,7 @@ public class Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(uIManager.getCursorlocked())
+        if(uIManager.getCursorlocked() && levelmanager.getCanMove())
         {
             // Update IsRunning from input.
             IsRunning = Input.GetKey(runningKey);
