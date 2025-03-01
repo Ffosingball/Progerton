@@ -10,7 +10,7 @@ public class ReplayMovements : MonoBehaviour
     private List<Vector3> recordedPositions;
     private List<Quaternion> recordedQuaternions;
     private int currentIndex; //for the loop in the coroutune
-    private float yOffset, zOffset;
+    private float yOffset;
     private Vector3 initialPosition;
     private Quaternion initialRotation;
     private Coroutine replay=null;
@@ -21,7 +21,6 @@ public class ReplayMovements : MonoBehaviour
     public List<Quaternion> getRecordedQuaternions(){return recordedQuaternions;}
 
     //setters
-    public void setZOffset(float zOffset){this.zOffset=zOffset;}
     public void setYOffset(float yOffset){this.yOffset=yOffset;}
     public void setInitialPosition(Vector3 initialPosition){this.initialPosition=initialPosition;}
     public void setInitialRotation(Quaternion initialRotation){this.initialRotation=initialRotation;}
@@ -97,7 +96,6 @@ public class ReplayMovements : MonoBehaviour
     {
         Vector3 position = initialPosition;
         position.y += yOffset;
-        position.z += zOffset;
         transform.position = position;
         transform.rotation = initialRotation;
     }

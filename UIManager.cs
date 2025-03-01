@@ -17,6 +17,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject changeModeScreen;
     [SerializeField]
+    private GameObject rerecordScreen;
+    [SerializeField]
     private TMP_Text isRecordingText;
     [SerializeField]
     private TMP_Text lastFirstRoundText;
@@ -142,5 +144,27 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
         changeModeScreen.SetActive(false);
         levelManager.setOverviewMode();
+    }
+
+
+    public void rerecordWarning()
+    {
+        Time.timeScale = 0f;
+        rerecordScreen.SetActive(true);
+    }
+
+
+    public void noRerecord()
+    {
+        Time.timeScale = 1f;
+        rerecordScreen.SetActive(false);
+    }
+
+
+    public void yesRerecord()
+    {
+        Time.timeScale = 1f;
+        rerecordScreen.SetActive(false);
+        levelManager.rerecordMoves();
     }
 }

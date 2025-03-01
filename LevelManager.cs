@@ -10,13 +10,20 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private float countdownTime = 3f;
     [SerializeField]
-    private Vector3 initialPositionCharacter = new Vector3(0,0,0); //for the character
+    private Vector3[] initialPositionsCharacter; //for the character
+    [SerializeField]
+    private Quaternion[] initialRotationsCharacter; //for the character
     [SerializeField]
     private Vector3 initialPositionCamera = new Vector3(0,0,0); //for the camera
     [SerializeField]
-    private float zOffset = 1;  //for the character
+    private Quaternion initialRotationCamera = Quaternion.Euler(0,0,0); //for the camera
     [SerializeField]
     private KeyCode changeModeKey = KeyCode.Q;
+    [SerializeField]
+    private KeyCode replay_rerecordKey = KeyCode.R;
+    [SerializeField]
+    private KeyCode endRecordingKey = KeyCode.E;
+
     
     public GameObject character;
     public GameObject camera;
@@ -28,6 +35,11 @@ public class LevelManager : MonoBehaviour
     private bool gameMode;
     private bool canMove;
     private float currentTime = 0;
+    private Coroutine recording=null;
+
+
+    public Vector3[] getInitialPositions(){return initialPositionsCharacter;}
+    public Quaternion[] getInitialRotations(){return initialRotationsCharacter;}
 
 
     public void Start()
@@ -37,6 +49,18 @@ public class LevelManager : MonoBehaviour
         gameMode = false;
         canMove=false;
         uIManager.setLevelOverviewScreen();
+
+        resetPosition();
+
+        camera.transform.position = initialPositionCamera;
+        camera.transform.rotation = initialRotationCamera;
+    }
+
+
+    public void resetPosition()
+    {
+        character.transform.position = initialPositionsCharacter[replayManager.getCurrentRound()];
+        character.transform.rotation = initialRotationsCharacter[replayManager.getCurrentRound()];
     }
 
 
@@ -45,6 +69,20 @@ public class LevelManager : MonoBehaviour
         if(Input.GetKeyDown(changeModeKey))
         {
             ChangeMode();
+        }
+
+        if(Input.GetKeyDown(replay_rerecordKey) && gameMode==false)
+        {
+            replayManager.StartReplay();
+        }
+        else
+        {
+            uIManager.rerecordWarning();
+        }
+
+        if(Input.GetKeyDown(endRecordingKey) && gameMode)
+        {
+            uIManager.endRecordingWarning();
         }
     }
 
@@ -56,6 +94,19 @@ public class LevelManager : MonoBehaviour
         character.SetActive(false);
         camera.SetActive(true);
         gameMode = false;
+        canMove=false;
+        uIManager.setLevelOverviewScreen();
+    }
+
+
+    public void rerecordMoves()
+    {
+        savePlayerMovements.StopRecording();
+        replayManager.StopReplay();
+        resetPosition();
+
+        StopCoroutine(recording);
+        recording = StartCoroutine(countdown());
     }
 
 
@@ -72,7 +123,7 @@ public class LevelManager : MonoBehaviour
             character.SetActive(true);
             gameMode = true;
             uIManager.setCountdownScreen();
-            StartCoroutine(countdown());
+            recording = StartCoroutine(countdown());
         }
     }
 
@@ -91,12 +142,13 @@ public class LevelManager : MonoBehaviour
         savePlayerMovements.StartRecording();
         replayManager.StartReplay();
 
-        StartCoroutine(timer());
+        recording = StartCoroutine(timer());
     }
 
 
     private IEnumerator<WaitForSeconds> timer()
     {
+        canMove=true;
         currentTime=0;
         while (currentTime<maxTime)
         {
@@ -104,5 +156,7 @@ public class LevelManager : MonoBehaviour
             currentTime+=0.1f;
             uIManager.outputTimer(currentTime);
         }
+
+        ?
     }
 }

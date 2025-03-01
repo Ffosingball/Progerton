@@ -11,26 +11,28 @@ public class ReplayManager : MonoBehaviour
     [SerializeField]
     private float yOffset=1f;  //offset for the repeater 
     [SerializeField]
-    private float zOffset=1f;  //ofsett for the initial position, so repeaters spawn next to each other
-    [SerializeField]
-    private Vector3 initialPosition = new Vector3(0,0,0); //Initial position for reapeter to appear
-    [SerializeField]
-    private Quaternion initialRotation = Quaternion.Euler(0, 0, 0);  //Initial rotation of repeater
-    [SerializeField]
     private GameObject replayerPrefab;  //Prefab of the object which will replay players movements
 
     //References
     public SavePlayerMovements savePlayerMovements;
     public UIManager uIManager;
+    public LevelManager levelManager;
 
     private bool isReplaying=false;
     private int currentRound=-1;
+    private Vector3[] initialPositions; //Initial position for reapeter to appear
+    private Quaternion[] initialRotations;  //Initial rotation of repeater
     private List<GameObject> allReplayers; //List of all repeaters on the level
+
+
+    public int getCurrentRound(){return currentRound;}
 
 
     private void Start()
     {
         allReplayers = new List<GameObject>();
+        initialPositions = levelManager.getAllPositions();
+        initialRotations = levelManager.getAllRotations();
         NextRound();
     }
 
@@ -52,6 +54,9 @@ public class ReplayManager : MonoBehaviour
         }
         else
         {
+            levelManager.resetPosition();
+            levelManager.
+
             if(currentRound!=0)//If its not the first round then 
             {
                 //set repeater from previous true and reset its data
@@ -62,14 +67,13 @@ public class ReplayManager : MonoBehaviour
             uIManager.OutputRoundNumber("Round "+(currentRound+1));
 
             //Instantiate new repeater
-            GameObject newReplay = Instantiate(replayerPrefab, new Vector3(0,0,0), Quaternion.Euler(0,0,0));
+            GameObject newReplay = Instantiate(replayerPrefab, initialPositions[currentRound], initialRotations[currentRound]);
             //Get its logic and set all required fields
             ReplayMovements newRep = newReplay.GetComponent<ReplayMovements>();
             newRep.savePlayerMovements = savePlayerMovements;
-            newRep.setZOffset(zOffset*currentRound);
             newRep.setYOffset(yOffset);
-            newRep.setInitialPosition(initialPosition);
-            newRep.setInitialRotation(initialRotation);
+            newRep.setInitialPosition(initialPositions[currentRound]);
+            newRep.setInitialRotation(initialRotations[currentRound]);
 
             newReplay.SetActive(false);
 
