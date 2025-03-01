@@ -55,7 +55,7 @@ public class ReplayManager : MonoBehaviour
         else
         {
             levelManager.resetPosition();
-            levelManager.
+            levelManager.setOverviewMode();
 
             if(currentRound!=0)//If its not the first round then 
             {
@@ -101,6 +101,8 @@ public class ReplayManager : MonoBehaviour
         }
         else
         {
+            levelManager.resetPosition();
+            levelManager.setOverviewMode();
             uIManager.OutputRoundNumber("Round "+(currentRound+1));
 
             //destroy last created repeater
@@ -156,5 +158,11 @@ public class ReplayManager : MonoBehaviour
     {
         ReplayMovements newRep = allReplayers[index].GetComponent<ReplayMovements>();
         newRep.getData();
+    }
+
+
+    public bool isLastRound()
+    {
+        return currentRound+1==numOfRounds;
     }
 }

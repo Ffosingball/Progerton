@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 /*This class manages all ui changes*/
 
@@ -19,6 +20,14 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject rerecordScreen;
     [SerializeField]
+    private GameObject endRecordingScreen;
+    [SerializeField]
+    private GameObject endRoundScreen;
+    [SerializeField]
+    private GameObject winScreen;
+    [SerializeField]
+    private GameObject lostScreen;
+    [SerializeField]
     private TMP_Text isRecordingText;
     [SerializeField]
     private TMP_Text lastFirstRoundText;
@@ -27,7 +36,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TMP_Text countdownText;
     [SerializeField]
-    private TMP_Text timerText;
+    private TMP_Text timerText, timeText2;
 
     public SavePlayerMovements savePlayerMovements;
     public LevelManager levelManager;
@@ -127,6 +136,8 @@ public class UIManager : MonoBehaviour
 
     public void changeModeWarning()
     {
+        cursorlocked=false;
+        Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0f;
         changeModeScreen.SetActive(true);
     }
@@ -134,6 +145,8 @@ public class UIManager : MonoBehaviour
 
     public void noChangeMode()
     {
+        cursorlocked=true;
+        Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
         changeModeScreen.SetActive(false);
     }
@@ -141,14 +154,18 @@ public class UIManager : MonoBehaviour
 
     public void yesChangeMode()
     {
+        cursorlocked=true;
+        Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
         changeModeScreen.SetActive(false);
-        levelManager.setOverviewMode();
+        levelManager.changeToOverviewMode();
     }
 
 
     public void rerecordWarning()
     {
+        cursorlocked=false;
+        Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0f;
         rerecordScreen.SetActive(true);
     }
@@ -156,6 +173,8 @@ public class UIManager : MonoBehaviour
 
     public void noRerecord()
     {
+        cursorlocked=true;
+        Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
         rerecordScreen.SetActive(false);
     }
@@ -163,8 +182,101 @@ public class UIManager : MonoBehaviour
 
     public void yesRerecord()
     {
+        cursorlocked=true;
+        Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
         rerecordScreen.SetActive(false);
         levelManager.rerecordMoves();
+    }
+
+
+    public void endRecordingWarning()
+    {
+        cursorlocked=false;
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 0f;
+        endRecordingScreen.SetActive(true);
+    }
+
+
+    public void noEndRecord()
+    {
+        cursorlocked=true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Time.timeScale = 1f;
+        endRecordingScreen.SetActive(false);
+    }
+
+
+    public void yesEndRecord()
+    {
+        cursorlocked=true;
+        Cursor.lockState = CursorLockMode.Locked;
+        endRecordingScreen.SetActive(false);
+        setEndRoundScreen();
+    }
+
+
+    public void setEndRoundScreen()
+    {
+        cursorlocked=false;
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 0f;
+        endRoundScreen.SetActive(true);
+    }
+
+
+    public void setWinScreen()
+    {
+        cursorlocked=false;
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 0f;
+        winScreen.SetActive(true);
+        timeText2.text = "Time go here!";
+    }
+
+
+    public void setLostScreen()
+    {
+        cursorlocked=false;
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 0f;
+        lostScreen.SetActive(true);
+    }
+
+
+    public void startNextRound()
+    {
+        cursorlocked=true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Time.timeScale = 1f;
+        levelManager.goToNextRound();
+    }
+
+
+    public void startPreviousRound()
+    {
+        cursorlocked=true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Time.timeScale = 1f;
+        levelManager.goToPreviousRound();
+    }
+
+
+    public void exitLevel()
+    {
+        Debug.Log("Level exited successfully!");
+    }
+
+
+    public void nextLevel()
+    {
+        Debug.Log("Next level loaded successfuly!");
+    }
+
+
+    public void startLevelAgain()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

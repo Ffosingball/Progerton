@@ -30,6 +30,7 @@ public class LevelManager : MonoBehaviour
     public UIManager uIManager;
     public SavePlayerMovements savePlayerMovements;
     public ReplayManager replayManager; 
+    public TriggersManager triggersManager;
 
     //false - camera mode, true - recording mode
     private bool gameMode;
@@ -44,14 +45,6 @@ public class LevelManager : MonoBehaviour
 
     public void Start()
     {
-        character.SetActive(false);
-        camera.SetActive(true);
-        gameMode = false;
-        canMove=false;
-        uIManager.setLevelOverviewScreen();
-
-        resetPosition();
-
         camera.transform.position = initialPositionCamera;
         camera.transform.rotation = initialRotationCamera;
     }
@@ -87,10 +80,16 @@ public class LevelManager : MonoBehaviour
     }
 
 
-    public void setOverviewMode()
+    public void changeToOverviewMode()
     {
         savePlayerMovements.StopRecording();
         replayManager.StopReplay();
+        setOverviewMode();
+    }
+
+
+    public void setOverviewMode()
+    {
         character.SetActive(false);
         camera.SetActive(true);
         gameMode = false;
@@ -155,8 +154,32 @@ public class LevelManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             currentTime+=0.1f;
             uIManager.outputTimer(currentTime);
+
+            if(triggersManager.getEndGame())
+                uIManager.setWinScreen();
         }
 
-        ?
+        if(isLastRound)
+        {
+            uIManager.setLostScreen();
+        }
+        else
+        {
+            uIManager.setEndRoundScreen();
+        }
+    }
+
+
+    public void goToNextRound()
+    {
+        savePlayerMovements.StopRecording();
+        replayManager.NextRound();
+    }
+
+
+    public void goToPreviousRound()
+    {
+        savePlayerMovements.StopRecording();
+        replayManager.PreviousRound();
     }
 }
