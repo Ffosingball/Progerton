@@ -36,7 +36,7 @@ public class Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(uIManager.getCursorlocked() && levelmanager.getCanMove())
+        if(uIManager.getCursorlocked() && levelManager.getCanMove())
         {
             // Update IsRunning from input.
             IsRunning = Input.GetKey(runningKey);

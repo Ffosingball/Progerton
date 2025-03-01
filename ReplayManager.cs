@@ -31,8 +31,8 @@ public class ReplayManager : MonoBehaviour
     private void Start()
     {
         allReplayers = new List<GameObject>();
-        initialPositions = levelManager.getAllPositions();
-        initialRotations = levelManager.getAllRotations();
+        initialPositions = levelManager.getInitialPositions();
+        initialRotations = levelManager.getInitialRotations();
         NextRound();
     }
 

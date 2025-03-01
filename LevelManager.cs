@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 /*This class manages all events and all non-movement
 non-rotation inputs*/
@@ -41,6 +42,7 @@ public class LevelManager : MonoBehaviour
 
     public Vector3[] getInitialPositions(){return initialPositionsCharacter;}
     public Quaternion[] getInitialRotations(){return initialRotationsCharacter;}
+    public bool getCanMove(){return canMove;}
 
 
     public void Start()
@@ -64,13 +66,12 @@ public class LevelManager : MonoBehaviour
             ChangeMode();
         }
 
-        if(Input.GetKeyDown(replay_rerecordKey) && gameMode==false)
+        if(Input.GetKeyDown(replay_rerecordKey))
         {
-            replayManager.StartReplay();
-        }
-        else
-        {
-            uIManager.rerecordWarning();
+            if(gameMode==false)
+                replayManager.StartReplay();
+            else
+                uIManager.rerecordWarning();
         }
 
         if(Input.GetKeyDown(endRecordingKey) && gameMode)
@@ -159,7 +160,7 @@ public class LevelManager : MonoBehaviour
                 uIManager.setWinScreen();
         }
 
-        if(isLastRound)
+        if(replayManager.isLastRound())
         {
             uIManager.setLostScreen();
         }

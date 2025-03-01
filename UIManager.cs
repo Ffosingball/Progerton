@@ -247,6 +247,7 @@ public class UIManager : MonoBehaviour
 
     public void startNextRound()
     {
+        endRoundScreen.SetActive(false);
         cursorlocked=true;
         Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
@@ -256,6 +257,7 @@ public class UIManager : MonoBehaviour
 
     public void startPreviousRound()
     {
+        endRoundScreen.SetActive(false);
         cursorlocked=true;
         Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
@@ -278,5 +280,15 @@ public class UIManager : MonoBehaviour
     public void startLevelAgain()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+
+    public void Rerecord()
+    {
+        cursorlocked=true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Time.timeScale = 1f;
+        endRoundScreen.SetActive(false);
+        levelManager.rerecordMoves();
     }
 }
