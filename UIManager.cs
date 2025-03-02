@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 /*This class manages all ui changes*/
 
@@ -28,20 +29,30 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject lostScreen;
     [SerializeField]
-    private TMP_Text isRecordingText;
+    private GameObject prevRoundScreen;
+    //[SerializeField]
+    //private TMP_Text isRecordingText;
     [SerializeField]
     private TMP_Text lastFirstRoundText;
     [SerializeField]
     private TMP_Text roundText;
     [SerializeField]
+    private TMP_Text errorText;
+    [SerializeField]
     private TMP_Text countdownText;
     [SerializeField]
     private TMP_Text timerText, timeText2;
+    [SerializeField]
+    private Button prevRoundBut;
+    [SerializeField]
+    private float timeBeforeTextDisappear=5f;
 
     public SavePlayerMovements savePlayerMovements;
     public LevelManager levelManager;
+    public ReplayManager replayManager;
 
     private bool cursorlocked;
+    private Coroutine disappearText=null;
 
 
     //Getter for cursorLocked
@@ -53,6 +64,7 @@ public class UIManager : MonoBehaviour
         // Lock the mouse cursor to the game screen.
         Cursor.lockState = CursorLockMode.Locked;
         cursorlocked=true;
+        lastFirstRoundText.text = "";
     }
 
 
@@ -72,10 +84,15 @@ public class UIManager : MonoBehaviour
         }
 
         //Check status and return
-        if(savePlayerMovements.getIsRecording())
+        /*if(savePlayerMovements.getIsRecording())
             isRecordingText.text = "Recording...";
         else
-            isRecordingText.text = "...";
+            isRecordingText.text = "...";*/
+
+        if(replayManager.getCurrentRound()==0)
+            prevRoundBut.interactable = false;
+        else
+            prevRoundBut.interactable = true;
     }
 
 
@@ -91,13 +108,34 @@ public class UIManager : MonoBehaviour
 
     public void OutputRoundStatus(string output)
     {
+        if(disappearText!=null)
+        {
+            StopCoroutine(disappearText);
+            disappearText=null;
+        }
+
         lastFirstRoundText.text = output;
+        disappearText = StartCoroutine(hideTextTimer());
+    }
+
+
+    private IEnumerator<WaitForSeconds> hideTextTimer()
+    {
+        yield return new WaitForSeconds(timeBeforeTextDisappear);
+        lastFirstRoundText.text = "";
+        disappearText = null;
     }
 
 
     public void OutputRoundNumber(string rText)
     {
         roundText.text = rText;
+    }
+
+
+    public void OutputErrorText(string rText)
+    {
+        errorText.text = rText;
     }
 
 
@@ -110,6 +148,7 @@ public class UIManager : MonoBehaviour
     public void outputTimer(float time)
     {
         timerText.text = time+"";
+        timeText2.text = "Time: "+time;
     }
 
 
@@ -290,5 +329,32 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
         endRoundScreen.SetActive(false);
         levelManager.rerecordMoves();
+    }
+
+
+    public void prevRoundWarning()
+    {
+        cursorlocked=false;
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 0f;
+        prevRoundScreen.SetActive(true);
+    }
+
+
+    public void noPrevRound()
+    {
+        cursorlocked=true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Time.timeScale = 1f;
+        prevRoundScreen.SetActive(false);
+    }
+
+
+    public void yesPrevRound()
+    {
+        cursorlocked=true;
+        Cursor.lockState = CursorLockMode.Locked;
+        prevRoundScreen.SetActive(false);
+        startPreviousRound();
     }
 }

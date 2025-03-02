@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 /*This class manages all events and all non-movement
 non-rotation inputs*/
@@ -13,54 +14,71 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private Vector3[] initialPositionsCharacter; //for the character
     [SerializeField]
-    private Quaternion[] initialRotationsCharacter; //for the character
+    private Vector3[] initialRotationsCharacter; //for the character
     [SerializeField]
     private Vector3 initialPositionCamera = new Vector3(0,0,0); //for the camera
     [SerializeField]
-    private Quaternion initialRotationCamera = Quaternion.Euler(0,0,0); //for the camera
+    private Vector3 initialRotationCamera = new Vector3(0,0,0); //for the camera
     [SerializeField]
     private KeyCode changeModeKey = KeyCode.Q;
     [SerializeField]
     private KeyCode replay_rerecordKey = KeyCode.R;
     [SerializeField]
     private KeyCode endRecordingKey = KeyCode.E;
+    [SerializeField]
+    private KeyCode goToPrevRoundKey = KeyCode.E;
 
     
     public GameObject character;
+    public GameObject cameraOfTheCharacter;
     public GameObject camera;
     public UIManager uIManager;
     public SavePlayerMovements savePlayerMovements;
     public ReplayManager replayManager; 
     public TriggersManager triggersManager;
+    public PersonLook personLook;
 
     //false - camera mode, true - recording mode
     private bool gameMode;
     private bool canMove;
     private float currentTime = 0;
     private Coroutine recording=null;
+    //private bool moveCamera = true;
 
 
     public Vector3[] getInitialPositions(){return initialPositionsCharacter;}
-    public Quaternion[] getInitialRotations(){return initialRotationsCharacter;}
+    public Vector3[] getInitialRotations(){return initialRotationsCharacter;}
     public bool getCanMove(){return canMove;}
+    //public bool getMoveCamera(){return moveCamera;}
 
 
     public void Start()
     {
         camera.transform.position = initialPositionCamera;
-        camera.transform.rotation = initialRotationCamera;
+        camera.transform.rotation = Quaternion.Euler(initialRotationCamera);
+        canMove=false;
     }
 
 
     public void resetPosition()
     {
-        character.transform.position = initialPositionsCharacter[replayManager.getCurrentRound()];
-        character.transform.rotation = initialRotationsCharacter[replayManager.getCurrentRound()];
+        int round = replayManager.getCurrentRound();
+        //moveCamera = false;
+        character.GetComponent<Rigidbody>().linearVelocity = new Vector3(0,0,0);
+        character.transform.position = initialPositionsCharacter[round];
+        character.transform.localRotation = Quaternion.Euler(initialRotationsCharacter[round]);
+    
+        Vector3 newRotation = initialRotationsCharacter[round];
+        // Convert rotation to match script's `velocity`
+        personLook.setVelocity(new Vector2(0, -newRotation.x)); 
     }
 
 
     public void Update()
     {
+        /*if(!moveCamera)
+            moveCamera=true;*/
+
         if(Input.GetKeyDown(changeModeKey))
         {
             ChangeMode();
@@ -76,7 +94,18 @@ public class LevelManager : MonoBehaviour
 
         if(Input.GetKeyDown(endRecordingKey) && gameMode)
         {
-            uIManager.endRecordingWarning();
+            if(replayManager.isLastRound())
+                uIManager.OutputErrorText("You cannot do that on the last round!");
+            else
+                uIManager.endRecordingWarning();
+        }
+
+        if(Input.GetKeyDown(goToPrevRoundKey) && !gameMode)
+        {
+            if(replayManager.getCurrentRound()==0)
+                uIManager.OutputRoundStatus("This is the first Round!");
+            else
+                uIManager.prevRoundWarning();
         }
     }
 
@@ -91,8 +120,15 @@ public class LevelManager : MonoBehaviour
 
     public void setOverviewMode()
     {
+        if(recording!=null)
+        {
+            StopCoroutine(recording);
+            recording=null;
+        }
+
         character.SetActive(false);
         camera.SetActive(true);
+        camera.GetComponent<Rigidbody>().linearVelocity = new Vector3(0,0,0);
         gameMode = false;
         canMove=false;
         uIManager.setLevelOverviewScreen();
@@ -101,11 +137,17 @@ public class LevelManager : MonoBehaviour
 
     public void rerecordMoves()
     {
+        if(recording!=null)
+        {
+            StopCoroutine(recording);
+            recording=null;
+        }
+
         savePlayerMovements.StopRecording();
         replayManager.StopReplay();
-        resetPosition();
+        canMove=false;
+        uIManager.setLevelOverviewScreen();
 
-        StopCoroutine(recording);
         recording = StartCoroutine(countdown());
     }
 
@@ -122,7 +164,6 @@ public class LevelManager : MonoBehaviour
             camera.SetActive(false);
             character.SetActive(true);
             gameMode = true;
-            uIManager.setCountdownScreen();
             recording = StartCoroutine(countdown());
         }
     }
@@ -130,7 +171,12 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator<WaitForSeconds> countdown()
     {
+        resetPosition();
+        uIManager.setCountdownScreen();
+        replayManager.StopReplay();
+
         currentTime=countdownTime;
+        uIManager.outputCountdown(currentTime);
         while (currentTime>0)
         {
             yield return new WaitForSeconds(1f);
@@ -152,9 +198,9 @@ public class LevelManager : MonoBehaviour
         currentTime=0;
         while (currentTime<maxTime)
         {
-            yield return new WaitForSeconds(0.1f);
-            currentTime+=0.1f;
-            uIManager.outputTimer(currentTime);
+            yield return new WaitForSeconds(0.02f);
+            currentTime+=0.02f;
+            uIManager.outputTimer((float)Math.Round((double)currentTime,2));
 
             if(triggersManager.getEndGame())
                 uIManager.setWinScreen();
@@ -173,6 +219,11 @@ public class LevelManager : MonoBehaviour
 
     public void goToNextRound()
     {
+        if(recording!=null)
+        {
+            StopCoroutine(recording);
+            recording=null;
+        }
         savePlayerMovements.StopRecording();
         replayManager.NextRound();
     }
@@ -180,6 +231,11 @@ public class LevelManager : MonoBehaviour
 
     public void goToPreviousRound()
     {
+        if(recording!=null)
+        {
+            StopCoroutine(recording);
+            recording=null;
+        }
         savePlayerMovements.StopRecording();
         replayManager.PreviousRound();
     }

@@ -6,6 +6,8 @@ public class TriggersManager : MonoBehaviour
 {
     [SerializeField]
     private int numOfTriggers = 3;
+    [SerializeField]
+    private TriggerBehaviour[] triggers;
     private bool[] flags;
     private bool endGame=false;
 
@@ -27,5 +29,14 @@ public class TriggersManager : MonoBehaviour
     public void setFlag(int index, bool flag){flags[index]=flag;}
     public bool getEndGame(){return endGame;}
     public void setEndGame(bool endGame){this.endGame=endGame;}
+
+
+    public void disableAllTriggers()
+    {
+        foreach(TriggerBehaviour trigger in triggers)
+        {
+            trigger.disableTrigger();
+        }
+    }
 
 }

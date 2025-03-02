@@ -11,9 +11,13 @@ public class PersonLook : MonoBehaviour
 
     public UIManager uIManager;
     public Transform character;
+    //public LevelManager levelManager;
 
     private Vector2 velocity;
     private Vector2 frameVelocity;
+
+
+    public void setVelocity(Vector2 velocity){this.velocity = velocity;}
 
 
     void Update()

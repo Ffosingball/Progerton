@@ -17,11 +17,12 @@ public class ReplayManager : MonoBehaviour
     public SavePlayerMovements savePlayerMovements;
     public UIManager uIManager;
     public LevelManager levelManager;
+    public TriggersManager triggersManager;
 
     private bool isReplaying=false;
     private int currentRound=-1;
     private Vector3[] initialPositions; //Initial position for reapeter to appear
-    private Quaternion[] initialRotations;  //Initial rotation of repeater
+    private Vector3[] initialRotations;  //Initial rotation of repeater
     private List<GameObject> allReplayers; //List of all repeaters on the level
 
 
@@ -67,7 +68,7 @@ public class ReplayManager : MonoBehaviour
             uIManager.OutputRoundNumber("Round "+(currentRound+1));
 
             //Instantiate new repeater
-            GameObject newReplay = Instantiate(replayerPrefab, initialPositions[currentRound], initialRotations[currentRound]);
+            GameObject newReplay = Instantiate(replayerPrefab, initialPositions[currentRound], Quaternion.Euler(initialRotations[currentRound]));
             //Get its logic and set all required fields
             ReplayMovements newRep = newReplay.GetComponent<ReplayMovements>();
             newRep.savePlayerMovements = savePlayerMovements;
@@ -86,6 +87,7 @@ public class ReplayManager : MonoBehaviour
     //This method returns back to the previous round and deletes last created repeater
     public void PreviousRound()
     {
+        Debug.Log("Prev!");
         //Check if repeaters still replaying than stop replay
         //before go to the previous round
         if(isReplaying)
@@ -143,6 +145,8 @@ public class ReplayManager : MonoBehaviour
     //Stops all repetition
     public void StopReplay()
     {
+        triggersManager.disableAllTriggers();
+
         for(int i=0; i<currentRound; i++)
         {
             ReplayMovements rep = allReplayers[i].GetComponent<ReplayMovements>();

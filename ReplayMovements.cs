@@ -12,7 +12,7 @@ public class ReplayMovements : MonoBehaviour
     private int currentIndex; //for the loop in the coroutune
     private float yOffset;
     private Vector3 initialPosition;
-    private Quaternion initialRotation;
+    private Vector3 initialRotation;
     private Coroutine replay=null;
 
 
@@ -23,7 +23,7 @@ public class ReplayMovements : MonoBehaviour
     //setters
     public void setYOffset(float yOffset){this.yOffset=yOffset;}
     public void setInitialPosition(Vector3 initialPosition){this.initialPosition=initialPosition;}
-    public void setInitialRotation(Quaternion initialRotation){this.initialRotation=initialRotation;}
+    public void setInitialRotation(Vector3 initialRotation){this.initialRotation=initialRotation;}
 
 
     private void Start(){
@@ -97,6 +97,6 @@ public class ReplayMovements : MonoBehaviour
         Vector3 position = initialPosition;
         position.y += yOffset;
         transform.position = position;
-        transform.rotation = initialRotation;
+        transform.rotation = Quaternion.Euler(initialRotation);
     }
 }

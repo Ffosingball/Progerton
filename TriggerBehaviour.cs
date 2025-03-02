@@ -48,4 +48,11 @@ public class TriggerBehaviour : MonoBehaviour
             }
         }
     }
+
+    public void disableTrigger()
+    {
+        numOfObjectsInside=0;
+        triggersManager.setFlag(correspondingFlag, false);
+        GetComponent<Renderer>().material = triggerOff;
+    }
 }
