@@ -65,6 +65,7 @@ public class UIManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         cursorlocked=true;
         lastFirstRoundText.text = "";
+        Time.timeScale = 1f;
     }
 
 
@@ -271,7 +272,6 @@ public class UIManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0f;
         winScreen.SetActive(true);
-        timeText2.text = "Time go here!";
     }
 
 
