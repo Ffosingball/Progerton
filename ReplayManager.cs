@@ -146,6 +146,7 @@ public class ReplayManager : MonoBehaviour
     public void StopReplay()
     {
         triggersManager.disableAllTriggers();
+        triggersManager.stopAllAnimations();
 
         for(int i=0; i<currentRound; i++)
         {

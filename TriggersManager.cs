@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 /*This class store flags of all triggers in the level*/
 
@@ -10,6 +11,7 @@ public class TriggersManager : MonoBehaviour
     private TriggerBehaviour[] triggers;
     private bool[] flags;
     private bool endGame=false;
+    private bool nextRound = false;
 
 
     //set all flags to false
@@ -29,6 +31,7 @@ public class TriggersManager : MonoBehaviour
     public void setFlag(int index, bool flag){flags[index]=flag;}
     public bool getEndGame(){return endGame;}
     public void setEndGame(bool endGame){this.endGame=endGame;}
+    public bool getNextRound(){return nextRound;}
 
 
     public void disableAllTriggers()
@@ -37,6 +40,20 @@ public class TriggersManager : MonoBehaviour
         {
             trigger.disableTrigger();
         }
+    }
+
+
+    public void stopAllAnimations()
+    {
+        nextRound = true;
+        StartCoroutine(wait());
+    }
+
+
+    private IEnumerator<WaitForSeconds> wait()
+    {
+        yield return new WaitForSeconds(0.2f);
+         nextRound = false;
     }
 
 }

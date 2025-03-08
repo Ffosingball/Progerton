@@ -12,6 +12,8 @@ public class Movement : MonoBehaviour
     private float runSpeed = 9;
     [SerializeField]
     private KeyCode runningKey = KeyCode.LeftShift;
+    [SerializeField]
+    private float minYHeight = -10;
     /// <summary> Functions to override movement speed. Will use the last added override. </summary>
     [SerializeField]
     private List<System.Func<float>> speedOverrides = new List<System.Func<float>>();
@@ -20,6 +22,7 @@ public class Movement : MonoBehaviour
     public LevelManager levelManager;
 
     private Rigidbody rigidbody;
+    private Transform transform;
     private bool IsRunning;
 
 
@@ -31,6 +34,7 @@ public class Movement : MonoBehaviour
     {
         // Get the rigidbody on this.
         rigidbody = GetComponent<Rigidbody>();
+        transform = GetComponent<Transform>();
     }
 
 
@@ -55,5 +59,8 @@ public class Movement : MonoBehaviour
             // Apply movement.
             rigidbody.linearVelocity = transform.rotation * new Vector3(targetVelocity.x, rigidbody.linearVelocity.y, targetVelocity.y);
         }
+
+        if(transform.position.y<minYHeight)
+            uIManager.yesRerecord();
     }
 }
