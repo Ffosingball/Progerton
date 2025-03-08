@@ -10,15 +10,15 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private float maxTime = 20f; //Max time for one round
     [SerializeField]
-    private float countdownTime = 3f;
+    private float countdownTime = 3f; //Countdown before start
     [SerializeField]
-    private Vector3[] initialPositionsCharacter; //for the character
+    private Vector3[] initialPositionsCharacter; //Initial position of the character in each round
     [SerializeField]
-    private Vector3[] initialRotationsCharacter; //for the character
+    private Vector3[] initialRotationsCharacter; //Initial rotation of the character in each round
     [SerializeField]
-    private Vector3 initialPositionCamera = new Vector3(0,0,0); //for the camera
+    private Vector3 initialPositionCamera = new Vector3(0,0,0); //initial position for the camera
     [SerializeField]
-    private Vector3 initialRotationCamera = new Vector3(0,0,0); //for the camera
+    private Vector3 initialRotationCamera = new Vector3(0,0,0); //initial rotation for the camera
     [SerializeField]
     private KeyCode changeModeKey = KeyCode.Q;
     [SerializeField]
@@ -38,20 +38,20 @@ public class LevelManager : MonoBehaviour
     public TriggersManager triggersManager;
     public PersonLook personLook;
 
-    //false - camera mode, true - recording mode
-    private bool gameMode;
-    private bool canMove;
+    private bool gameMode; //false - camera mode, true - recording mode
+    private bool canMove; //it is used to disable movement of the character during countdown
     private float currentTime = 0;
     private Coroutine recording=null;
-    //private bool moveCamera = true;
 
 
+    //getters
     public Vector3[] getInitialPositions(){return initialPositionsCharacter;}
     public Vector3[] getInitialRotations(){return initialRotationsCharacter;}
     public bool getCanMove(){return canMove;}
     //public bool getMoveCamera(){return moveCamera;}
 
 
+    //Set initial positions
     public void Start()
     {
         camera.transform.position = initialPositionCamera;
@@ -60,6 +60,7 @@ public class LevelManager : MonoBehaviour
     }
 
 
+    //Resets position of the character depending on the current round
     public void resetPosition()
     {
         int round = replayManager.getCurrentRound();
@@ -74,6 +75,7 @@ public class LevelManager : MonoBehaviour
     }
 
 
+    //Check if any of the keys has been pressed
     public void Update()
     {
         /*if(!moveCamera)
@@ -110,6 +112,7 @@ public class LevelManager : MonoBehaviour
     }
 
 
+    //Change mode to overview mode
     public void changeToOverviewMode()
     {
         savePlayerMovements.StopRecording();

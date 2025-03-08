@@ -1,8 +1,8 @@
 using UnityEngine;
 
-/*This is a behaviour for the trigger which ends the game*/
+/*This class checks if someone inside the trigger*/
 
-public class EndLevelTrigger : MonoBehaviour
+public class GateButtonBehaviour : MonoBehaviour
 {
     [SerializeField]
     private string targetTag = "Player"; // tag of object which we find
@@ -10,12 +10,14 @@ public class EndLevelTrigger : MonoBehaviour
     private Material triggerOn;  
     [SerializeField]
     private Material triggerOff;
+    [SerializeField]
+    private int correspondingGate; //this field stores which flag in the array of all flags
+    //this trigger changes
 
     public TriggersManager triggersManager;
 
 
     void Start(){
-        //Set its material
         GetComponent<Renderer>().material = triggerOff;
     }
 
@@ -25,8 +27,14 @@ public class EndLevelTrigger : MonoBehaviour
     {
         if (other.CompareTag(targetTag)) // Check tag of the object
         {
-            triggersManager.setEndGame(true);
+            triggersManager.setGate(correspondingGate, true);
             GetComponent<Renderer>().material = triggerOn;
         }
+    }
+
+    public void disableTrigger()
+    {
+        triggersManager.setGate(correspondingGate, false);
+        GetComponent<Renderer>().material = triggerOff;
     }
 }

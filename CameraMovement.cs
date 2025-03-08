@@ -12,14 +12,6 @@ public class CameraMovement : MonoBehaviour
     private float maxHeight = 40;
     [SerializeField]
     private float minHeight = 1;
-    /*[SerializeField]
-    private float minX = -20;
-    [SerializeField]
-    private float maxX = 20;
-    [SerializeField]
-    private float minZ = -20;
-    [SerializeField]
-    private float maxZ = 20;*/
     [SerializeField]
     private KeyCode downwardKey = KeyCode.LeftShift;
     [SerializeField]
