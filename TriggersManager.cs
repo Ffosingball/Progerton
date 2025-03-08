@@ -13,9 +13,15 @@ public class TriggersManager : MonoBehaviour
     private TriggerBehaviour[] triggers;
     [SerializeField]
     private GateButtonBehaviour[] gates;
+    [SerializeField]
+    private PlatformButtonBehaviour[] platformButtons;
+    [SerializeField]
+    private PlatformBehaviour[] platforms;
     private bool[] flags, gatesMode;
     private bool endGame=false;
     private bool nextRound = false;
+    private bool movePlatforms = false;
+    private int numOfActiveButtonPlatforms = 0;
 
 
     //set all flags to false
@@ -43,7 +49,11 @@ public class TriggersManager : MonoBehaviour
     public void setGate(int index, bool gate){gatesMode[index]=gate;}
     public bool getEndGame(){return endGame;}
     public void setEndGame(bool endGame){this.endGame=endGame;}
+    public bool getMovePlatforms(){return movePlatforms;}
+    public void setMovePlatforms(bool movePlatforms){this.movePlatforms=movePlatforms;}
     public bool getNextRound(){return nextRound;}
+    public void setActiveButton(int num){this.numOfActiveButtonPlatforms+=num;}
+    public int getActiveButton(){return numOfActiveButtonPlatforms;}
 
 
     public void disableAllTriggers()
@@ -57,6 +67,18 @@ public class TriggersManager : MonoBehaviour
         {
             gate.disableTrigger();
         }
+
+        foreach(PlatformButtonBehaviour button in platformButtons)
+        {
+            button.disableTrigger();
+        }
+
+        foreach(PlatformBehaviour platform in platforms)
+        {
+            platform.resetPosition();
+        }
+
+        numOfActiveButtonPlatforms = 0;
     }
 
 
