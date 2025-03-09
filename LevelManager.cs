@@ -131,7 +131,7 @@ public class LevelManager : MonoBehaviour
 
         character.SetActive(false);
         camera.SetActive(true);
-        camera.GetComponent<Rigidbody>().linearVelocity = new Vector3(0,0,0);
+        //camera.GetComponent<Rigidbody>().linearVelocity = new Vector3(0,0,0);
         gameMode = false;
         canMove=false;
         uIManager.setLevelOverviewScreen();

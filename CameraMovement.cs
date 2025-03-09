@@ -13,18 +13,26 @@ public class CameraMovement : MonoBehaviour
     [SerializeField]
     private float minHeight = 1;
     [SerializeField]
+    private float maxZ = 40;
+    [SerializeField]
+    private float minZ = -40;
+    [SerializeField]
+    private float maxX = 40;
+    [SerializeField]
+    private float minX = -40;
+    [SerializeField]
     private KeyCode downwardKey = KeyCode.LeftShift;
     [SerializeField]
     private KeyCode upwardKey = KeyCode.Space;
 
-    private Rigidbody rigidbody;
+    private Transform transform2;
 
 
 
     void Awake()
     {
         // Get the rigidbody on this.
-        rigidbody = GetComponent<Rigidbody>();
+        transform2 = GetComponent<Transform>();
     }
 
     void FixedUpdate()
@@ -34,12 +42,12 @@ public class CameraMovement : MonoBehaviour
         //Check if player wants to move upward or downward
         if(Input.GetKey(upwardKey))
         {
-            if(rigidbody.transform.position.y<maxHeight)
+            if(transform2.position.y<maxHeight)
                 velocityY = verticalSpeed;
         }
         else if(Input.GetKey(downwardKey))
         {
-            if(rigidbody.transform.position.y>minHeight)
+            if(transform2.position.y>minHeight)
                 velocityY = -verticalSpeed;
         }
 
@@ -47,6 +55,12 @@ public class CameraMovement : MonoBehaviour
         Vector2 targetVelocity =new Vector2( Input.GetAxis("Horizontal") * horizontalSpeed, Input.GetAxis("Vertical") * horizontalSpeed);
 
         // Apply movement.
-        rigidbody.linearVelocity = transform.rotation * new Vector3(targetVelocity.x, velocityY, targetVelocity.y);
+        transform2.Translate(new Vector3(targetVelocity.x, velocityY, targetVelocity.y) * Time.deltaTime);
+        Vector3 pos = transform2.position;
+
+        pos.z = Mathf.Clamp(pos.z, minZ, maxZ);
+        pos.x = Mathf.Clamp(pos.x, minX, maxX);
+
+        transform2.position = pos;
     }
 }
