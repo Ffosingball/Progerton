@@ -49,6 +49,7 @@ public class LevelManager : MonoBehaviour
     public Vector3[] getInitialRotations(){return initialRotationsCharacter;}
     public bool getCanMove(){return canMove;}
     //public bool getMoveCamera(){return moveCamera;}
+    public float getTime() {return maxTime-currentTime;}
 
 
     //Set initial positions
@@ -198,11 +199,11 @@ public class LevelManager : MonoBehaviour
     private IEnumerator<WaitForSeconds> timer()
     {
         canMove=true;
-        currentTime=0;
-        while (currentTime<maxTime)
+        currentTime=maxTime;
+        while (currentTime>0)
         {
             yield return new WaitForSeconds(0.02f);
-            currentTime+=0.02f;
+            currentTime-=0.02f;
             uIManager.outputTimer((float)Math.Round((double)currentTime,2));
 
             if(triggersManager.getEndGame())

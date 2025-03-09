@@ -45,6 +45,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Button prevRoundBut;
     [SerializeField]
+    private Button nextLevelBut;
+    [SerializeField]
     private float timeBeforeTextDisappear=5f;
 
     public SavePlayerMovements savePlayerMovements;
@@ -53,6 +55,7 @@ public class UIManager : MonoBehaviour
 
     private bool cursorlocked;
     private Coroutine disappearText=null;
+    private LevelData data;
 
 
     //Getter for cursorLocked
@@ -66,6 +69,13 @@ public class UIManager : MonoBehaviour
         cursorlocked=true;
         lastFirstRoundText.text = "";
         Time.timeScale = 1f;
+
+        data = SaveSystem.LoadLevelData();
+
+        if(data.sceneName.Count==GameInfo.currentLevel-1)
+            nextLevelBut.interactable = false;
+        else
+            nextLevelBut.interactable = true;
     }
 
 
@@ -149,7 +159,6 @@ public class UIManager : MonoBehaviour
     public void outputTimer(float time)
     {
         timerText.text = time+"";
-        timeText2.text = "Time: "+time;
     }
 
 
@@ -272,6 +281,13 @@ public class UIManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Time.timeScale = 0f;
         winScreen.SetActive(true);
+
+        timeText2.text = "Time: "+levelManager.getTime();
+
+        if(data.sceneName.Count!=GameInfo.currentLevel-1)
+            data.locked[GameInfo.currentLevel+1] = false;
+        
+        data.bestTime[GameInfo.currentLevel] = levelManager.getTime();
     }
 
 
@@ -306,13 +322,13 @@ public class UIManager : MonoBehaviour
 
     public void exitLevel()
     {
-        Debug.Log("Level exited successfully!");
+        SceneManager.LoadScene("MainMenu");
     }
 
 
     public void nextLevel()
     {
-        Debug.Log("Next level loaded successfuly!");
+        SceneManager.LoadScene("level"+(GameInfo.currentLevel+1));
     }
 
 
