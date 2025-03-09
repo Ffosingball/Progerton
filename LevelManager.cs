@@ -49,7 +49,7 @@ public class LevelManager : MonoBehaviour
     public Vector3[] getInitialRotations(){return initialRotationsCharacter;}
     public bool getCanMove(){return canMove;}
     //public bool getMoveCamera(){return moveCamera;}
-    public float getTime() {return maxTime-currentTime;}
+    public float getTime() {return (float)Math.Round((double)(maxTime-currentTime),2);}
 
 
     //Set initial positions

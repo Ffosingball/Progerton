@@ -43,6 +43,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TMP_Text timerText, timeText2;
     [SerializeField]
+    private TMP_Text levelText1, levelText2, levelText3;
+    [SerializeField]
     private Button prevRoundBut;
     [SerializeField]
     private Button nextLevelBut;
@@ -76,6 +78,10 @@ public class UIManager : MonoBehaviour
             nextLevelBut.interactable = false;
         else
             nextLevelBut.interactable = true;
+
+        levelText1.text = "Level " + (GameInfo.currentLevel+1);
+        levelText2.text = "Level " + (GameInfo.currentLevel+1);
+        levelText3.text = "Level " + (GameInfo.currentLevel+1);
     }
 
 
@@ -287,7 +293,10 @@ public class UIManager : MonoBehaviour
         if(data.sceneName.Count!=GameInfo.currentLevel-1)
             data.locked[GameInfo.currentLevel+1] = false;
         
-        data.bestTime[GameInfo.currentLevel] = levelManager.getTime();
+        if(data.bestTime[GameInfo.currentLevel]>levelManager.getTime())
+            data.bestTime[GameInfo.currentLevel] = levelManager.getTime();
+
+        SaveSystem.SaveLevelData(data);
     }
 
 
@@ -328,7 +337,8 @@ public class UIManager : MonoBehaviour
 
     public void nextLevel()
     {
-        SceneManager.LoadScene("level"+(GameInfo.currentLevel+1));
+        GameInfo.currentLevel++;
+        SceneManager.LoadScene("level"+(GameInfo.currentLevel));
     }
 
 
