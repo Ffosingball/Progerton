@@ -5,10 +5,10 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     //Reference to the listener
-    public AudioSource musicSource, soundSource;
+    public AudioSource musicSource, soundSource, stepSource;
     //Reference to sound
     public AudioClip clip;
-    private Coroutine changeValueSoundPlaying=null;
+    //private Coroutine changeValueSoundPlaying=null;
 
 
     //It starts play background music
@@ -62,6 +62,12 @@ public class SoundManager : MonoBehaviour
     }
 
 
+    public void PlayClip()
+    {
+        soundSource.PlayOneShot(clip);
+    }
+
+
     /*public void PlayChangeValueSound()
     {
         if(changeValueSoundPlaying==null)
@@ -95,6 +101,9 @@ public class SoundManager : MonoBehaviour
 
     public void updateSoundVolume(float volume)
     {
+        if(stepSource!=null)
+            stepSource.volume = volume;
+
         soundSource.volume = volume;
     }
 }

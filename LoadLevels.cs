@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Tables;
 
 public class LoadLevels : MonoBehaviour
 {
@@ -16,12 +18,21 @@ public class LoadLevels : MonoBehaviour
     [SerializeField]
     private int sizeOfOneRow = 240;
 
+    [SerializeField]
+    private LocalizedStringTable _localizedStringTable;
+    private StringTable _currentStringTable;
+
     private LevelData data;
+    private GameObject[] levelButtons;
+
+    public SettingsManager settingsManager;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
+        levelButtons = new GameObject[tempNumOfLevels];
+
         RectTransform panel = levelScreen.GetComponent<RectTransform>();
         // Get the current size
         Vector2 size = panel.sizeDelta;
@@ -34,17 +45,26 @@ public class LoadLevels : MonoBehaviour
         if(data==null)
             data = createFile();
 
+        // 2. Wait for the table to load asynchronously
+        _currentStringTable = _localizedStringTable.GetTable();
+        // At this point _currentStringTable can be used to
+        // access our strings
+        // 3. Retrieve the localized string
+        string levelText = _currentStringTable["level"].LocalizedValue;
+        string bestTimeText = _currentStringTable["best_time"].LocalizedValue;
+
         for(int i=0; i<tempNumOfLevels; i++)
         {
             GameObject newBut = Instantiate(levelButton, new Vector3(0,0,0), Quaternion.Euler(0,0,0));
+            levelButtons[i] = newBut;
             newBut.transform.SetParent(levelScreen.transform);
 
             TMP_Text[] texts = newBut.GetComponentsInChildren<TMP_Text>();
-            texts[0].text = data.levelNames[i];
+            texts[0].text = levelText+(i+1);
             if(data.bestTime[i]==-1)
                 texts[1].text = "";
             else
-                texts[1].text = "best time: "+data.bestTime[i];
+                texts[1].text = bestTimeText+data.bestTime[i];
 
             // Get Button component and assign unique scene index
             Button button = newBut.GetComponent<Button>();
@@ -60,9 +80,29 @@ public class LoadLevels : MonoBehaviour
     }
 
 
+    private void FixedUpdate()
+    {
+        if(settingsManager.getLanguageChanged())
+        {
+            for(int i=0; i<tempNumOfLevels; i++)
+            {
+                _currentStringTable = _localizedStringTable.GetTable();
+                string levelText = _currentStringTable["level"].LocalizedValue;
+                string bestTimeText = _currentStringTable["best_time"].LocalizedValue;
+
+                TMP_Text[] texts = levelButtons[i].GetComponentsInChildren<TMP_Text>();
+                texts[0].text = levelText+(i+1);
+                if(data.bestTime[i]==-1)
+                    texts[1].text = "";
+                else
+                    texts[1].text = bestTimeText+data.bestTime[i];
+            }
+        }
+    }
+
+
     public void ButtonClicked(int num)
     {
-        Debug.Log("Clicked: "+num);
         GameInfo.currentLevel = num;
         SceneManager.LoadScene(data.sceneName[num]);
     }

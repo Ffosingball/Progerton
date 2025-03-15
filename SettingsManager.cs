@@ -4,6 +4,7 @@ using TMPro;
 using System.Collections.Generic;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
+using System;
 
 /*This class manages all ui changes in main menu*/
 
@@ -22,13 +23,22 @@ public class SettingsManager : MonoBehaviour
     [SerializeField]
     private TMP_Text textSliderMusic, textSliderSound;
     [SerializeField]
-    private Dropdown languageChoice;
+    private TMP_Dropdown languageChoice;
     [SerializeField]
     private Toggle toggleShowPrompts;
 
 
     private SettingsPreferences settingsPreferences;
     private bool isInitialized = false;
+    private bool languageChanged=false;
+    private Coroutine changeLanguage;
+
+
+    public SoundManager soundManager;
+
+
+    public SettingsPreferences getSettingsPreferences(){return settingsPreferences;}
+    public bool getLanguageChanged(){return languageChanged;}
 
 
     private void Start()
@@ -39,10 +49,9 @@ public class SettingsManager : MonoBehaviour
         if(settingsPreferences==null)
             settingsPreferences = createPreferences();
 
-        GameInfo.setPreferences(settingsPreferences);
-
         languageChoice.value = settingsPreferences.languageIndex;
         languageChoice.RefreshShownValue();
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[settingsPreferences.languageIndex];
 
         textSliderMusic.text = (Math.Round(settingsPreferences.musicVolume*100))+"%";
         soundManager.updateMusciVolume(settingsPreferences.musicVolume);
@@ -50,7 +59,7 @@ public class SettingsManager : MonoBehaviour
 
         textSliderSound.text = (Math.Round(settingsPreferences.soundEffectsVolume*100))+"%";
         soundManager.updateSoundVolume(settingsPreferences.soundEffectsVolume);
-        sliderSound.value = settingsPreferences.soundVolume;
+        sliderSound.value = settingsPreferences.soundEffectsVolume;
 
         if(settingsPreferences.showPrompts)
             toggleShowPrompts.isOn = true;
@@ -87,7 +96,25 @@ public class SettingsManager : MonoBehaviour
         settingsPreferences.languageIndex = languageIndex;
         SaveSystem.SaveSettingsPreferences(settingsPreferences);
 
+        languageChanged=true;
+
+        if(changeLanguage!=null)
+        {
+            StopCoroutine(changeLanguage);
+            changeLanguage = null;
+        }
+
+        changeLanguage = StartCoroutine(waitForChanges());
+
         //Sound goes here
+    }
+
+
+    private IEnumerator<WaitForSeconds> waitForChanges()
+    {
+        yield return new WaitForSeconds(0.2f);
+        languageChanged = false;
+        changeLanguage = null;
     }
 
 
@@ -98,7 +125,7 @@ public class SettingsManager : MonoBehaviour
             return;
         }
 
-        settingsPreferences.musicVolume = sliderMusic;
+        settingsPreferences.musicVolume = sliderMusic.value;
         textSliderMusic.text = (Math.Round(settingsPreferences.musicVolume*100))+"%";
         soundManager.updateMusciVolume(settingsPreferences.musicVolume);
         SaveSystem.SaveSettingsPreferences(settingsPreferences);
@@ -113,7 +140,7 @@ public class SettingsManager : MonoBehaviour
             return;
         }
 
-        settingsPreferences.soundVolume = sliderSound;
+        settingsPreferences.soundEffectsVolume = sliderSound.value;
         textSliderSound.text = (Math.Round(settingsPreferences.soundEffectsVolume*100))+"%";
         soundManager.updateSoundVolume(settingsPreferences.soundEffectsVolume);
         SaveSystem.SaveSettingsPreferences(settingsPreferences);
@@ -137,5 +164,18 @@ public class SettingsManager : MonoBehaviour
         SaveSystem.SaveSettingsPreferences(settingsPreferences);
 
         //Sound goes here
+    }
+
+
+    private SettingsPreferences createPreferences()
+    {
+        SettingsPreferences pref = new SettingsPreferences();
+        pref.languageIndex = 0;
+        pref.soundEffectsVolume = 1f;
+        pref.musicVolume = 1f;
+        pref.showPrompts = true;
+        pref.uiSize = 2;
+
+        return pref;
     }
 }

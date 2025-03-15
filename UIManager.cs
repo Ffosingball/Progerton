@@ -45,13 +45,15 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TMP_Text levelText1, levelText2, levelText3;
     [SerializeField]
+    private GameObject overviewPrompts, gamePrompts;
+    [SerializeField]
     private Button prevRoundBut;
     [SerializeField]
     private Button nextLevelBut;
     [SerializeField]
     private float timeBeforeTextDisappear=5f;
 
-    public SavePlayerMovements savePlayerMovements;
+    public SettingsManager settingsManager;
     public LevelManager levelManager;
     public ReplayManager replayManager;
 
@@ -110,6 +112,17 @@ public class UIManager : MonoBehaviour
             prevRoundBut.interactable = false;
         else
             prevRoundBut.interactable = true;
+        
+        if(settingsManager.getSettingsPreferences().showPrompts)
+        {
+            overviewPrompts.SetActive(true);
+            gamePrompts.SetActive(true);
+        }
+        else
+        {
+            overviewPrompts.SetActive(false);
+            gamePrompts.SetActive(false);
+        }
     }
 
 
