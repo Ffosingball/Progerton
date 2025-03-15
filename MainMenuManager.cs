@@ -68,11 +68,4 @@ public class MainMenuManager : MonoBehaviour
         string str = _currentStringTable["check_text"].LocalizedValue;
         Debug.Log(str);
     }
-
-
-    public void ChangeLanguage(int languageIndex)
-    {
-        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[languageIndex];
-        LoadLocalizedText();
-    }
 }
