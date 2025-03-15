@@ -23,9 +23,12 @@ public class SettingsManager : MonoBehaviour
     private TMP_Text textSliderMusic, textSliderSound;
     [SerializeField]
     private Dropdown languageChoice;
+    [SerializeField]
+    private Toggle toggleShowPrompts;
 
 
     private SettingsPreferences settingsPreferences;
+    private bool isInitialized = false;
 
 
     private void Start()
@@ -38,12 +41,23 @@ public class SettingsManager : MonoBehaviour
 
         GameInfo.setPreferences(settingsPreferences);
 
-        languageChoice.value = GameInfo.languageIndex;
+        languageChoice.value = settingsPreferences.languageIndex;
         languageChoice.RefreshShownValue();
-        textSliderMusic.text = (Math.Round(GameInfo.musicVolume*100))+"%";
-        soundManager.updateMusciVolume(GameInfo.musicVolume);
-        textSliderSound.text = (Math.Round(GameInfo.soundEffectsVolume*100))+"%";
-        soundManager.updateSoundVolume(GameInfo.soundEffectsVolume);
+
+        textSliderMusic.text = (Math.Round(settingsPreferences.musicVolume*100))+"%";
+        soundManager.updateMusciVolume(settingsPreferences.musicVolume);
+        sliderMusic.value = settingsPreferences.musicVolume;
+
+        textSliderSound.text = (Math.Round(settingsPreferences.soundEffectsVolume*100))+"%";
+        soundManager.updateSoundVolume(settingsPreferences.soundEffectsVolume);
+        sliderSound.value = settingsPreferences.soundVolume;
+
+        if(settingsPreferences.showPrompts)
+            toggleShowPrompts.isOn = true;
+        else
+            toggleShowPrompts.isOn = false;
+
+        isInitialized = true;
     }
 
 
@@ -63,8 +77,17 @@ public class SettingsManager : MonoBehaviour
 
     public void ChangeLanguage(int languageIndex)
     {
+        if (!isInitialized)
+        {
+            return;
+        }
+
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[languageIndex];
-        GameInfo.languageIndex = languageIndex;
+
+        settingsPreferences.languageIndex = languageIndex;
+        SaveSystem.SaveSettingsPreferences(settingsPreferences);
+
+        //Sound goes here
     }
 
 
@@ -72,33 +95,47 @@ public class SettingsManager : MonoBehaviour
     {
         if (!isInitialized)
         {
-            // Ignore the first call at initialization
             return;
         }
 
-        GameInfo.musicVolume = sliderMusic.value;
-        textSliderMusic.text = (Math.Round(GameInfo.musicVolume*100))+"%";
-        soundManager.updateMusciVolume(GameInfo.musicVolume);
+        settingsPreferences.musicVolume = sliderMusic;
+        textSliderMusic.text = (Math.Round(settingsPreferences.musicVolume*100))+"%";
+        soundManager.updateMusciVolume(settingsPreferences.musicVolume);
+        SaveSystem.SaveSettingsPreferences(settingsPreferences);
 
-        //settingsChanged=true;
-        //soundManager.PlayChangeValueSound();
-        //Debug.Log("Changed");
+        //Sound goes here
     }
 
     public void onSoundVolumeChange()
     {
         if (!isInitialized)
         {
-            // Ignore the first call at initialization
             return;
         }
 
-        GameInfo.soundEffectsVolume = sliderSound.value;
-        textSliderSound.text = (Math.Round(GameInfo.soundEffectsVolume*100))+"%";
-        soundManager.updateSoundVolume(GameInfo.soundEffectsVolume);
+        settingsPreferences.soundVolume = sliderSound;
+        textSliderSound.text = (Math.Round(settingsPreferences.soundEffectsVolume*100))+"%";
+        soundManager.updateSoundVolume(settingsPreferences.soundEffectsVolume);
+        SaveSystem.SaveSettingsPreferences(settingsPreferences);
 
-        //settingsChanged=true;
-        //soundManager.PlayChangeValueSound();
-        //Debug.Log("Changed");
+        //Sound goes here
+    }
+
+
+    public void onCheckPromtsForKeys()
+    {
+        if (!isInitialized)
+        {
+            return;
+        }
+
+        if(settingsPreferences.showPrompts)
+            settingsPreferences.showPrompts = false;
+        else
+            settingsPreferences.showPrompts = true;
+        
+        SaveSystem.SaveSettingsPreferences(settingsPreferences);
+
+        //Sound goes here
     }
 }
