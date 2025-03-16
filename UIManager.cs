@@ -30,6 +30,8 @@ public class UIManager : MonoBehaviour
     private GameObject lostScreen;
     [SerializeField]
     private GameObject prevRoundScreen;
+    [SerializeField]
+    private GameObject settingsScreen;
     //[SerializeField]
     //private TMP_Text isRecordingText;
     [SerializeField]
@@ -395,5 +397,19 @@ public class UIManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         prevRoundScreen.SetActive(false);
         startPreviousRound();
+    }
+
+
+    public void OpenSettingsScreen()
+    {
+        escapeScreen.SetActive(false);
+        settingsScreen.SetActive(true);
+    }
+
+
+    public void OpenEscapeScreen()
+    {
+        escapeScreen.SetActive(true);
+        settingsScreen.SetActive(false);
     }
 }

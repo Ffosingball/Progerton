@@ -5,7 +5,8 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     //Reference to the listener
-    public AudioSource musicSource, soundSource, stepSource;
+    public AudioSource musicSource;
+    public AudioSource[] soundSources;
     //Reference to sound
     public AudioClip clip;
     //private Coroutine changeValueSoundPlaying=null;
@@ -58,13 +59,13 @@ public class SoundManager : MonoBehaviour
     //This method start play short sounds
     public void PlayOtherSound(AudioClip soundClip)
     {
-        soundSource.PlayOneShot(soundClip);
+        soundSources[0].PlayOneShot(soundClip);
     }
 
 
     public void PlayClip()
     {
-        soundSource.PlayOneShot(clip);
+        soundSources[0].PlayOneShot(clip);
     }
 
 
@@ -85,8 +86,11 @@ public class SoundManager : MonoBehaviour
     //This method stops all music
     public void StopSound()
     {
-        if (soundSource.isPlaying)
-            soundSource.Stop();
+        foreach (AudioSource sound in soundSources)
+        {
+            if (sound.isPlaying)
+                sound.Stop();
+        }
         
         if(musicSource.isPlaying)
             musicSource.Stop();
@@ -101,9 +105,9 @@ public class SoundManager : MonoBehaviour
 
     public void updateSoundVolume(float volume)
     {
-        if(stepSource!=null)
-            stepSource.volume = volume;
-
-        soundSource.volume = volume;
+        foreach (AudioSource sound in soundSources)
+        {
+            sound.volume = volume;
+        }
     }
 }

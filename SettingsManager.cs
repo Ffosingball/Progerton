@@ -19,13 +19,15 @@ public class SettingsManager : MonoBehaviour
     [SerializeField]
     private Button keyBindingBut;*/
     [SerializeField]
-    private Slider sliderMusic, sliderSound;
+    private Slider sliderMusic, sliderSound, sliderUI;
     [SerializeField]
     private TMP_Text textSliderMusic, textSliderSound;
     [SerializeField]
     private TMP_Dropdown languageChoice;
     [SerializeField]
     private Toggle toggleShowPrompts;
+    [SerializeField]
+    private CanvasScaler canvasScaler;
 
 
     private SettingsPreferences settingsPreferences;
@@ -60,6 +62,9 @@ public class SettingsManager : MonoBehaviour
         textSliderSound.text = (Math.Round(settingsPreferences.soundEffectsVolume*100))+"%";
         soundManager.updateSoundVolume(settingsPreferences.soundEffectsVolume);
         sliderSound.value = settingsPreferences.soundEffectsVolume;
+
+        canvasScaler.scaleFactor = settingsPreferences.uiSize;
+        sliderUI.value = settingsPreferences.uiSize;
 
         if(settingsPreferences.showPrompts)
             toggleShowPrompts.isOn = true;
@@ -149,6 +154,19 @@ public class SettingsManager : MonoBehaviour
     }
 
 
+    public void onUIScaleChange()
+    {
+        if (!isInitialized)
+        {
+            return;
+        }
+
+        canvasScaler.scaleFactor = sliderUI.value;
+        settingsPreferences.uiSize = sliderUI.value;
+        SaveSystem.SaveSettingsPreferences(settingsPreferences);
+    }
+
+
     public void onCheckPromtsForKeys()
     {
         if (!isInitialized)
@@ -174,7 +192,7 @@ public class SettingsManager : MonoBehaviour
         pref.soundEffectsVolume = 1f;
         pref.musicVolume = 1f;
         pref.showPrompts = true;
-        pref.uiSize = 2;
+        pref.uiSize = 1f;
 
         return pref;
     }
