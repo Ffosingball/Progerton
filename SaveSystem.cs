@@ -45,7 +45,7 @@ public static class SaveSystem
         //Create path to the file
         //Application.persistentDataPath is useful to create files for crossplatforms games
         //After add name and extension of the binary file
-        string path = Application.persistentDataPath + "/settingsPref.omg";
+        string path = Application.persistentDataPath + "/settingsPreff.omg";
         //Create a file
         FileStream stream = new FileStream(path, FileMode.Create);
         //Write data in that file
@@ -56,7 +56,7 @@ public static class SaveSystem
 
     public static SettingsPreferences LoadSettingsPreferences()
     {
-        string path = Application.persistentDataPath + "/settingsPref.omg";
+        string path = Application.persistentDataPath + "/settingsPreff.omg";
         if(File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

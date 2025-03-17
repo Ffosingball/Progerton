@@ -9,7 +9,6 @@ public class SettingsPreferences
     public float soundEffectsVolume;
     public float musicVolume;
     public int languageIndex;
-    public float uiSize;
     public bool showPrompts;
 
     public SettingsPreferences()

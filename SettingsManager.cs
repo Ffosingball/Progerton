@@ -19,7 +19,7 @@ public class SettingsManager : MonoBehaviour
     [SerializeField]
     private Button keyBindingBut;*/
     [SerializeField]
-    private Slider sliderMusic, sliderSound, sliderUI;
+    private Slider sliderMusic, sliderSound;
     [SerializeField]
     private TMP_Text textSliderMusic, textSliderSound;
     [SerializeField]
@@ -27,7 +27,9 @@ public class SettingsManager : MonoBehaviour
     [SerializeField]
     private Toggle toggleShowPrompts;
     [SerializeField]
-    private CanvasScaler canvasScaler;
+    private TMP_FontAsset japaneseFont;
+    [SerializeField]
+    private TMP_FontAsset otherLanguageFont;
 
 
     private SettingsPreferences settingsPreferences;
@@ -63,15 +65,14 @@ public class SettingsManager : MonoBehaviour
         soundManager.updateSoundVolume(settingsPreferences.soundEffectsVolume);
         sliderSound.value = settingsPreferences.soundEffectsVolume;
 
-        canvasScaler.scaleFactor = settingsPreferences.uiSize;
-        sliderUI.value = settingsPreferences.uiSize;
-
         if(settingsPreferences.showPrompts)
             toggleShowPrompts.isOn = true;
         else
             toggleShowPrompts.isOn = false;
 
         isInitialized = true;
+
+        UpdateFont();
     }
 
 
@@ -100,6 +101,7 @@ public class SettingsManager : MonoBehaviour
 
         settingsPreferences.languageIndex = languageIndex;
         SaveSystem.SaveSettingsPreferences(settingsPreferences);
+        UpdateFont();
 
         languageChanged=true;
 
@@ -112,6 +114,18 @@ public class SettingsManager : MonoBehaviour
         changeLanguage = StartCoroutine(waitForChanges());
 
         //Sound goes here
+    }
+
+
+    private void UpdateFont()
+    {
+        string currentLanguage = LocalizationSettings.SelectedLocale.Identifier.Code;
+        TMP_FontAsset selectedFont = (currentLanguage == "ja") ? japaneseFont : otherLanguageFont;
+
+        foreach (TextMeshProUGUI text in FindObjectsOfType<TextMeshProUGUI>(true)) // true includes inactive objects
+        {
+            text.font = selectedFont;
+        }
     }
 
 
@@ -154,19 +168,6 @@ public class SettingsManager : MonoBehaviour
     }
 
 
-    public void onUIScaleChange()
-    {
-        if (!isInitialized)
-        {
-            return;
-        }
-
-        canvasScaler.scaleFactor = sliderUI.value;
-        settingsPreferences.uiSize = sliderUI.value;
-        SaveSystem.SaveSettingsPreferences(settingsPreferences);
-    }
-
-
     public void onCheckPromtsForKeys()
     {
         if (!isInitialized)
@@ -192,7 +193,6 @@ public class SettingsManager : MonoBehaviour
         pref.soundEffectsVolume = 1f;
         pref.musicVolume = 1f;
         pref.showPrompts = true;
-        pref.uiSize = 1f;
 
         return pref;
     }

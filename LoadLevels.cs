@@ -76,6 +76,9 @@ public class LoadLevels : MonoBehaviour
                 button.interactable = false;
             else
                 button.interactable = true;
+
+            RectTransform transform = newBut.GetComponent<RectTransform>();
+            transform.localScale = new Vector3(1f,1f,1f);
         }
     }
 
