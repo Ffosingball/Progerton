@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Tables;
+
 
 /*This class manages all ui changes*/
 
@@ -55,6 +58,10 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private float timeBeforeTextDisappear=5f;
 
+    [SerializeField]
+    private LocalizedStringTable _localizedStringTable;
+    private StringTable _currentStringTable;
+
     public SettingsManager settingsManager;
     public LevelManager levelManager;
     public ReplayManager replayManager;
@@ -62,6 +69,7 @@ public class UIManager : MonoBehaviour
     private bool cursorlocked;
     private Coroutine disappearText=null;
     private LevelData data;
+    private GameObject curScreen;
 
 
     //Getter for cursorLocked
@@ -82,10 +90,6 @@ public class UIManager : MonoBehaviour
             nextLevelBut.interactable = false;
         else
             nextLevelBut.interactable = true;
-
-        levelText1.text = "Level " + (GameInfo.currentLevel+1);
-        levelText2.text = "Level " + (GameInfo.currentLevel+1);
-        levelText3.text = "Level " + (GameInfo.currentLevel+1);
     }
 
 
@@ -125,6 +129,29 @@ public class UIManager : MonoBehaviour
             overviewPrompts.SetActive(false);
             gamePrompts.SetActive(false);
         }
+
+
+        if(settingsManager.getLanguageChanged())
+        {
+            updateText();
+        }
+    }
+
+
+    private void updateText()
+    {
+        Debug.Log("Changed!");
+        _currentStringTable = _localizedStringTable.GetTable();
+
+        levelText1.text = _currentStringTable["level"].LocalizedValue +" "+ (GameInfo.currentLevel+1)+" "+_currentStringTable["completed"].LocalizedValue;
+        levelText2.text = _currentStringTable["level"].LocalizedValue +" "+ (GameInfo.currentLevel+1)+" "+_currentStringTable["failure"].LocalizedValue;
+        levelText3.text = _currentStringTable["level"].LocalizedValue +" "+ (GameInfo.currentLevel+1); 
+
+        TMP_Text t1 = gamePrompts.GetComponent<TMP_Text>();
+        t1.text = "W, S, D, A - "+_currentStringTable["move"].LocalizedValue+"\nShift - "+_currentStringTable["run"].LocalizedValue+"\nEscape - "+_currentStringTable["exit"].LocalizedValue+"\nE - "+_currentStringTable["end_recording"].LocalizedValue+"\nR - "+_currentStringTable["rerecord_moves"].LocalizedValue+"\nQ - "+_currentStringTable["overview"].LocalizedValue;
+
+        TMP_Text t2 = overviewPrompts.GetComponent<TMP_Text>();
+        t2.text = "W, S, D, A - "+_currentStringTable["move"].LocalizedValue+"\nShift, Space - "+_currentStringTable["move_up_and_down"].LocalizedValue+"\nEscape - "+_currentStringTable["exit"].LocalizedValue+"\nR - "+_currentStringTable["replay_movements"].LocalizedValue+"\nQ - "+_currentStringTable["start_recording"].LocalizedValue+"\nE - "+_currentStringTable["prev_round"].LocalizedValue;
     }
 
 
@@ -138,15 +165,23 @@ public class UIManager : MonoBehaviour
     }
 
 
-    public void OutputRoundStatus(string output)
+    public void OutputRoundStatus(int output)
     {
         if(disappearText!=null)
         {
             StopCoroutine(disappearText);
             disappearText=null;
         }
-
-        lastFirstRoundText.text = output;
+	
+	switch(output)
+	{
+	    case 1:
+        	lastFirstRoundText.text = _currentStringTable["first_round"].LocalizedValue;
+		break;
+	    case 2:
+        	lastFirstRoundText.text = _currentStringTable["last_round"].LocalizedValue;
+		break;
+	}
         disappearText = StartCoroutine(hideTextTimer());
     }
 
@@ -159,15 +194,15 @@ public class UIManager : MonoBehaviour
     }
 
 
-    public void OutputRoundNumber(string rText)
+    public void OutputRoundNumber(int num)
     {
-        roundText.text = rText;
+        roundText.text = _currentStringTable["round"].LocalizedValue+num;
     }
 
 
-    public void OutputErrorText(string rText)
+    public void OutputErrorText()
     {
-        errorText.text = rText;
+        errorText.text = _currentStringTable["error_message"].LocalizedValue;
     }
 
 
@@ -187,6 +222,7 @@ public class UIManager : MonoBehaviour
     {
         gameScreen.SetActive(false);
         levelOverviewScreen.SetActive(true);
+        curScreen = levelOverviewScreen;
     }
 
 
@@ -194,6 +230,7 @@ public class UIManager : MonoBehaviour
     {
         levelOverviewScreen.SetActive(false);
         countdownScreen.SetActive(true);
+        curScreen = countdownScreen;
     }
 
 
@@ -201,6 +238,7 @@ public class UIManager : MonoBehaviour
     {
         countdownScreen.SetActive(false);
         gameScreen.SetActive(true);
+        curScreen = gameScreen;
     }
 
 
@@ -303,7 +341,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 0f;
         winScreen.SetActive(true);
 
-        timeText2.text = "Time: "+levelManager.getTime();
+        timeText2.text = _currentStringTable["time"].LocalizedValue+levelManager.getTime();
 
         if(data.sceneName.Count!=GameInfo.currentLevel-1)
             data.locked[GameInfo.currentLevel+1] = false;
@@ -404,6 +442,7 @@ public class UIManager : MonoBehaviour
     {
         escapeScreen.SetActive(false);
         settingsScreen.SetActive(true);
+        curScreen.SetActive(false);
     }
 
 
@@ -411,5 +450,6 @@ public class UIManager : MonoBehaviour
     {
         escapeScreen.SetActive(true);
         settingsScreen.SetActive(false);
+        curScreen.SetActive(true);
     }
 }

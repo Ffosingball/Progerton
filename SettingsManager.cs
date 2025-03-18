@@ -73,6 +73,9 @@ public class SettingsManager : MonoBehaviour
         isInitialized = true;
 
         UpdateFont();
+
+        languageChanged=true;
+        changeLanguage = StartCoroutine(waitForChanges());
     }
 
 
@@ -181,6 +184,8 @@ public class SettingsManager : MonoBehaviour
             settingsPreferences.showPrompts = true;
         
         SaveSystem.SaveSettingsPreferences(settingsPreferences);
+
+        //Debug.Log("Called");
 
         //Sound goes here
     }

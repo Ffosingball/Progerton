@@ -98,7 +98,7 @@ public class LevelManager : MonoBehaviour
         if(Input.GetKeyDown(endRecordingKey) && gameMode)
         {
             if(replayManager.isLastRound())
-                uIManager.OutputErrorText("You cannot do that on the last round!");
+                uIManager.OutputErrorText();
             else
                 uIManager.endRecordingWarning();
         }
@@ -106,7 +106,7 @@ public class LevelManager : MonoBehaviour
         if(Input.GetKeyDown(goToPrevRoundKey) && !gameMode)
         {
             if(replayManager.getCurrentRound()==0)
-                uIManager.OutputRoundStatus("This is the first Round!");
+                uIManager.OutputRoundStatus(1);
             else
                 uIManager.prevRoundWarning();
         }

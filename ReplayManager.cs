@@ -50,7 +50,7 @@ public class ReplayManager : MonoBehaviour
 
         if(currentRound==numOfRounds)//Check if its the last round
         {
-            uIManager.OutputRoundStatus("This is the last Round!");
+            uIManager.OutputRoundStatus(2);
             currentRound--;
         }
         else
@@ -65,7 +65,7 @@ public class ReplayManager : MonoBehaviour
                 resetData(currentRound-1);
             }
 
-            uIManager.OutputRoundNumber("Round "+(currentRound+1));
+            uIManager.OutputRoundNumber(currentRound+1);
 
             //Instantiate new repeater
             GameObject newReplay = Instantiate(replayerPrefab, initialPositions[currentRound], Quaternion.Euler(initialRotations[currentRound]));
@@ -98,14 +98,14 @@ public class ReplayManager : MonoBehaviour
         //Check if its the first round
         if(currentRound==-1)
         {
-            uIManager.OutputRoundStatus("This is the first Round!");
+            uIManager.OutputRoundStatus(1);
             currentRound++;
         }
         else
         {
             levelManager.resetPosition();
             levelManager.setOverviewMode();
-            uIManager.OutputRoundNumber("Round "+(currentRound+1));
+            uIManager.OutputRoundNumber(currentRound+1);
 
             //destroy last created repeater
             Destroy(allReplayers[currentRound+1]);
