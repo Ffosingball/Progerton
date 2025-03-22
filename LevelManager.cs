@@ -37,6 +37,7 @@ public class LevelManager : MonoBehaviour
     public ReplayManager replayManager; 
     public TriggersManager triggersManager;
     public PersonLook personLook;
+    public SettingsManager settingsManager;
 
     private bool gameMode; //false - camera mode, true - recording mode
     private bool canMove; //it is used to disable movement of the character during countdown
@@ -92,7 +93,12 @@ public class LevelManager : MonoBehaviour
             if(gameMode==false)
                 replayManager.StartReplay();
             else
-                uIManager.rerecordWarning();
+            {
+                if(settingsManager.getSettingsPreferences().showWarningsScreen)
+                    uIManager.rerecordWarning();
+                else
+                    uIManager.yesRerecord();
+            }
         }
 
         if(Input.GetKeyDown(endRecordingKey) && gameMode)
@@ -100,7 +106,12 @@ public class LevelManager : MonoBehaviour
             if(replayManager.isLastRound())
                 uIManager.OutputErrorText();
             else
-                uIManager.endRecordingWarning();
+            {
+                if(settingsManager.getSettingsPreferences().showWarningsScreen)
+                    uIManager.endRecordingWarning();
+                else
+                    uIManager.yesEndRecord();
+            }
         }
 
         if(Input.GetKeyDown(goToPrevRoundKey) && !gameMode)
@@ -108,7 +119,12 @@ public class LevelManager : MonoBehaviour
             if(replayManager.getCurrentRound()==0)
                 uIManager.OutputRoundStatus(1);
             else
-                uIManager.prevRoundWarning();
+            {
+                if(settingsManager.getSettingsPreferences().showWarningsScreen)
+                    uIManager.prevRoundWarning();
+                else
+                    uIManager.yesPrevRound();
+            }
         }
     }
 
@@ -161,7 +177,10 @@ public class LevelManager : MonoBehaviour
     {
         if(gameMode)
         {
-            uIManager.changeModeWarning();
+            if(settingsManager.getSettingsPreferences().showWarningsScreen)
+                uIManager.changeModeWarning();
+            else
+                uIManager.yesChangeMode();
         }
         else
         {

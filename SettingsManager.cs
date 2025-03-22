@@ -191,6 +191,26 @@ public class SettingsManager : MonoBehaviour
     }
 
 
+    public void onCheckWarningsScreen()
+    {
+        if (!isInitialized)
+        {
+            return;
+        }
+
+        if(settingsPreferences.showWarningsScreen)
+            settingsPreferences.showWarningsScreen = false;
+        else
+            settingsPreferences.showWarningsScreen = true;
+        
+        SaveSystem.SaveSettingsPreferences(settingsPreferences);
+
+        //Debug.Log("Called");
+
+        //Sound goes here
+    }
+
+
     private SettingsPreferences createPreferences()
     {
         SettingsPreferences pref = new SettingsPreferences();
@@ -198,6 +218,7 @@ public class SettingsManager : MonoBehaviour
         pref.soundEffectsVolume = 1f;
         pref.musicVolume = 1f;
         pref.showPrompts = true;
+        pref.showWarningsScreen = true;
 
         return pref;
     }

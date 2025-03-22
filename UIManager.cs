@@ -70,6 +70,7 @@ public class UIManager : MonoBehaviour
     private Coroutine disappearText=null;
     private LevelData data;
     private GameObject curScreen;
+    private int roundNum=-1;
 
 
     //Getter for cursorLocked
@@ -140,18 +141,19 @@ public class UIManager : MonoBehaviour
 
     private void updateText()
     {
-        Debug.Log("Changed!");
         _currentStringTable = _localizedStringTable.GetTable();
+
+        roundText.text = _currentStringTable["roundT"].LocalizedValue+" "+roundNum;
 
         levelText1.text = _currentStringTable["level"].LocalizedValue +" "+ (GameInfo.currentLevel+1)+" "+_currentStringTable["completed"].LocalizedValue;
         levelText2.text = _currentStringTable["level"].LocalizedValue +" "+ (GameInfo.currentLevel+1)+" "+_currentStringTable["failure"].LocalizedValue;
         levelText3.text = _currentStringTable["level"].LocalizedValue +" "+ (GameInfo.currentLevel+1); 
 
         TMP_Text t1 = gamePrompts.GetComponent<TMP_Text>();
-        t1.text = "W, S, D, A - "+_currentStringTable["move"].LocalizedValue+"\nShift - "+_currentStringTable["run"].LocalizedValue+"\nEscape - "+_currentStringTable["exit"].LocalizedValue+"\nE - "+_currentStringTable["end_recording"].LocalizedValue+"\nR - "+_currentStringTable["rerecord_moves"].LocalizedValue+"\nQ - "+_currentStringTable["overview"].LocalizedValue;
+        t1.text = "W, S, D, A - "+_currentStringTable["move"].LocalizedValue.Replace("\n", "")+"\nShift - "+_currentStringTable["run"].LocalizedValue.Replace("\n", "")+"\nEscape - "+_currentStringTable["exit"].LocalizedValue.Replace("\n", "")+"\nE - "+_currentStringTable["end_recording"].LocalizedValue.Replace("\n", "")+"\nR - "+_currentStringTable["rerecord_moves"].LocalizedValue.Replace("\n", "")+"\nQ - "+_currentStringTable["overview"].LocalizedValue.Replace("\n", "");
 
         TMP_Text t2 = overviewPrompts.GetComponent<TMP_Text>();
-        t2.text = "W, S, D, A - "+_currentStringTable["move"].LocalizedValue+"\nShift, Space - "+_currentStringTable["move_up_and_down"].LocalizedValue+"\nEscape - "+_currentStringTable["exit"].LocalizedValue+"\nR - "+_currentStringTable["replay_movements"].LocalizedValue+"\nQ - "+_currentStringTable["start_recording"].LocalizedValue+"\nE - "+_currentStringTable["prev_round"].LocalizedValue;
+        t2.text = "W, S, D, A - "+_currentStringTable["move"].LocalizedValue.Replace("\n", "")+"\nShift, Space - "+_currentStringTable["move_up_and_down"].LocalizedValue.Replace("\n", "")+"\nEscape - "+_currentStringTable["exit"].LocalizedValue.Replace("\n", "")+"\nR - "+_currentStringTable["replay_movements"].LocalizedValue.Replace("\n", "")+"\nQ - "+_currentStringTable["start_recording"].LocalizedValue.Replace("\n", "")+"\nE - "+_currentStringTable["prev_round"].LocalizedValue.Replace("\n", "");
     }
 
 
@@ -161,6 +163,7 @@ public class UIManager : MonoBehaviour
         cursorlocked=true;
         Cursor.lockState = CursorLockMode.Locked;
         escapeScreen.SetActive(false);
+        settingsScreen.SetActive(false);
         Time.timeScale = 1f;
     }
 
@@ -196,7 +199,7 @@ public class UIManager : MonoBehaviour
 
     public void OutputRoundNumber(int num)
     {
-        roundText.text = _currentStringTable["round"].LocalizedValue+num;
+        roundNum=num;
     }
 
 
