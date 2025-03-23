@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /*This class manages movement of the character on the ground*/
 
@@ -7,16 +8,10 @@ public class Movement : MonoBehaviour
 {
     [SerializeField]
     private float speed = 5;
-    [Header("Running")]
     [SerializeField]
     private float runSpeed = 9;
     [SerializeField]
-    private KeyCode runningKey = KeyCode.LeftShift;
-    [SerializeField]
     private float minYHeight = -10;
-    /// <summary> Functions to override movement speed. Will use the last added override. </summary>
-    [SerializeField]
-    private List<System.Func<float>> speedOverrides = new List<System.Func<float>>();
     
     public UIManager uIManager;
     public LevelManager levelManager;
@@ -24,10 +19,13 @@ public class Movement : MonoBehaviour
     private Rigidbody rigidbody;
     private Transform transform;
     private bool IsRunning;
+    private Vector2 moveInput = new Vector2(0,0);
+    private Vector2 mouseInput = new Vector2(0,0);
 
 
     //Getter for IsRunning
     public bool getIsRunning(){return IsRunning;}
+    public Vector2 getMouseInput() {return mouseInput;}
 
 
     void Awake()
@@ -42,25 +40,42 @@ public class Movement : MonoBehaviour
     {
         if(uIManager.getCursorlocked() && levelManager.getCanMove())
         {
-            // Update IsRunning from input.
-            IsRunning = Input.GetKey(runningKey);
-
-            // Get targetMovingSpeed.
-            float targetMovingSpeed = IsRunning ? runSpeed : speed;
-            if (speedOverrides.Count > 0)
-            {
-                //Debug.Log("xyz: "+transform.position);
-                targetMovingSpeed = speedOverrides[speedOverrides.Count - 1]();
-            }
-
-            // Get targetVelocity from input.
-            Vector2 targetVelocity =new Vector2( Input.GetAxis("Horizontal") * targetMovingSpeed, Input.GetAxis("Vertical") * targetMovingSpeed);
+            float targetMovingSpeed;
+            if (IsRunning)
+                targetMovingSpeed = runSpeed;
+            else
+                targetMovingSpeed = speed;
 
             // Apply movement.
-            rigidbody.linearVelocity = transform.rotation * new Vector3(targetVelocity.x, rigidbody.linearVelocity.y, targetVelocity.y);
+            rigidbody.linearVelocity = transform.rotation * new Vector3(moveInput.x* targetMovingSpeed, rigidbody.linearVelocity.y, moveInput.y* targetMovingSpeed);
         }
 
         if(transform.position.y<minYHeight)
             uIManager.yesRerecord();
+    }
+
+
+    public void OnSprint(InputValue value)
+    {
+        if(value.isPressed && value.Get<float>()==1)
+        {
+            IsRunning=true;
+        }
+        else
+        {
+            IsRunning = false;
+        }
+    }
+
+
+    public void OnMove2(InputValue value)
+    {
+        moveInput = value.Get<Vector2>();
+    }
+
+
+    void OnLook(InputValue value)
+    {
+        mouseInput = value.Get<Vector2>();
     }
 }

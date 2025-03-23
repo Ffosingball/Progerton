@@ -136,14 +136,15 @@ public class UIManager : MonoBehaviour
         {
             updateText();
         }
+
+
+        roundText.text = _currentStringTable["roundT"].LocalizedValue+" "+roundNum;
     }
 
 
     private void updateText()
     {
         _currentStringTable = _localizedStringTable.GetTable();
-
-        roundText.text = _currentStringTable["roundT"].LocalizedValue+" "+roundNum;
 
         levelText1.text = _currentStringTable["level"].LocalizedValue +" "+ (GameInfo.currentLevel+1)+" "+_currentStringTable["completed"].LocalizedValue;
         levelText2.text = _currentStringTable["level"].LocalizedValue +" "+ (GameInfo.currentLevel+1)+" "+_currentStringTable["failure"].LocalizedValue;
@@ -164,6 +165,7 @@ public class UIManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         escapeScreen.SetActive(false);
         settingsScreen.SetActive(false);
+        curScreen.SetActive(true);
         Time.timeScale = 1f;
     }
 
@@ -224,6 +226,7 @@ public class UIManager : MonoBehaviour
     public void setLevelOverviewScreen()
     {
         gameScreen.SetActive(false);
+        countdownScreen.SetActive(false);
         levelOverviewScreen.SetActive(true);
         curScreen = levelOverviewScreen;
     }

@@ -8,6 +8,7 @@ public class SettingsPreferences
 {
     public float soundEffectsVolume;
     public float musicVolume;
+    public float sensitivity;
     public int languageIndex;
     public bool showPrompts;
     public bool showWarningsScreen;

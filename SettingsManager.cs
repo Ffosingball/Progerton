@@ -19,13 +19,13 @@ public class SettingsManager : MonoBehaviour
     [SerializeField]
     private Button keyBindingBut;*/
     [SerializeField]
-    private Slider sliderMusic, sliderSound;
+    private Slider sliderMusic, sliderSound, sliderSensitivity;
     [SerializeField]
     private TMP_Text textSliderMusic, textSliderSound;
     [SerializeField]
     private TMP_Dropdown languageChoice;
     [SerializeField]
-    private Toggle toggleShowPrompts;
+    private Toggle toggleShowPrompts, toggleWarningScreen;
     [SerializeField]
     private TMP_FontAsset japaneseFont;
     [SerializeField]
@@ -65,10 +65,17 @@ public class SettingsManager : MonoBehaviour
         soundManager.updateSoundVolume(settingsPreferences.soundEffectsVolume);
         sliderSound.value = settingsPreferences.soundEffectsVolume;
 
+        sliderSensitivity.value = settingsPreferences.sensitivity;
+
         if(settingsPreferences.showPrompts)
             toggleShowPrompts.isOn = true;
         else
             toggleShowPrompts.isOn = false;
+
+        if(settingsPreferences.showWarningsScreen)
+            toggleWarningScreen.isOn = true;
+        else
+            toggleWarningScreen.isOn = false;
 
         isInitialized = true;
 
@@ -171,6 +178,20 @@ public class SettingsManager : MonoBehaviour
     }
 
 
+    public void onSensitivityChange()
+    {
+        if (!isInitialized)
+        {
+            return;
+        }
+
+        settingsPreferences.sensitivity = sliderSensitivity.value;
+        SaveSystem.SaveSettingsPreferences(settingsPreferences);
+
+        //Sound goes here
+    }
+
+
     public void onCheckPromtsForKeys()
     {
         if (!isInitialized)
@@ -219,6 +240,7 @@ public class SettingsManager : MonoBehaviour
         pref.musicVolume = 1f;
         pref.showPrompts = true;
         pref.showWarningsScreen = true;
+        pref.sensitivity = 1f;
 
         return pref;
     }

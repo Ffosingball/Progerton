@@ -5,12 +5,13 @@
 public class PersonLook : MonoBehaviour
 {
     [SerializeField]
-    private float sensitivity = 2;
-    [SerializeField]
     private float smoothing = 1.5f;
 
     public UIManager uIManager;
     public Transform character;
+    public Movement movement;
+    public CameraMovement cameraMovement;
+    public SettingsManager settingsManager;
     //public LevelManager levelManager;
 
     private Vector2 velocity;
@@ -26,10 +27,15 @@ public class PersonLook : MonoBehaviour
         {
             // Get smooth velocity.
             Vector2 mouseDelta = new Vector2();
-            if (Cursor.lockState == CursorLockMode.Locked) // Только если мышь заблокирована
-                mouseDelta = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
+            if (Cursor.lockState == CursorLockMode.Locked)
+            {
+                if(movement!=null)
+                    mouseDelta = movement.getMouseInput();
+                else
+                    mouseDelta = cameraMovement.getMouseInput();
+            }
 
-            Vector2 rawFrameVelocity = Vector2.Scale(mouseDelta, Vector2.one * sensitivity);
+            Vector2 rawFrameVelocity = mouseDelta * (settingsManager.getSettingsPreferences().sensitivity/10);
             frameVelocity = Vector2.Lerp(frameVelocity, rawFrameVelocity, 1 / smoothing);
             velocity += frameVelocity;
             velocity.y = Mathf.Clamp(velocity.y, -90, 90);

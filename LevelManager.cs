@@ -19,14 +19,6 @@ public class LevelManager : MonoBehaviour
     private Vector3 initialPositionCamera = new Vector3(0,0,0); //initial position for the camera
     [SerializeField]
     private Vector3 initialRotationCamera = new Vector3(0,0,0); //initial rotation for the camera
-    [SerializeField]
-    private KeyCode changeModeKey = KeyCode.Q;
-    [SerializeField]
-    private KeyCode replay_rerecordKey = KeyCode.R;
-    [SerializeField]
-    private KeyCode endRecordingKey = KeyCode.E;
-    [SerializeField]
-    private KeyCode goToPrevRoundKey = KeyCode.E;
 
     
     public GameObject character;
@@ -77,55 +69,40 @@ public class LevelManager : MonoBehaviour
     }
 
 
-    //Check if any of the keys has been pressed
-    public void Update()
+    public void handleEndRecording()
     {
-        /*if(!moveCamera)
-            moveCamera=true;*/
-
-        if(Input.GetKeyDown(changeModeKey))
+        if(replayManager.isLastRound())
+            uIManager.OutputErrorText();
+        else
         {
-            ChangeMode();
-        }
-
-        if(Input.GetKeyDown(replay_rerecordKey))
-        {
-            if(gameMode==false)
-                replayManager.StartReplay();
+            if(settingsManager.getSettingsPreferences().showWarningsScreen)
+                uIManager.endRecordingWarning();
             else
-            {
-                if(settingsManager.getSettingsPreferences().showWarningsScreen)
-                    uIManager.rerecordWarning();
-                else
-                    uIManager.yesRerecord();
-            }
+                uIManager.yesEndRecord();
         }
+    }
 
-        if(Input.GetKeyDown(endRecordingKey) && gameMode)
-        {
-            if(replayManager.isLastRound())
-                uIManager.OutputErrorText();
-            else
-            {
-                if(settingsManager.getSettingsPreferences().showWarningsScreen)
-                    uIManager.endRecordingWarning();
-                else
-                    uIManager.yesEndRecord();
-            }
-        }
 
-        if(Input.GetKeyDown(goToPrevRoundKey) && !gameMode)
+    public void handlePreviousRound()
+    {
+        if(replayManager.getCurrentRound()==0)
+            uIManager.OutputRoundStatus(1);
+        else
         {
-            if(replayManager.getCurrentRound()==0)
-                uIManager.OutputRoundStatus(1);
+            if(settingsManager.getSettingsPreferences().showWarningsScreen)
+                uIManager.prevRoundWarning();
             else
-            {
-                if(settingsManager.getSettingsPreferences().showWarningsScreen)
-                    uIManager.prevRoundWarning();
-                else
-                    uIManager.yesPrevRound();
-            }
+                uIManager.yesPrevRound();
         }
+    }
+
+
+    public void handleRerecordMoves()
+    {
+        if(settingsManager.getSettingsPreferences().showWarningsScreen)
+            uIManager.rerecordWarning();
+        else
+            uIManager.yesRerecord();
     }
 
 

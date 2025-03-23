@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /*This class manages movement of the camera*/
 
@@ -20,12 +21,15 @@ public class CameraMovement : MonoBehaviour
     private float maxX = 40;
     [SerializeField]
     private float minX = -40;
-    [SerializeField]
-    private KeyCode downwardKey = KeyCode.LeftShift;
-    [SerializeField]
-    private KeyCode upwardKey = KeyCode.Space;
 
     private Transform transform2;
+    private Vector2 moveInput = new Vector2(0,0);
+    private Vector2 mouseInput = new Vector2(0,0);
+    private bool movesDownward=false, movesUpward=false;
+
+
+
+    public Vector2 getMouseInput() {return mouseInput;}
 
 
 
@@ -40,27 +44,62 @@ public class CameraMovement : MonoBehaviour
         float velocityY=0;
 
         //Check if player wants to move upward or downward
-        if(Input.GetKey(upwardKey))
+        if(movesUpward)
         {
             if(transform2.position.y<maxHeight)
                 velocityY = verticalSpeed;
         }
-        else if(Input.GetKey(downwardKey))
+        else if(movesDownward)
         {
             if(transform2.position.y>minHeight)
                 velocityY = -verticalSpeed;
         }
 
-        // Get targetVelocity from input.
-        Vector2 targetVelocity =new Vector2( Input.GetAxis("Horizontal") * horizontalSpeed, Input.GetAxis("Vertical") * horizontalSpeed);
-
         // Apply movement.
-        transform2.Translate(new Vector3(targetVelocity.x, velocityY, targetVelocity.y) * Time.deltaTime);
+        transform2.Translate(new Vector3(moveInput.x* horizontalSpeed, velocityY, moveInput.y* horizontalSpeed)* Time.deltaTime);
         Vector3 pos = transform2.position;
 
         pos.z = Mathf.Clamp(pos.z, minZ, maxZ);
         pos.x = Mathf.Clamp(pos.x, minX, maxX);
 
         transform2.position = pos;
+    }
+
+
+    public void OnMove2(InputValue value)
+    {
+        moveInput = value.Get<Vector2>();
+    }
+
+
+    void OnLook(InputValue value)
+    {
+        mouseInput = value.Get<Vector2>();
+    }
+
+
+    public void OnMove_downward(InputValue value)
+    {
+        if(value.isPressed && value.Get<float>()==1)
+        {
+            movesDownward=true;
+        }
+        else
+        {
+            movesDownward = false;
+        }
+    }
+
+
+    public void OnMove_upward(InputValue value)
+    {
+        if(value.isPressed && value.Get<float>()==1)
+        {
+            movesUpward=true;
+        }
+        else
+        {
+            movesUpward = false;
+        }
     }
 }
