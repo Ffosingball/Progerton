@@ -12,6 +12,7 @@ public class SettingsPreferences
     public int languageIndex;
     public bool showPrompts;
     public bool showWarningsScreen;
+    public string[] keyBindings;
 
     public SettingsPreferences()
     {

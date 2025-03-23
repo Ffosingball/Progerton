@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Tables;
+using System;
 
 
 /*This class manages all ui changes*/
@@ -142,7 +143,7 @@ public class UIManager : MonoBehaviour
     }
 
 
-    private void updateText()
+    public void updateText()
     {
         _currentStringTable = _localizedStringTable.GetTable();
 
@@ -151,10 +152,48 @@ public class UIManager : MonoBehaviour
         levelText3.text = _currentStringTable["level"].LocalizedValue +" "+ (GameInfo.currentLevel+1); 
 
         TMP_Text t1 = gamePrompts.GetComponent<TMP_Text>();
-        t1.text = "W, S, D, A - "+_currentStringTable["move"].LocalizedValue.Replace("\n", "")+"\nShift - "+_currentStringTable["run"].LocalizedValue.Replace("\n", "")+"\nEscape - "+_currentStringTable["exit"].LocalizedValue.Replace("\n", "")+"\nE - "+_currentStringTable["end_recording"].LocalizedValue.Replace("\n", "")+"\nR - "+_currentStringTable["rerecord_moves"].LocalizedValue.Replace("\n", "")+"\nQ - "+_currentStringTable["overview"].LocalizedValue.Replace("\n", "");
+        string[] parts = new string[6];
+        string key = "";
+        string compositeKey = "";
+
+        key = settingsManager.getSettingsPreferences().keyBindings[0];
+        compositeKey = compositeKey + (key[key.Length-1]+"").ToUpper();
+        key = settingsManager.getSettingsPreferences().keyBindings[1];
+        compositeKey = compositeKey + ", " + (key[key.Length-1]+"").ToUpper();
+        key = settingsManager.getSettingsPreferences().keyBindings[2];
+        compositeKey = compositeKey + ", " + (key[key.Length-1]+"").ToUpper();
+        key = settingsManager.getSettingsPreferences().keyBindings[3];
+        compositeKey = compositeKey + ", " + (key[key.Length-1]+"").ToUpper();
+        parts[0] = compositeKey+"- "+_currentStringTable["move"].LocalizedValue.Replace("\n", "");
+        key = settingsManager.getSettingsPreferences().keyBindings[6];
+        parts[1] = "\n"+(key[key.Length-1]+" ").ToUpper()+"- "+_currentStringTable["run"].LocalizedValue.Replace("\n", "");
+        parts[2] = "\nEscape - "+_currentStringTable["exit"].LocalizedValue.Replace("\n", "");
+        key = settingsManager.getSettingsPreferences().keyBindings[10];
+        parts[3] = "\n"+(key[key.Length-1]+" ").ToUpper()+"- "+_currentStringTable["end_recording"].LocalizedValue.Replace("\n", "");
+        key = settingsManager.getSettingsPreferences().keyBindings[11];
+        parts[4] = "\n"+(key[key.Length-1]+" ").ToUpper()+"- "+_currentStringTable["rerecord_moves"].LocalizedValue.Replace("\n", "");
+        key = settingsManager.getSettingsPreferences().keyBindings[12];
+        parts[5] = "\n"+(key[key.Length-1]+" ").ToUpper()+"- "+_currentStringTable["overview"].LocalizedValue.Replace("\n", "");
+
+        t1.text = parts[0]+parts[1]+parts[2]+parts[3]+parts[4]+parts[5];
 
         TMP_Text t2 = overviewPrompts.GetComponent<TMP_Text>();
-        t2.text = "W, S, D, A - "+_currentStringTable["move"].LocalizedValue.Replace("\n", "")+"\nShift, Space - "+_currentStringTable["move_up_and_down"].LocalizedValue.Replace("\n", "")+"\nEscape - "+_currentStringTable["exit"].LocalizedValue.Replace("\n", "")+"\nR - "+_currentStringTable["replay_movements"].LocalizedValue.Replace("\n", "")+"\nQ - "+_currentStringTable["start_recording"].LocalizedValue.Replace("\n", "")+"\nE - "+_currentStringTable["prev_round"].LocalizedValue.Replace("\n", "");
+
+        parts[0] = compositeKey+_currentStringTable["move"].LocalizedValue.Replace("\n", "");
+        key = settingsManager.getSettingsPreferences().keyBindings[4];
+        compositeKey = compositeKey + (key[key.Length-1]+"").ToUpper();
+        key = settingsManager.getSettingsPreferences().keyBindings[5];
+        compositeKey = compositeKey + ", " + (key[key.Length-1]+"").ToUpper();
+        parts[1] = "\n"+compositeKey+" - "+_currentStringTable["move_up_and_down"].LocalizedValue.Replace("\n", "");
+        parts[2] = "\nEscape - "+_currentStringTable["exit"].LocalizedValue.Replace("\n", "");
+        key = settingsManager.getSettingsPreferences().keyBindings[8];
+        parts[3] = "\n"+(key[key.Length-1]+" ").ToUpper()+"- "+_currentStringTable["replay_movements"].LocalizedValue.Replace("\n", "");
+        key = settingsManager.getSettingsPreferences().keyBindings[7];
+        parts[4] = "\n"+(key[key.Length-1]+" ").ToUpper()+"- "+_currentStringTable["start_recording"].LocalizedValue.Replace("\n", "");
+        key = settingsManager.getSettingsPreferences().keyBindings[9];
+        parts[5] = "\n"+(key[key.Length-1]+" ").ToUpper()+"- "+_currentStringTable["prev_round"].LocalizedValue.Replace("\n", "");
+
+        t2.text = parts[0]+parts[1]+parts[2]+parts[3]+parts[4]+parts[5];
     }
 
 

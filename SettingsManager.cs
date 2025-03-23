@@ -39,6 +39,7 @@ public class SettingsManager : MonoBehaviour
 
 
     public SoundManager soundManager;
+    public KeyRebinder keyRebinder;
 
 
     public SettingsPreferences getSettingsPreferences(){return settingsPreferences;}
@@ -82,6 +83,9 @@ public class SettingsManager : MonoBehaviour
         UpdateFont();
 
         languageChanged=true;
+
+        keyRebinder.updateText();
+
         changeLanguage = StartCoroutine(waitForChanges());
     }
 
@@ -241,6 +245,21 @@ public class SettingsManager : MonoBehaviour
         pref.showPrompts = true;
         pref.showWarningsScreen = true;
         pref.sensitivity = 1f;
+
+        pref.keyBindings = new string[13];
+        pref.keyBindings[0] = "<Keyboard>/w";
+        pref.keyBindings[1] = "<Keyboard>/s";
+        pref.keyBindings[2] = "<Keyboard>/a";
+        pref.keyBindings[3] = "<Keyboard>/d";
+        pref.keyBindings[4] = "<Keyboard>/space";
+        pref.keyBindings[5] = "<Keyboard>/shift";
+        pref.keyBindings[6] = "<Keyboard>/shift";
+        pref.keyBindings[7] = "<Keyboard>/q";
+        pref.keyBindings[8] = "<Keyboard>/r";
+        pref.keyBindings[9] = "<Keyboard>/e";
+        pref.keyBindings[10] = "<Keyboard>/e";
+        pref.keyBindings[11] = "<Keyboard>/r";
+        pref.keyBindings[12] = "<Keyboard>/q";
 
         return pref;
     }
