@@ -16,6 +16,11 @@ public class SettingsPreferences
 
     public SettingsPreferences()
     {
-        Debug.Log("Created!");
+        soundEffectsVolume = 0;
+    }
+
+    public string ToString()
+    {
+        return "Sound volume: "+soundEffectsVolume+"; music volume: "+musicVolume+"; prompts: "+showPrompts+"; warnings: "+showWarningsScreen+"; sensitivity: "+sensitivity+"; language: "+languageIndex;
     }
 }

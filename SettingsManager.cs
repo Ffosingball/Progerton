@@ -54,6 +54,14 @@ public class SettingsManager : MonoBehaviour
         if(settingsPreferences==null)
             settingsPreferences = createPreferences();
 
+        ResetUI();
+    }
+
+
+    private void ResetUI()
+    {
+        isInitialized = false;
+
         languageChoice.value = settingsPreferences.languageIndex;
         languageChoice.RefreshShownValue();
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[settingsPreferences.languageIndex];
@@ -78,14 +86,12 @@ public class SettingsManager : MonoBehaviour
         else
             toggleWarningScreen.isOn = false;
 
-        isInitialized = true;
-
         UpdateFont();
-
-        languageChanged=true;
 
         keyRebinder.updateText();
 
+        isInitialized = true;
+        languageChanged=true;
         changeLanguage = StartCoroutine(waitForChanges());
     }
 
@@ -262,5 +268,48 @@ public class SettingsManager : MonoBehaviour
         pref.keyBindings[12] = "<Keyboard>/q";
 
         return pref;
+    }
+
+
+    public void ResetToDefaultSettings()
+    {
+        //Debug.Log(settingsPreferences.ToString());
+        settingsPreferences.languageIndex = 0;
+        settingsPreferences.soundEffectsVolume = 1f;
+        settingsPreferences.musicVolume = 1f;
+        settingsPreferences.showPrompts = true;
+        settingsPreferences.showWarningsScreen = true;
+        settingsPreferences.sensitivity = 1f;
+        //Debug.Log(settingsPreferences.ToString());
+
+        SaveSystem.SaveSettingsPreferences(settingsPreferences);
+
+        ResetUI();
+        //Debug.Log(settingsPreferences.ToString());
+    }
+
+
+    public void ResetToDefaultKeyBindings()
+    {
+        settingsPreferences.keyBindings = new string[13];
+        settingsPreferences.keyBindings[0] = "<Keyboard>/w";
+        settingsPreferences.keyBindings[1] = "<Keyboard>/s";
+        settingsPreferences.keyBindings[2] = "<Keyboard>/a";
+        settingsPreferences.keyBindings[3] = "<Keyboard>/d";
+        settingsPreferences.keyBindings[4] = "<Keyboard>/space";
+        settingsPreferences.keyBindings[5] = "<Keyboard>/shift";
+        settingsPreferences.keyBindings[6] = "<Keyboard>/shift";
+        settingsPreferences.keyBindings[7] = "<Keyboard>/q";
+        settingsPreferences.keyBindings[8] = "<Keyboard>/r";
+        settingsPreferences.keyBindings[9] = "<Keyboard>/e";
+        settingsPreferences.keyBindings[10] = "<Keyboard>/e";
+        settingsPreferences.keyBindings[11] = "<Keyboard>/r";
+        settingsPreferences.keyBindings[12] = "<Keyboard>/q";
+
+        SaveSystem.SaveSettingsPreferences(settingsPreferences);
+
+        keyRebinder.updateText();
+
+        ResetUI();
     }
 }

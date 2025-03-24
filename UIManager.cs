@@ -66,6 +66,7 @@ public class UIManager : MonoBehaviour
     public SettingsManager settingsManager;
     public LevelManager levelManager;
     public ReplayManager replayManager;
+    public KeyRebinder keyRebinder;
 
     private bool cursorlocked;
     private Coroutine disappearText=null;
@@ -123,6 +124,7 @@ public class UIManager : MonoBehaviour
         
         if(settingsManager.getSettingsPreferences().showPrompts)
         {
+            //Debug.Log("Show");
             overviewPrompts.SetActive(true);
             gamePrompts.SetActive(true);
         }
@@ -145,6 +147,7 @@ public class UIManager : MonoBehaviour
 
     public void updateText()
     {
+        //Debug.Log("Updated text!");
         _currentStringTable = _localizedStringTable.GetTable();
 
         levelText1.text = _currentStringTable["level"].LocalizedValue +" "+ (GameInfo.currentLevel+1)+" "+_currentStringTable["completed"].LocalizedValue;
@@ -153,45 +156,30 @@ public class UIManager : MonoBehaviour
 
         TMP_Text t1 = gamePrompts.GetComponent<TMP_Text>();
         string[] parts = new string[6];
-        string key = "";
         string compositeKey = "";
 
-        key = settingsManager.getSettingsPreferences().keyBindings[0];
-        compositeKey = compositeKey + (key[key.Length-1]+"").ToUpper();
-        key = settingsManager.getSettingsPreferences().keyBindings[1];
-        compositeKey = compositeKey + ", " + (key[key.Length-1]+"").ToUpper();
-        key = settingsManager.getSettingsPreferences().keyBindings[2];
-        compositeKey = compositeKey + ", " + (key[key.Length-1]+"").ToUpper();
-        key = settingsManager.getSettingsPreferences().keyBindings[3];
-        compositeKey = compositeKey + ", " + (key[key.Length-1]+"").ToUpper();
-        parts[0] = compositeKey+"- "+_currentStringTable["move"].LocalizedValue.Replace("\n", "");
-        key = settingsManager.getSettingsPreferences().keyBindings[6];
-        parts[1] = "\n"+(key[key.Length-1]+" ").ToUpper()+"- "+_currentStringTable["run"].LocalizedValue.Replace("\n", "");
+        compositeKey = keyRebinder.GetButtonTextMove(0);
+        compositeKey = compositeKey + ", " + keyRebinder.GetButtonTextMove(1);
+        compositeKey = compositeKey + ", " + keyRebinder.GetButtonTextMove(2);
+        compositeKey = compositeKey + ", " + keyRebinder.GetButtonTextMove(3);
+        parts[0] = compositeKey+" - "+_currentStringTable["move"].LocalizedValue.Replace("\n", "");
+        parts[1] = "\n"+keyRebinder.GetButtonText(6)+" - "+_currentStringTable["run"].LocalizedValue.Replace("\n", "");
         parts[2] = "\nEscape - "+_currentStringTable["exit"].LocalizedValue.Replace("\n", "");
-        key = settingsManager.getSettingsPreferences().keyBindings[10];
-        parts[3] = "\n"+(key[key.Length-1]+" ").ToUpper()+"- "+_currentStringTable["end_recording"].LocalizedValue.Replace("\n", "");
-        key = settingsManager.getSettingsPreferences().keyBindings[11];
-        parts[4] = "\n"+(key[key.Length-1]+" ").ToUpper()+"- "+_currentStringTable["rerecord_moves"].LocalizedValue.Replace("\n", "");
-        key = settingsManager.getSettingsPreferences().keyBindings[12];
-        parts[5] = "\n"+(key[key.Length-1]+" ").ToUpper()+"- "+_currentStringTable["overview"].LocalizedValue.Replace("\n", "");
+        parts[3] = "\n"+keyRebinder.GetButtonText(10)+" - "+_currentStringTable["end_recording"].LocalizedValue.Replace("\n", "");
+        parts[4] = "\n"+keyRebinder.GetButtonText(11)+" - "+_currentStringTable["rerecord_moves"].LocalizedValue.Replace("\n", "");
+        parts[5] = "\n"+keyRebinder.GetButtonText(12)+" - "+_currentStringTable["overview"].LocalizedValue.Replace("\n", "");
 
         t1.text = parts[0]+parts[1]+parts[2]+parts[3]+parts[4]+parts[5];
 
         TMP_Text t2 = overviewPrompts.GetComponent<TMP_Text>();
 
-        parts[0] = compositeKey+_currentStringTable["move"].LocalizedValue.Replace("\n", "");
-        key = settingsManager.getSettingsPreferences().keyBindings[4];
-        compositeKey = compositeKey + (key[key.Length-1]+"").ToUpper();
-        key = settingsManager.getSettingsPreferences().keyBindings[5];
-        compositeKey = compositeKey + ", " + (key[key.Length-1]+"").ToUpper();
+        parts[0] = compositeKey+" - "+_currentStringTable["move"].LocalizedValue.Replace("\n", "");
+        compositeKey = keyRebinder.GetButtonText(4)+ ", " +keyRebinder.GetButtonText(5);
         parts[1] = "\n"+compositeKey+" - "+_currentStringTable["move_up_and_down"].LocalizedValue.Replace("\n", "");
         parts[2] = "\nEscape - "+_currentStringTable["exit"].LocalizedValue.Replace("\n", "");
-        key = settingsManager.getSettingsPreferences().keyBindings[8];
-        parts[3] = "\n"+(key[key.Length-1]+" ").ToUpper()+"- "+_currentStringTable["replay_movements"].LocalizedValue.Replace("\n", "");
-        key = settingsManager.getSettingsPreferences().keyBindings[7];
-        parts[4] = "\n"+(key[key.Length-1]+" ").ToUpper()+"- "+_currentStringTable["start_recording"].LocalizedValue.Replace("\n", "");
-        key = settingsManager.getSettingsPreferences().keyBindings[9];
-        parts[5] = "\n"+(key[key.Length-1]+" ").ToUpper()+"- "+_currentStringTable["prev_round"].LocalizedValue.Replace("\n", "");
+        parts[3] = "\n"+keyRebinder.GetButtonText(8)+" - "+_currentStringTable["replay_movements"].LocalizedValue.Replace("\n", "");
+        parts[4] = "\n"+keyRebinder.GetButtonText(7)+" - "+_currentStringTable["start_recording"].LocalizedValue.Replace("\n", "");
+        parts[5] = "\n"+keyRebinder.GetButtonText(9)+" - "+_currentStringTable["prev_round"].LocalizedValue.Replace("\n", "");
 
         t2.text = parts[0]+parts[1]+parts[2]+parts[3]+parts[4]+parts[5];
     }
@@ -217,15 +205,15 @@ public class UIManager : MonoBehaviour
             disappearText=null;
         }
 	
-	switch(output)
-	{
-	    case 1:
-        	lastFirstRoundText.text = _currentStringTable["first_round"].LocalizedValue;
-		break;
-	    case 2:
-        	lastFirstRoundText.text = _currentStringTable["last_round"].LocalizedValue;
-		break;
-	}
+        switch(output)
+        {
+            case 1:
+                lastFirstRoundText.text = _currentStringTable["first_round"].LocalizedValue;
+            break;
+            case 2:
+                lastFirstRoundText.text = _currentStringTable["last_round"].LocalizedValue;
+            break;
+        }
         disappearText = StartCoroutine(hideTextTimer());
     }
 
@@ -235,6 +223,12 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(timeBeforeTextDisappear);
         lastFirstRoundText.text = "";
         disappearText = null;
+    }
+
+
+    public string getTextForKeyRebinding()
+    {
+        return _currentStringTable["press_key"].LocalizedValue;
     }
 
 

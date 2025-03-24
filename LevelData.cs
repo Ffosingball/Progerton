@@ -13,6 +13,10 @@ public class LevelData
 
     public LevelData()
     {
-        Debug.Log("Created!");
+        levelNames = new List<string>();
+        sceneName = new List<string>();
+        locked = new List<bool>();
+        bestTime = new List<float>();
+        pictureRef = new List<int>();
     }
 }
