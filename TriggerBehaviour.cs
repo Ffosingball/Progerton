@@ -15,12 +15,15 @@ public class TriggerBehaviour : MonoBehaviour
     //this trigger changes
 
     public TriggersManager triggersManager;
+    public Renderer renderer;
+    public Animator triggerAnimator; 
 
     private int numOfObjectsInside=0; //This is required for correct working of the trigger
 
 
     void Start(){
-        GetComponent<Renderer>().material = triggerOff;
+        renderer.material = triggerOff;
+        triggerAnimator.SetBool("isOn", false);
     }
 
 
@@ -30,7 +33,8 @@ public class TriggerBehaviour : MonoBehaviour
         if (other.CompareTag(targetTag)) // Check tag of the object
         {
             triggersManager.setFlag(correspondingFlag, true);
-            GetComponent<Renderer>().material = triggerOn;
+            renderer.material = triggerOn;
+            triggerAnimator.SetBool("isOn", true);
             numOfObjectsInside++;
         }
     }
@@ -44,7 +48,8 @@ public class TriggerBehaviour : MonoBehaviour
             if (numOfObjectsInside == 0) //Check if somebody still there
             {
                 triggersManager.setFlag(correspondingFlag, false);
-                GetComponent<Renderer>().material = triggerOff;
+                renderer.material = triggerOff;
+                triggerAnimator.SetBool("isOn", false);
             }
         }
     }
@@ -53,6 +58,7 @@ public class TriggerBehaviour : MonoBehaviour
     {
         numOfObjectsInside=0;
         triggersManager.setFlag(correspondingFlag, false);
-        GetComponent<Renderer>().material = triggerOff;
+        renderer.material = triggerOff;
+        triggerAnimator.SetBool("isOn", false);
     }
 }
