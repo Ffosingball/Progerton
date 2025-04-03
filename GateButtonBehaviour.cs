@@ -7,18 +7,15 @@ public class GateButtonBehaviour : MonoBehaviour
     [SerializeField]
     private string targetTag = "Player"; // tag of object which we find
     [SerializeField]
-    private Material triggerOn;  
-    [SerializeField]
-    private Material triggerOff;
-    [SerializeField]
     private int correspondingGate; //this field stores which flag in the array of all flags
     //this trigger changes
 
     public TriggersManager triggersManager;
+    public Animator buttonAnimator; 
 
 
     void Start(){
-        GetComponent<Renderer>().material = triggerOff;
+        buttonAnimator.SetBool("pushed", false);
     }
 
 
@@ -28,13 +25,14 @@ public class GateButtonBehaviour : MonoBehaviour
         if (other.CompareTag(targetTag)) // Check tag of the object
         {
             triggersManager.setGate(correspondingGate, true);
-            GetComponent<Renderer>().material = triggerOn;
+            buttonAnimator.SetBool("pushed", true);
         }
     }
 
     public void disableTrigger()
     {
+        buttonAnimator.SetBool("pushed", false);
+        buttonAnimator.Play("button_off_idle_");
         triggersManager.setGate(correspondingGate, false);
-        GetComponent<Renderer>().material = triggerOff;
     }
 }
