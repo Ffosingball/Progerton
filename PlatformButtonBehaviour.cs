@@ -11,14 +11,19 @@ public class PlatformButtonBehaviour : MonoBehaviour
     [SerializeField]
     private Material triggerOff;
     [SerializeField]
+    private AudioClip buttonPush;
 
     public TriggersManager triggersManager;
+    public Renderer renderer;
+    public Animator buttonPlatformAnimator; 
+    public AudioSource soundSource;
 
     private int numOfObjectsInside=0; //This is required for correct working of the trigger
 
 
     void Start(){
-        GetComponent<Renderer>().material = triggerOff;
+        renderer.material = triggerOff;
+        buttonPlatformAnimator.SetBool("someoneInside", false);
     }
 
 
@@ -31,8 +36,12 @@ public class PlatformButtonBehaviour : MonoBehaviour
                 triggersManager.setActiveButton(1);
 
             triggersManager.setMovePlatforms(true);
-            GetComponent<Renderer>().material = triggerOn;
+            buttonPlatformAnimator.SetBool("someoneInside", true);
+            renderer.material = triggerOn;
             numOfObjectsInside++;
+
+            if(numOfObjectsInside==1)
+                soundSource.PlayOneShot(buttonPush);
         }
     }
 
@@ -44,7 +53,8 @@ public class PlatformButtonBehaviour : MonoBehaviour
             numOfObjectsInside--;
             if (numOfObjectsInside == 0) //Check if somebody still there
             {
-                GetComponent<Renderer>().material = triggerOff;
+                renderer.material = triggerOff;
+                buttonPlatformAnimator.SetBool("someoneInside", false);
 
                 if(numOfObjectsInside==0)
                     triggersManager.setActiveButton(-1);
@@ -52,6 +62,7 @@ public class PlatformButtonBehaviour : MonoBehaviour
 
             if(triggersManager.getActiveButton()==0)
                 triggersManager.setMovePlatforms(false);
+                soundSource.PlayOneShot(buttonPush);
         }
     }
 
@@ -59,6 +70,7 @@ public class PlatformButtonBehaviour : MonoBehaviour
     {
         numOfObjectsInside=0;
         triggersManager.setMovePlatforms(false);
-        GetComponent<Renderer>().material = triggerOff;
+        renderer.material = triggerOff;
+        buttonPlatformAnimator.SetBool("someoneInside", false);
     }
 }

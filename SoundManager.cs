@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SoundManager : MonoBehaviour
 {
     //Reference to the listener
+    public AudioMixer mixer;
     public AudioSource musicSource;
-    public AudioSource[] soundSources;
     //Reference to sound
     public AudioClip clip;
     //private Coroutine changeValueSoundPlaying=null;
@@ -57,16 +58,10 @@ public class SoundManager : MonoBehaviour
 
 
     //This method start play short sounds
-    public void PlayOtherSound(AudioClip soundClip)
-    {
-        soundSources[0].PlayOneShot(soundClip);
-    }
-
-
-    public void PlayClip()
+    /*public void PlayClip()
     {
         soundSources[0].PlayOneShot(clip);
-    }
+    }*/
 
 
     /*public void PlayChangeValueSound()
@@ -84,30 +79,21 @@ public class SoundManager : MonoBehaviour
 
 
     //This method stops all music
-    public void StopSound()
-    {
-        foreach (AudioSource sound in soundSources)
-        {
-            if (sound.isPlaying)
-                sound.Stop();
-        }
-        
+    public void StopMusic()
+    {   
         if(musicSource.isPlaying)
             musicSource.Stop();
     }
 
 
-    public void updateMusciVolume(float volume)
+    public void updateMusicVolume(float musicVolume)
     {
-        musicSource.volume = volume;
+        mixer.SetFloat("MusicVolume", Mathf.Log10(musicVolume) * 20);
     }
 
 
-    public void updateSoundVolume(float volume)
+    public void updateSoundVolume(float soundVolume)
     {
-        foreach (AudioSource sound in soundSources)
-        {
-            sound.volume = volume;
-        }
+        mixer.SetFloat("SoundVolume", Mathf.Log10(soundVolume) * 20);
     }
 }

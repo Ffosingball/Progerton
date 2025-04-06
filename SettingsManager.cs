@@ -67,7 +67,7 @@ public class SettingsManager : MonoBehaviour
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[settingsPreferences.languageIndex];
 
         textSliderMusic.text = (Math.Round(settingsPreferences.musicVolume*100))+"%";
-        soundManager.updateMusciVolume(settingsPreferences.musicVolume);
+        soundManager.updateMusicVolume(settingsPreferences.musicVolume);
         sliderMusic.value = settingsPreferences.musicVolume;
 
         textSliderSound.text = (Math.Round(settingsPreferences.soundEffectsVolume*100))+"%";
@@ -166,7 +166,7 @@ public class SettingsManager : MonoBehaviour
 
         settingsPreferences.musicVolume = sliderMusic.value;
         textSliderMusic.text = (Math.Round(settingsPreferences.musicVolume*100))+"%";
-        soundManager.updateMusciVolume(settingsPreferences.musicVolume);
+        soundManager.updateMusicVolume(settingsPreferences.musicVolume);
         SaveSystem.SaveSettingsPreferences(settingsPreferences);
 
         //Sound goes here

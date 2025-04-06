@@ -6,6 +6,7 @@ using UnityEngine;
 public class ReplayMovements : MonoBehaviour
 {
     public SavePlayerMovements savePlayerMovements;
+    public Animator repeaterAnimator; 
 
     private List<Vector3> recordedPositions;
     private List<Quaternion> recordedQuaternions;
@@ -28,6 +29,7 @@ public class ReplayMovements : MonoBehaviour
 
     private void Start(){
         Reset();
+        repeaterAnimator.SetBool("moves", false);
     }
 
 
@@ -55,12 +57,22 @@ public class ReplayMovements : MonoBehaviour
     {
         if(recordedPositions!=null)
         {
+            repeaterAnimator.SetBool("moves", true);
             currentIndex=0;
             while (currentIndex < recordedPositions.Count)
             {
                 Vector3 position = recordedPositions[currentIndex];
                 position.y += yOffset;
-                transform.position = position;
+                if(transform.position == position)
+                {
+                    repeaterAnimator.SetBool("moves", false);
+                }
+                else
+                {
+                    repeaterAnimator.SetBool("moves", true);
+                    transform.position = position;
+                }
+
                 transform.rotation = recordedQuaternions[currentIndex];
                 currentIndex++;
                 //Debug.Log("WTF");
@@ -68,6 +80,7 @@ public class ReplayMovements : MonoBehaviour
             }
         }
 
+        repeaterAnimator.SetBool("moves", false);
         //Debug.Log("Finished");
         //When it finishes all recorded movements than just waits on the 
         //same place
@@ -83,6 +96,7 @@ public class ReplayMovements : MonoBehaviour
         if(replay!=null)
         {
             StopCoroutine(replay);
+            repeaterAnimator.SetBool("moves", false);
             replay=null;
             //Debug.Log("Stopped");
         }
