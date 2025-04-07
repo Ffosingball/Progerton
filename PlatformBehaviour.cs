@@ -16,8 +16,8 @@ public class PlatformBehaviour : MonoBehaviour
     [SerializeField]
     private bool directionUp = true;
 
-    
     public TriggersManager triggersManager;
+    public AudioSource soundSource;
 
     private Rigidbody rigidbody;
     private Transform transform;
@@ -57,10 +57,16 @@ public class PlatformBehaviour : MonoBehaviour
                 if(transform.position.y<minHeight)
                     directionUp = true;
             }
+
+            if(!soundSource.isPlaying)
+                soundSource.UnPause();
         }
         else
         {
             rigidbody.linearVelocity = new Vector3(0,0,0);
+
+            if(soundSource.isPlaying)
+                soundSource.Pause();
         }
     }
 }
