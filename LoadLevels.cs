@@ -83,7 +83,7 @@ public class LoadLevels : MonoBehaviour
     }
 
 
-    private void FixedUpdate()
+    private void Update()
     {
         if(settingsManager.getLanguageChanged())
         {

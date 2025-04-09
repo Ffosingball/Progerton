@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Tables;
 using System;
+using UnityEngine.Audio;
 
 
 /*This class manages all ui changes*/
@@ -58,6 +59,8 @@ public class UIManager : MonoBehaviour
     private Button nextLevelBut;
     [SerializeField]
     private float timeBeforeTextDisappear=5f;
+    [SerializeField]
+    private AudioClip countdown;
 
     [SerializeField]
     private LocalizedStringTable _localizedStringTable;
@@ -67,8 +70,11 @@ public class UIManager : MonoBehaviour
     public LevelManager levelManager;
     public ReplayManager replayManager;
     public KeyRebinder keyRebinder;
+    public AudioMixer mixer;
+    public SoundManager soundManager;
+    public AudioSource soundSource;
 
-    private bool cursorlocked;
+    private bool cursorlocked, musicIsMuffled;
     private Coroutine disappearText=null;
     private LevelData data;
     private GameObject curScreen;
@@ -86,6 +92,9 @@ public class UIManager : MonoBehaviour
         cursorlocked=true;
         lastFirstRoundText.text = "";
         Time.timeScale = 1f;
+        mixer.SetFloat("muffleFrequency", 22000f);
+        musicIsMuffled = false;
+        
 
         data = SaveSystem.LoadLevelData();
 
@@ -104,7 +113,7 @@ public class UIManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             escapeScreen.SetActive(true);
             Time.timeScale = 0f;
-            //Debug.Log("Open");
+            MuffleMusic();
         }
         else if(Input.GetKeyDown(KeyCode.Escape)) //return to game
         {
@@ -193,6 +202,7 @@ public class UIManager : MonoBehaviour
         escapeScreen.SetActive(false);
         settingsScreen.SetActive(false);
         curScreen.SetActive(true);
+        MakeMusicClear();
         Time.timeScale = 1f;
     }
 
@@ -262,6 +272,7 @@ public class UIManager : MonoBehaviour
         countdownScreen.SetActive(false);
         levelOverviewScreen.SetActive(true);
         curScreen = levelOverviewScreen;
+        soundManager.ResumeMusic();
     }
 
 
@@ -270,6 +281,8 @@ public class UIManager : MonoBehaviour
         levelOverviewScreen.SetActive(false);
         countdownScreen.SetActive(true);
         curScreen = countdownScreen;
+        soundManager.PauseMusic();
+        soundSource.PlayOneShot(countdown);
     }
 
 
@@ -278,6 +291,7 @@ public class UIManager : MonoBehaviour
         countdownScreen.SetActive(false);
         gameScreen.SetActive(true);
         curScreen = gameScreen;
+        soundManager.ResumeMusic();
     }
 
 
@@ -285,6 +299,7 @@ public class UIManager : MonoBehaviour
     {
         cursorlocked=false;
         Cursor.lockState = CursorLockMode.None;
+        MuffleMusic();
         Time.timeScale = 0f;
         changeModeScreen.SetActive(true);
     }
@@ -294,6 +309,7 @@ public class UIManager : MonoBehaviour
     {
         cursorlocked=true;
         Cursor.lockState = CursorLockMode.Locked;
+        MakeMusicClear();
         Time.timeScale = 1f;
         changeModeScreen.SetActive(false);
     }
@@ -303,6 +319,7 @@ public class UIManager : MonoBehaviour
     {
         cursorlocked=true;
         Cursor.lockState = CursorLockMode.Locked;
+        MakeMusicClear();
         Time.timeScale = 1f;
         changeModeScreen.SetActive(false);
         levelManager.changeToOverviewMode();
@@ -313,6 +330,7 @@ public class UIManager : MonoBehaviour
     {
         cursorlocked=false;
         Cursor.lockState = CursorLockMode.None;
+        MuffleMusic();
         Time.timeScale = 0f;
         rerecordScreen.SetActive(true);
     }
@@ -322,6 +340,7 @@ public class UIManager : MonoBehaviour
     {
         cursorlocked=true;
         Cursor.lockState = CursorLockMode.Locked;
+        MakeMusicClear();
         Time.timeScale = 1f;
         rerecordScreen.SetActive(false);
     }
@@ -331,6 +350,7 @@ public class UIManager : MonoBehaviour
     {
         cursorlocked=true;
         Cursor.lockState = CursorLockMode.Locked;
+        MakeMusicClear();
         Time.timeScale = 1f;
         rerecordScreen.SetActive(false);
         levelManager.rerecordMoves();
@@ -341,6 +361,7 @@ public class UIManager : MonoBehaviour
     {
         cursorlocked=false;
         Cursor.lockState = CursorLockMode.None;
+        MuffleMusic();
         Time.timeScale = 0f;
         endRecordingScreen.SetActive(true);
     }
@@ -350,6 +371,7 @@ public class UIManager : MonoBehaviour
     {
         cursorlocked=true;
         Cursor.lockState = CursorLockMode.Locked;
+        MakeMusicClear();
         Time.timeScale = 1f;
         endRecordingScreen.SetActive(false);
     }
@@ -368,6 +390,7 @@ public class UIManager : MonoBehaviour
     {
         cursorlocked=false;
         Cursor.lockState = CursorLockMode.None;
+        soundManager.PauseMusic();
         Time.timeScale = 0f;
         endRoundScreen.SetActive(true);
     }
@@ -377,6 +400,7 @@ public class UIManager : MonoBehaviour
     {
         cursorlocked=false;
         Cursor.lockState = CursorLockMode.None;
+        soundManager.PauseMusic();
         Time.timeScale = 0f;
         winScreen.SetActive(true);
 
@@ -396,6 +420,7 @@ public class UIManager : MonoBehaviour
     {
         cursorlocked=false;
         Cursor.lockState = CursorLockMode.None;
+        soundManager.PauseMusic();
         Time.timeScale = 0f;
         lostScreen.SetActive(true);
     }
@@ -406,6 +431,8 @@ public class UIManager : MonoBehaviour
         endRoundScreen.SetActive(false);
         cursorlocked=true;
         Cursor.lockState = CursorLockMode.Locked;
+        soundManager.ResumeMusic();
+        MakeMusicClear();
         Time.timeScale = 1f;
         levelManager.goToNextRound();
     }
@@ -416,6 +443,8 @@ public class UIManager : MonoBehaviour
         endRoundScreen.SetActive(false);
         cursorlocked=true;
         Cursor.lockState = CursorLockMode.Locked;
+        soundManager.ResumeMusic();
+        MakeMusicClear();
         Time.timeScale = 1f;
         levelManager.goToPreviousRound();
     }
@@ -444,6 +473,8 @@ public class UIManager : MonoBehaviour
     {
         cursorlocked=true;
         Cursor.lockState = CursorLockMode.Locked;
+        soundManager.ResumeMusic();
+        MakeMusicClear();
         Time.timeScale = 1f;
         endRoundScreen.SetActive(false);
         levelManager.rerecordMoves();
@@ -454,6 +485,7 @@ public class UIManager : MonoBehaviour
     {
         cursorlocked=false;
         Cursor.lockState = CursorLockMode.None;
+        MuffleMusic();
         Time.timeScale = 0f;
         prevRoundScreen.SetActive(true);
     }
@@ -463,6 +495,7 @@ public class UIManager : MonoBehaviour
     {
         cursorlocked=true;
         Cursor.lockState = CursorLockMode.Locked;
+        MakeMusicClear();
         Time.timeScale = 1f;
         prevRoundScreen.SetActive(false);
     }
@@ -490,5 +523,31 @@ public class UIManager : MonoBehaviour
         escapeScreen.SetActive(true);
         settingsScreen.SetActive(false);
         curScreen.SetActive(true);
+    }
+
+
+    public void MuffleMusic()
+    {
+        mixer.SetFloat("muffleFrequency", 320f);
+        float currentVolume;
+        if(!musicIsMuffled)
+        {
+            mixer.GetFloat("MusicVolume", out currentVolume);
+            mixer.SetFloat("MusicVolume", currentVolume-5);
+            musicIsMuffled = true;
+        }
+    }
+
+
+    public void MakeMusicClear()
+    {
+        mixer.SetFloat("muffleFrequency", 22000f);
+        if(musicIsMuffled)
+        {
+            float currentVolume;
+            mixer.GetFloat("MusicVolume", out currentVolume);
+            mixer.SetFloat("MusicVolume", currentVolume+5);
+            musicIsMuffled = false;
+        }
     }
 }

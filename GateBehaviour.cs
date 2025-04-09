@@ -16,7 +16,7 @@ public class GateBehaviour : MonoBehaviour
 
     private bool currentValue=false;
 
-    private void FixedUpdate()
+    private void Update()
     {
         //Check changes
         if (triggersManager.getGate(correspondingGate) && triggersManager.getGate(correspondingGate)!=currentValue) 

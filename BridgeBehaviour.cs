@@ -16,7 +16,7 @@ public class BridgeBehaviour : MonoBehaviour
 
     private bool currentValue=false;
 
-    private void FixedUpdate()
+    private void Update()
     {
         //Check changes
         if (triggersManager.getFlag(correspondingFlag) && triggersManager.getFlag(correspondingFlag)!=currentValue) 
@@ -24,18 +24,24 @@ public class BridgeBehaviour : MonoBehaviour
             //Change bool variable in animator
             bridgeAnimator.SetBool("Appear", true); // Start appear animation
             soundSource1.Stop();
-            soundSource1.PlayOneShot(bridgeON);
             soundSource2.Stop();
-            soundSource2.PlayOneShot(bridgeON);
+            if (!triggersManager.getNextRound()) 
+            {
+                soundSource1.PlayOneShot(bridgeON);
+                soundSource2.PlayOneShot(bridgeON);
+            }
             currentValue = true;
         }
         else if(triggersManager.getFlag(correspondingFlag)!=currentValue)
         {
             bridgeAnimator.SetBool("Appear", false); // Start disappear animation
             soundSource1.Stop();
-            soundSource1.PlayOneShot(bridgeOFF);
             soundSource2.Stop();
-            soundSource2.PlayOneShot(bridgeOFF);
+            if (!triggersManager.getNextRound()) 
+            {
+                soundSource1.PlayOneShot(bridgeOFF);
+                soundSource2.PlayOneShot(bridgeOFF);
+            }
             currentValue = false;
         }
 

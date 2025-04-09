@@ -39,7 +39,7 @@ public class CameraMovement : MonoBehaviour
         transform2 = GetComponent<Transform>();
     }
 
-    void FixedUpdate()
+    void Update()
     {
         float velocityY=0;
 

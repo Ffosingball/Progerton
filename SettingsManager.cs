@@ -166,7 +166,12 @@ public class SettingsManager : MonoBehaviour
 
         settingsPreferences.musicVolume = sliderMusic.value;
         textSliderMusic.text = (Math.Round(settingsPreferences.musicVolume*100))+"%";
-        soundManager.updateMusicVolume(settingsPreferences.musicVolume);
+
+        if(Time.timeScale==0)
+            soundManager.updateMusicVolume(settingsPreferences.musicVolume,-5);
+        else
+            soundManager.updateMusicVolume(settingsPreferences.musicVolume);
+
         SaveSystem.SaveSettingsPreferences(settingsPreferences);
 
         //Sound goes here

@@ -39,7 +39,7 @@ public class PlatformBehaviour : MonoBehaviour
     }
 
 
-    void FixedUpdate()
+    void Update()
     {
         if(triggersManager.getMovePlatforms())
         {

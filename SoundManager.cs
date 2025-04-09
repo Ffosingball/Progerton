@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using System;
+using System.Linq;
 
 public class SoundManager : MonoBehaviour
 {
@@ -9,43 +11,66 @@ public class SoundManager : MonoBehaviour
     public AudioMixer mixer;
     public AudioSource musicSource;
     //Reference to sound
-    public AudioClip clip;
+    public MusicLengths[] musics;
     //private Coroutine changeValueSoundPlaying=null;
+
+    private bool musicStoped=false;
 
 
     //It starts play background music
     private void Start()
     {
-        //StartCoroutine(windSound());
+        StartCoroutine(backgroundMusic());
     }
 
 
     //Infinite loop to play background music
-    /*private IEnumerator windSound()
+    private IEnumerator<WaitForSeconds> backgroundMusic()
     {
         while (true)
         {
-            switch(UnityEngine.Random.Range(0, 4))
+            int waitFor = 0;
+            switch(UnityEngine.Random.Range(0, 7))
             {
                 case 0:
-                    PlayMusic(background1);
-                    yield return new WaitForSeconds(121f);
+                    PlayMusic(musics[0].music);
+                    waitFor = musics[0].length;
                     break;
                 case 1:
-                    PlayMusic(background2);
-                    yield return new WaitForSeconds(558f); 
+                    PlayMusic(musics[1].music);
+                    waitFor = musics[1].length;
                     break;
                 case 2:
-                    PlayMusic(background3);
-                    yield return new WaitForSeconds(393f); 
+                    PlayMusic(musics[2].music);
+                    waitFor = musics[2].length; 
                     break;
                 case 3:
-                    PlayMusic(background4);
-                    yield return new WaitForSeconds(224f); 
+                    PlayMusic(musics[3].music);
+                    waitFor = musics[3].length;
+                    break;
+                case 4:
+                    PlayMusic(musics[4].music);
+                    waitFor = musics[4].length; 
+                    break;
+                case 5:
+                    PlayMusic(musics[5].music);
+                    waitFor = musics[5].length; 
+                    break;
+                case 6:
+                    PlayMusic(musics[6].music);
+                    waitFor = musics[6].length; 
                     break;
             }
+
+            float counter = 0;
+            while(counter<waitFor)
+            {
+                yield return new WaitForSeconds(0.1f); 
+                if(!musicStoped)
+                    counter+=0.1f;
+            }
         }
-    }*/
+    }
 
 
     //This method strart play a music
@@ -57,38 +82,30 @@ public class SoundManager : MonoBehaviour
     }
 
 
-    //This method start play short sounds
-    /*public void PlayClip()
-    {
-        soundSources[0].PlayOneShot(clip);
-    }*/
-
-
-    /*public void PlayChangeValueSound()
-    {
-        if(changeValueSoundPlaying==null)
-            changeValueSoundPlaying = StartCoroutine(ChangeValueSoundCourutine());
-    }
-
-    private IEnumerator ChangeValueSoundCourutine()
-    {
-        soundSource.PlayOneShot(changeValue);
-        yield return new WaitForSeconds(1f); 
-        changeValueSoundPlaying = null;
-    }*/
-
-
     //This method stops all music
-    public void StopMusic()
+    public void PauseMusic()
     {   
         if(musicSource.isPlaying)
-            musicSource.Stop();
+        {
+            musicSource.Pause();
+            musicStoped = true;
+        }
     }
 
 
-    public void updateMusicVolume(float musicVolume)
+    public void ResumeMusic()
+    {   
+        if(musicStoped)
+        {
+            musicSource.UnPause();
+            musicStoped = false;
+        }
+    }
+
+
+    public void updateMusicVolume(float musicVolume, float offset=0)
     {
-        mixer.SetFloat("MusicVolume", Mathf.Log10(musicVolume) * 20);
+        mixer.SetFloat("MusicVolume", (Mathf.Log10(musicVolume) * 20)+offset);
     }
 
 
@@ -96,4 +113,12 @@ public class SoundManager : MonoBehaviour
     {
         mixer.SetFloat("SoundVolume", Mathf.Log10(soundVolume) * 20);
     }
+}
+
+
+[Serializable]
+public struct MusicLengths
+{
+    public AudioClip music;
+    public int length;
 }
