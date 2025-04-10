@@ -8,18 +8,21 @@ public class InputManagerGame : MonoBehaviour
 
     void OnRerecord_moves(InputValue value)
     {
-        levelManager.handleRerecordMoves();
+        if(levelManager.getCanMove())
+            levelManager.handleRerecordMoves();
     }
 
 
     void OnSwitch_overview(InputValue value)
     {
-        levelManager.ChangeMode();
+        if(levelManager.getCanMove())
+            levelManager.ChangeMode();
     }
 
 
     void OnEnd_recording(InputValue value)
     {
-        levelManager.handleEndRecording();
+        if(levelManager.getCanMove())
+            levelManager.handleEndRecording();
     }
 }

@@ -29,45 +29,34 @@ public class SoundManager : MonoBehaviour
     {
         while (true)
         {
-            int waitFor = 0;
             switch(UnityEngine.Random.Range(0, 7))
             {
                 case 0:
                     PlayMusic(musics[0].music);
-                    waitFor = musics[0].length;
                     break;
                 case 1:
                     PlayMusic(musics[1].music);
-                    waitFor = musics[1].length;
                     break;
                 case 2:
                     PlayMusic(musics[2].music);
-                    waitFor = musics[2].length; 
                     break;
                 case 3:
                     PlayMusic(musics[3].music);
-                    waitFor = musics[3].length;
                     break;
                 case 4:
                     PlayMusic(musics[4].music);
-                    waitFor = musics[4].length; 
                     break;
                 case 5:
                     PlayMusic(musics[5].music);
-                    waitFor = musics[5].length; 
                     break;
                 case 6:
                     PlayMusic(musics[6].music);
-                    waitFor = musics[6].length; 
                     break;
             }
 
-            float counter = 0;
-            while(counter<waitFor)
+            while(musicSource.isPlaying || musicStoped)
             {
                 yield return new WaitForSeconds(0.1f); 
-                if(!musicStoped)
-                    counter+=0.1f;
             }
         }
     }
@@ -78,7 +67,7 @@ public class SoundManager : MonoBehaviour
     {
         musicSource.clip = soundClip;
         musicSource.Play();
-        Debug.Log("Playing music");
+        //Debug.Log("Playing music");
     }
 
 

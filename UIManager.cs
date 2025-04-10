@@ -42,7 +42,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TMP_Text lastFirstRoundText;
     [SerializeField]
-    private TMP_Text roundText;
+    private TMP_Text[] roundText;
     [SerializeField]
     private TMP_Text errorText;
     [SerializeField]
@@ -72,7 +72,7 @@ public class UIManager : MonoBehaviour
     public KeyRebinder keyRebinder;
     public AudioMixer mixer;
     public SoundManager soundManager;
-    public AudioSource soundSource;
+    public AudioSource countdownAudioSource;
 
     private bool cursorlocked, musicIsMuffled;
     private Coroutine disappearText=null;
@@ -114,6 +114,7 @@ public class UIManager : MonoBehaviour
             escapeScreen.SetActive(true);
             Time.timeScale = 0f;
             MuffleMusic();
+            countdownAudioSource.Pause();
         }
         else if(Input.GetKeyDown(KeyCode.Escape)) //return to game
         {
@@ -149,8 +150,10 @@ public class UIManager : MonoBehaviour
             updateText();
         }
 
-
-        roundText.text = _currentStringTable["roundT"].LocalizedValue+" "+roundNum;
+        foreach(TMP_Text text in roundText)
+        {
+            text.text = _currentStringTable["roundT"].LocalizedValue+" "+roundNum;
+        }
     }
 
 
@@ -203,6 +206,7 @@ public class UIManager : MonoBehaviour
         settingsScreen.SetActive(false);
         curScreen.SetActive(true);
         MakeMusicClear();
+        countdownAudioSource.UnPause();
         Time.timeScale = 1f;
     }
 
@@ -282,7 +286,7 @@ public class UIManager : MonoBehaviour
         countdownScreen.SetActive(true);
         curScreen = countdownScreen;
         soundManager.PauseMusic();
-        soundSource.PlayOneShot(countdown);
+        countdownAudioSource.PlayOneShot(countdown);
     }
 
 
