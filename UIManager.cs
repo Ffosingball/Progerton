@@ -14,6 +14,8 @@ using UnityEngine.Audio;
 public class UIManager : MonoBehaviour
 {
     [SerializeField]
+    private Texture2D cursorTexture;
+    [SerializeField]
     private GameObject gameScreen;
     [SerializeField]
     private GameObject escapeScreen;
@@ -87,10 +89,13 @@ public class UIManager : MonoBehaviour
     
     void Start()
     {
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
+
         // Lock the mouse cursor to the game screen.
         Cursor.lockState = CursorLockMode.Locked;
         cursorlocked=true;
         lastFirstRoundText.text = "";
+        errorText.text = "";
         Time.timeScale = 1f;
         mixer.SetFloat("muffleFrequency", 22000f);
         musicIsMuffled = false;
@@ -109,7 +114,9 @@ public class UIManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape) && cursorlocked)//open pause menu
         {
+            soundManager.playKeyPressedSound();
             cursorlocked=false;
+            Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.ForceSoftware);
             Cursor.lockState = CursorLockMode.None;
             escapeScreen.SetActive(true);
             Time.timeScale = 0f;
@@ -200,7 +207,9 @@ public class UIManager : MonoBehaviour
     //Unpause the game
     public void ReturnToGame()
     {
+        soundManager.playKeyPressedSound();
         cursorlocked=true;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.Locked;
         escapeScreen.SetActive(false);
         settingsScreen.SetActive(false);
@@ -302,6 +311,7 @@ public class UIManager : MonoBehaviour
     public void changeModeWarning()
     {
         cursorlocked=false;
+        Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.None;
         MuffleMusic();
         Time.timeScale = 0f;
@@ -312,6 +322,7 @@ public class UIManager : MonoBehaviour
     public void noChangeMode()
     {
         cursorlocked=true;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.Locked;
         MakeMusicClear();
         Time.timeScale = 1f;
@@ -322,6 +333,7 @@ public class UIManager : MonoBehaviour
     public void yesChangeMode()
     {
         cursorlocked=true;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.Locked;
         MakeMusicClear();
         Time.timeScale = 1f;
@@ -333,6 +345,7 @@ public class UIManager : MonoBehaviour
     public void rerecordWarning()
     {
         cursorlocked=false;
+        Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.None;
         MuffleMusic();
         Time.timeScale = 0f;
@@ -343,6 +356,7 @@ public class UIManager : MonoBehaviour
     public void noRerecord()
     {
         cursorlocked=true;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.Locked;
         MakeMusicClear();
         Time.timeScale = 1f;
@@ -353,6 +367,7 @@ public class UIManager : MonoBehaviour
     public void yesRerecord()
     {
         cursorlocked=true;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.Locked;
         MakeMusicClear();
         Time.timeScale = 1f;
@@ -364,6 +379,7 @@ public class UIManager : MonoBehaviour
     public void endRecordingWarning()
     {
         cursorlocked=false;
+        Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.None;
         MuffleMusic();
         Time.timeScale = 0f;
@@ -374,6 +390,7 @@ public class UIManager : MonoBehaviour
     public void noEndRecord()
     {
         cursorlocked=true;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.Locked;
         MakeMusicClear();
         Time.timeScale = 1f;
@@ -384,6 +401,7 @@ public class UIManager : MonoBehaviour
     public void yesEndRecord()
     {
         cursorlocked=true;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.Locked;
         endRecordingScreen.SetActive(false);
         setEndRoundScreen();
@@ -393,6 +411,7 @@ public class UIManager : MonoBehaviour
     public void setEndRoundScreen()
     {
         cursorlocked=false;
+        Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.None;
         soundManager.PauseMusic();
         Time.timeScale = 0f;
@@ -403,6 +422,7 @@ public class UIManager : MonoBehaviour
     public void setWinScreen()
     {
         cursorlocked=false;
+        Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.None;
         soundManager.PauseMusic();
         Time.timeScale = 0f;
@@ -423,6 +443,7 @@ public class UIManager : MonoBehaviour
     public void setLostScreen()
     {
         cursorlocked=false;
+        Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.None;
         soundManager.PauseMusic();
         Time.timeScale = 0f;
@@ -434,6 +455,7 @@ public class UIManager : MonoBehaviour
     {
         endRoundScreen.SetActive(false);
         cursorlocked=true;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.Locked;
         soundManager.ResumeMusic();
         MakeMusicClear();
@@ -446,6 +468,7 @@ public class UIManager : MonoBehaviour
     {
         endRoundScreen.SetActive(false);
         cursorlocked=true;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.Locked;
         soundManager.ResumeMusic();
         MakeMusicClear();
@@ -476,6 +499,7 @@ public class UIManager : MonoBehaviour
     public void Rerecord()
     {
         cursorlocked=true;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.Locked;
         soundManager.ResumeMusic();
         MakeMusicClear();
@@ -488,6 +512,7 @@ public class UIManager : MonoBehaviour
     public void prevRoundWarning()
     {
         cursorlocked=false;
+        Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.None;
         MuffleMusic();
         Time.timeScale = 0f;
@@ -498,6 +523,7 @@ public class UIManager : MonoBehaviour
     public void noPrevRound()
     {
         cursorlocked=true;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.Locked;
         MakeMusicClear();
         Time.timeScale = 1f;
@@ -508,6 +534,7 @@ public class UIManager : MonoBehaviour
     public void yesPrevRound()
     {
         cursorlocked=true;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.Locked;
         prevRoundScreen.SetActive(false);
         startPreviousRound();

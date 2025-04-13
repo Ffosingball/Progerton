@@ -9,7 +9,8 @@ public class SoundManager : MonoBehaviour
 {
     //Reference to the listener
     public AudioMixer mixer;
-    public AudioSource musicSource;
+    public AudioSource musicSource, uiSoundSource;
+    public AudioClip buttonSound, keyPressedSound;
     //Reference to sound
     public MusicLengths[] musics;
     //private Coroutine changeValueSoundPlaying=null;
@@ -29,30 +30,7 @@ public class SoundManager : MonoBehaviour
     {
         while (true)
         {
-            switch(UnityEngine.Random.Range(0, 7))
-            {
-                case 0:
-                    PlayMusic(musics[0].music);
-                    break;
-                case 1:
-                    PlayMusic(musics[1].music);
-                    break;
-                case 2:
-                    PlayMusic(musics[2].music);
-                    break;
-                case 3:
-                    PlayMusic(musics[3].music);
-                    break;
-                case 4:
-                    PlayMusic(musics[4].music);
-                    break;
-                case 5:
-                    PlayMusic(musics[5].music);
-                    break;
-                case 6:
-                    PlayMusic(musics[6].music);
-                    break;
-            }
+            PlayMusic(musics[UnityEngine.Random.Range(0, musics.Length)].music);
 
             while(musicSource.isPlaying || musicStoped)
             {
@@ -89,6 +67,18 @@ public class SoundManager : MonoBehaviour
             musicSource.UnPause();
             musicStoped = false;
         }
+    }
+
+
+    public void playButtonSound()
+    {
+        uiSoundSource.PlayOneShot(buttonSound);
+    }
+
+
+    public void playKeyPressedSound()
+    {
+        uiSoundSource.PlayOneShot(keyPressedSound);
     }
 
 

@@ -112,6 +112,9 @@ public class SettingsManager : MonoBehaviour
 
     public void ChangeLanguage(int languageIndex)
     {
+        if(languageIndex > 4)
+            languageIndex = 4;
+
         if (!isInitialized)
         {
             return;
