@@ -30,6 +30,10 @@ public class SettingsManager : MonoBehaviour
     private TMP_FontAsset japaneseFont;
     [SerializeField]
     private TMP_FontAsset otherLanguageFont;
+    [SerializeField]
+    private TMP_FontAsset outrightFont;
+    [SerializeField]
+    private TMP_Text[] exceptions;
 
 
     private SettingsPreferences settingsPreferences;
@@ -148,6 +152,14 @@ public class SettingsManager : MonoBehaviour
         foreach (TextMeshProUGUI text in FindObjectsOfType<TextMeshProUGUI>(true)) // true includes inactive objects
         {
             text.font = selectedFont;
+        }
+
+        if(exceptions!=null)
+        {
+            foreach(TextMeshProUGUI text in exceptions)
+            {
+                text.font = outrightFont;
+            }
         }
     }
 

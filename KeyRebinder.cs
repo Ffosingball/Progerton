@@ -14,6 +14,7 @@ public class KeyRebinder : MonoBehaviour
 
     public SettingsManager settingsManager;
     public UIManager uIManager;
+    public MainMenuManager mainMenuManager;
 
     private InputActionRebindingExtensions.RebindingOperation rebindingOperation;
     /*private string prevBinding;
@@ -43,7 +44,7 @@ public class KeyRebinder : MonoBehaviour
 
     public void StartRebinding0()
     {
-        buttonTexts[0].text = uIManager.getTextForKeyRebinding();
+        setTextForButton(0);
         //prevBinding = actionReferences[0].action.bindings[0].effectivePath;
 
         actionReferences[numOfActions].action.Disable();
@@ -56,7 +57,7 @@ public class KeyRebinder : MonoBehaviour
 
     public void StartRebinding1()
     {
-        buttonTexts[1].text = uIManager.getTextForKeyRebinding();
+        setTextForButton(1);
 
         actionReferences[numOfActions].action.Disable();
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
@@ -68,7 +69,7 @@ public class KeyRebinder : MonoBehaviour
 
     public void StartRebinding2()
     {
-        buttonTexts[2].text = uIManager.getTextForKeyRebinding();
+        setTextForButton(2);
 
         actionReferences[numOfActions].action.Disable();
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
@@ -80,7 +81,7 @@ public class KeyRebinder : MonoBehaviour
 
     public void StartRebinding3()
     {
-        buttonTexts[3].text = uIManager.getTextForKeyRebinding();
+        setTextForButton(3);
 
         actionReferences[numOfActions].action.Disable();
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
@@ -92,7 +93,7 @@ public class KeyRebinder : MonoBehaviour
 
     public void StartRebinding4()
     {
-        buttonTexts[4].text = uIManager.getTextForKeyRebinding();
+        setTextForButton(4);
 
         actionReferences[numOfActions].action.Disable();
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
@@ -104,7 +105,7 @@ public class KeyRebinder : MonoBehaviour
 
     public void StartRebinding5()
     {
-        buttonTexts[5].text = uIManager.getTextForKeyRebinding();
+        setTextForButton(5);
 
         actionReferences[numOfActions].action.Disable();
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
@@ -116,7 +117,7 @@ public class KeyRebinder : MonoBehaviour
 
     public void StartRebinding6()
     {
-        buttonTexts[6].text = uIManager.getTextForKeyRebinding();
+        setTextForButton(6);
 
         actionReferences[numOfActions].action.Disable();
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
@@ -128,7 +129,7 @@ public class KeyRebinder : MonoBehaviour
 
     public void StartRebinding7()
     {
-        buttonTexts[7].text = uIManager.getTextForKeyRebinding();
+        setTextForButton(7);
 
         actionReferences[7].action.Disable();
         rebindingOperation = actionReferences[7].action.PerformInteractiveRebinding(0)
@@ -140,7 +141,7 @@ public class KeyRebinder : MonoBehaviour
 
     public void StartRebinding8()
     {
-        buttonTexts[8].text = uIManager.getTextForKeyRebinding();
+        setTextForButton(8);
 
         actionReferences[8].action.Disable();
         rebindingOperation = actionReferences[8].action.PerformInteractiveRebinding(0)
@@ -152,7 +153,7 @@ public class KeyRebinder : MonoBehaviour
 
     public void StartRebinding9()
     {
-        buttonTexts[9].text = uIManager.getTextForKeyRebinding();
+        setTextForButton(9);
 
         actionReferences[9].action.Disable();
         rebindingOperation = actionReferences[9].action.PerformInteractiveRebinding(0)
@@ -164,7 +165,7 @@ public class KeyRebinder : MonoBehaviour
 
     public void StartRebinding10()
     {
-        buttonTexts[10].text = uIManager.getTextForKeyRebinding();
+        setTextForButton(10);
 
         actionReferences[10].action.Disable();
         rebindingOperation = actionReferences[10].action.PerformInteractiveRebinding(0)
@@ -176,7 +177,7 @@ public class KeyRebinder : MonoBehaviour
 
     public void StartRebinding11()
     {
-        buttonTexts[11].text = uIManager.getTextForKeyRebinding();
+        setTextForButton(11);
 
         actionReferences[11].action.Disable();
         rebindingOperation = actionReferences[11].action.PerformInteractiveRebinding(0)
@@ -188,7 +189,7 @@ public class KeyRebinder : MonoBehaviour
 
     public void StartRebinding12()
     {
-        buttonTexts[12].text = uIManager.getTextForKeyRebinding();
+        setTextForButton(12);
 
         actionReferences[12].action.Disable();
         rebindingOperation = actionReferences[12].action.PerformInteractiveRebinding(0)
@@ -240,5 +241,14 @@ public class KeyRebinder : MonoBehaviour
         return InputControlPath.ToHumanReadableString(
             actionReferences[i].action.bindings[0].effectivePath,
             InputControlPath.HumanReadableStringOptions.OmitDevice);
+    }
+
+
+    private void setTextForButton(int index)
+    {
+        if(uIManager!=null)
+            buttonTexts[index].text = uIManager.getTextForKeyRebinding();
+        else
+            buttonTexts[index].text = mainMenuManager.getTextForKeyRebinding();
     }
 }

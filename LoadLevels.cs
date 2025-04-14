@@ -14,13 +14,22 @@ public class LoadLevels : MonoBehaviour
     [SerializeField]
     private GameObject levelScreen;
     [SerializeField]
-    private int tempNumOfLevels = 20;
+    private int tempNumOfLevels = 40, actualNumOfLevels = 4;
     [SerializeField]
     private int sizeOfOneRow = 240;
 
     [SerializeField]
     private LocalizedStringTable _localizedStringTable;
     private StringTable _currentStringTable;
+
+    [SerializeField]
+    private Sprite lockedLevelImage;
+    [SerializeField]
+    private Sprite[] unlockedLevelImage;
+    [SerializeField]
+    private GameObject loadingScreen;
+    [SerializeField]
+    private Image loadingFillBar;
 
     private LevelData data;
     private GameObject[] levelButtons;
@@ -53,14 +62,14 @@ public class LoadLevels : MonoBehaviour
         string levelText = _currentStringTable["level"].LocalizedValue;
         string bestTimeText = _currentStringTable["best_time"].LocalizedValue;
 
-        for(int i=0; i<tempNumOfLevels; i++)
+        for(int i=0; i<actualNumOfLevels; i++)
         {
             GameObject newBut = Instantiate(levelButton, new Vector3(0,0,0), Quaternion.Euler(0,0,0));
             levelButtons[i] = newBut;
             newBut.transform.SetParent(levelScreen.transform);
 
             TMP_Text[] texts = newBut.GetComponentsInChildren<TMP_Text>();
-            texts[0].text = levelText+(i+1);
+            texts[0].text = levelText+" "+(i+1);
             if(data.bestTime[i]==-1)
                 texts[1].text = "";
             else
@@ -73,9 +82,31 @@ public class LoadLevels : MonoBehaviour
             button.onClick.AddListener(() => ButtonClicked(sceneIndex));
 
             if(data.locked[i])
+            {
                 button.interactable = false;
+                button.image.sprite = lockedLevelImage;
+            }
             else
+            {
                 button.interactable = true;
+                button.image.sprite = unlockedLevelImage[i];
+            }
+
+            RectTransform transform = newBut.GetComponent<RectTransform>();
+            transform.localScale = new Vector3(1f,1f,1f);
+        }
+
+        //WHEN GAME IS COMPLETED DELETE THIS
+        for(int i=actualNumOfLevels; i<tempNumOfLevels; i++)
+        {
+            GameObject newBut = Instantiate(levelButton, new Vector3(0,0,0), Quaternion.Euler(0,0,0));
+            newBut.transform.SetParent(levelScreen.transform);
+
+            TMP_Text[] texts = newBut.GetComponentsInChildren<TMP_Text>();
+            texts[0].text = levelText+" "+(i+1);
+            Button button = newBut.GetComponent<Button>();
+            button.interactable = false;
+            button.image.sprite = lockedLevelImage;
 
             RectTransform transform = newBut.GetComponent<RectTransform>();
             transform.localScale = new Vector3(1f,1f,1f);
@@ -87,14 +118,14 @@ public class LoadLevels : MonoBehaviour
     {
         if(settingsManager.getLanguageChanged())
         {
-            for(int i=0; i<tempNumOfLevels; i++)
+            for(int i=0; i<actualNumOfLevels; i++)
             {
                 _currentStringTable = _localizedStringTable.GetTable();
                 string levelText = _currentStringTable["level"].LocalizedValue;
                 string bestTimeText = _currentStringTable["best_time"].LocalizedValue;
 
                 TMP_Text[] texts = levelButtons[i].GetComponentsInChildren<TMP_Text>();
-                texts[0].text = levelText+(i+1);
+                texts[0].text = levelText+" "+(i+1);
                 if(data.bestTime[i]==-1)
                     texts[1].text = "";
                 else
@@ -106,8 +137,31 @@ public class LoadLevels : MonoBehaviour
 
     public void ButtonClicked(int num)
     {
-        GameInfo.currentLevel = num;
-        SceneManager.LoadScene(data.sceneName[num]);
+        //REMOVE IF WHEN GAME IS COMPLETE
+        if(num!=0)
+        {
+            GameInfo.currentLevel = num;
+            StartCoroutine(LoadSceneAsync(data.sceneName[num]));
+        }
+        else
+            StartCoroutine(LoadSceneAsync("levelTemplate"));
+    }
+
+
+    private IEnumerator LoadSceneAsync(string sceneName)
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+
+        loadingScreen.SetActive(true);
+
+        while(!operation.isDone)
+        {
+            float progressValue = Mathf.Clamp01(operation.progress/0.9f);
+
+            loadingFillBar.fillAmount = progressValue;
+
+            yield return null;
+        }
     }
 
 
@@ -120,7 +174,7 @@ public class LoadLevels : MonoBehaviour
         List<float> bestTime = new List<float>();
         List<int> pictureRef = new List<int>();
 
-        for(int i=0; i<tempNumOfLevels; i++)
+        for(int i=0; i<actualNumOfLevels; i++)
         {
             levelNames.Add("Level "+(i+1));
             sceneName.Add("level"+i);

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Tables;
@@ -67,6 +68,11 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private LocalizedStringTable _localizedStringTable;
     private StringTable _currentStringTable;
+
+    [SerializeField]
+    private GameObject loadingScreen;
+    [SerializeField]
+    private Image loadingFillBar;
 
     public SettingsManager settingsManager;
     public LevelManager levelManager;
@@ -479,14 +485,14 @@ public class UIManager : MonoBehaviour
 
     public void exitLevel()
     {
-        SceneManager.LoadScene("MainMenu");
+        StartCoroutine(LoadSceneAsync("MainMenu"));
     }
 
 
     public void nextLevel()
     {
         GameInfo.currentLevel++;
-        SceneManager.LoadScene("level"+(GameInfo.currentLevel));
+        StartCoroutine(LoadSceneAsync("level"+(GameInfo.currentLevel)));
     }
 
 
@@ -579,6 +585,23 @@ public class UIManager : MonoBehaviour
             mixer.GetFloat("MusicVolume", out currentVolume);
             mixer.SetFloat("MusicVolume", currentVolume+5);
             musicIsMuffled = false;
+        }
+    }
+
+
+    private IEnumerator LoadSceneAsync(string sceneName)
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+
+        loadingScreen.SetActive(true);
+
+        while(!operation.isDone)
+        {
+            float progressValue = Mathf.Clamp01(operation.progress/0.9f);
+
+            loadingFillBar.fillAmount = progressValue;
+
+            yield return null;
         }
     }
 }
