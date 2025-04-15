@@ -10,7 +10,7 @@ public class SoundManager : MonoBehaviour
     //Reference to the listener
     public AudioMixer mixer;
     public AudioSource musicSource, uiSoundSource;
-    public AudioClip buttonSound, keyPressedSound;
+    public AudioClip buttonSound, keyPressedSound, victorySound, lostSound, fallRestartSound, belowZeroRestartSound;
     //Reference to sound
     public MusicLengths[] musics;
     //private Coroutine changeValueSoundPlaying=null;
@@ -79,6 +79,29 @@ public class SoundManager : MonoBehaviour
     public void playKeyPressedSound()
     {
         uiSoundSource.PlayOneShot(keyPressedSound);
+    }
+
+
+    public void playVictorySound()
+    {
+        uiSoundSource.PlayOneShot(victorySound);
+    }
+
+
+    public void playLostSound()
+    {
+        uiSoundSource.PlayOneShot(lostSound);
+    }
+
+    public void playFallDamageSound()
+    {
+        uiSoundSource.PlayOneShot(fallRestartSound);
+    }
+
+
+    public void playfallBelowZeroSound()
+    {
+        uiSoundSource.PlayOneShot(belowZeroRestartSound);
     }
 
 

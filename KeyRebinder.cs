@@ -11,6 +11,8 @@ public class KeyRebinder : MonoBehaviour
     private TMP_Text[] buttonTexts; // UI Text to show current key
     [SerializeField]
     private int numOfActions;
+    [SerializeField]
+    private GameObject errorText;
 
     public SettingsManager settingsManager;
     public UIManager uIManager;

@@ -18,6 +18,10 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField]
     private GameObject settingsScreen;
     [SerializeField]
+    private TMP_Text madeBy;
+    [SerializeField]
+    private string username;
+    [SerializeField]
     private LocalizedStringTable _localizedStringTable;
     private StringTable _currentStringTable;
 
@@ -44,6 +48,8 @@ public class MainMenuManager : MonoBehaviour
     private void updateText()
     {
         _currentStringTable = _localizedStringTable.GetTable();
+
+        madeBy.text = _currentStringTable["madeBy"].LocalizedValue+" "+username;
     }
 
 

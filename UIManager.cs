@@ -427,6 +427,7 @@ public class UIManager : MonoBehaviour
 
     public void setWinScreen()
     {
+        soundManager.playVictorySound();
         cursorlocked=false;
         Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.None;
@@ -448,6 +449,7 @@ public class UIManager : MonoBehaviour
 
     public void setLostScreen()
     {
+        soundManager.playLostSound();
         cursorlocked=false;
         Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.None;
@@ -591,9 +593,10 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator LoadSceneAsync(string sceneName)
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
 
         loadingScreen.SetActive(true);
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
 
         while(!operation.isDone)
         {

@@ -35,14 +35,17 @@ public class LevelManager : MonoBehaviour
     private bool canMove; //it is used to disable movement of the character during countdown
     private float currentTime = 0;
     private Coroutine recording=null;
+    private bool stopCounting=false;
 
 
     //getters
     public Vector3[] getInitialPositions(){return initialPositionsCharacter;}
     public Vector3[] getInitialRotations(){return initialRotationsCharacter;}
     public bool getCanMove(){return canMove;}
+    public void setCanMove(bool canMove){this.canMove = canMove; }
     //public bool getMoveCamera(){return moveCamera;}
     public float getTime() {return (float)Math.Round((double)(maxTime-currentTime),2);}
+    public void setStopCounting(bool stopCounting){this.stopCounting=stopCounting;}
 
 
     //Set initial positions
@@ -199,11 +202,14 @@ public class LevelManager : MonoBehaviour
         while (currentTime>0)
         {
             yield return new WaitForSeconds(0.02f);
-            currentTime-=0.02f;
-            uIManager.outputTimer((float)Math.Round((double)currentTime,2));
+            if(!stopCounting)
+            {
+                currentTime-=0.02f;
+                uIManager.outputTimer((float)Math.Round((double)currentTime,2));
 
-            if(triggersManager.getEndGame())
-                uIManager.setWinScreen();
+                if(triggersManager.getEndGame())
+                    uIManager.setWinScreen();
+            }
         }
 
         if(replayManager.isLastRound())

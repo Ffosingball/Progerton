@@ -147,11 +147,19 @@ public class SettingsManager : MonoBehaviour
     private void UpdateFont()
     {
         string currentLanguage = LocalizationSettings.SelectedLocale.Identifier.Code;
-        TMP_FontAsset selectedFont = (currentLanguage == "ja") ? japaneseFont : otherLanguageFont;
 
         foreach (TextMeshProUGUI text in FindObjectsOfType<TextMeshProUGUI>(true)) // true includes inactive objects
         {
-            text.font = selectedFont;
+            if(currentLanguage == "ja")
+            {
+                text.font = japaneseFont;
+                text.fontStyle &= ~FontStyles.Bold;
+            }
+            else
+            {
+                text.font = otherLanguageFont;
+                text.fontStyle |= FontStyles.Bold;
+            }
         }
 
         if(exceptions!=null)
