@@ -133,11 +133,11 @@ public class KeyRebinder : MonoBehaviour
     {
         setTextForButton(7);
 
-        actionReferences[7].action.Disable();
-        rebindingOperation = actionReferences[7].action.PerformInteractiveRebinding(0)
+        actionReferences[numOfActions].action.Disable();
+        rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(7,2))
+            .OnComplete(operation => RebindComplete(7,1))
             .Start();
     }
 
@@ -145,11 +145,11 @@ public class KeyRebinder : MonoBehaviour
     {
         setTextForButton(8);
 
-        actionReferences[8].action.Disable();
-        rebindingOperation = actionReferences[8].action.PerformInteractiveRebinding(0)
+        actionReferences[numOfActions].action.Disable();
+        rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(8,2))
+            .OnComplete(operation => RebindComplete(8,1))
             .Start();
     }
 
@@ -157,11 +157,11 @@ public class KeyRebinder : MonoBehaviour
     {
         setTextForButton(9);
 
-        actionReferences[9].action.Disable();
-        rebindingOperation = actionReferences[9].action.PerformInteractiveRebinding(0)
+        actionReferences[numOfActions].action.Disable();
+        rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(9,2))
+            .OnComplete(operation => RebindComplete(9,1))
             .Start();
     }
 
@@ -169,11 +169,11 @@ public class KeyRebinder : MonoBehaviour
     {
         setTextForButton(10);
 
-        actionReferences[10].action.Disable();
-        rebindingOperation = actionReferences[10].action.PerformInteractiveRebinding(0)
+        actionReferences[numOfActions].action.Disable();
+        rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(10,2))
+            .OnComplete(operation => RebindComplete(10,1))
             .Start();
     }
 
@@ -181,11 +181,11 @@ public class KeyRebinder : MonoBehaviour
     {
         setTextForButton(11);
 
-        actionReferences[11].action.Disable();
-        rebindingOperation = actionReferences[11].action.PerformInteractiveRebinding(0)
+        actionReferences[numOfActions].action.Disable();
+        rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(11,2))
+            .OnComplete(operation => RebindComplete(11,1))
             .Start();
     }
 
@@ -193,35 +193,45 @@ public class KeyRebinder : MonoBehaviour
     {
         setTextForButton(12);
 
-        actionReferences[12].action.Disable();
-        rebindingOperation = actionReferences[12].action.PerformInteractiveRebinding(0)
+        actionReferences[numOfActions].action.Disable();
+        rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(12,2))
+            .OnComplete(operation => RebindComplete(12,1))
             .Start();
     }
 
     private void RebindComplete(int i, int type)
     {
-        switch (type)
+        actionReferences[numOfActions].action.Enable();
+        if(settingsManager.getSettingsPreferences().isBindingExist(actionReferences[numOfActions].action.bindings[0].effectivePath))
         {
-            case 0:
-                actionReferences[numOfActions].action.Enable();
-                actionReferences[i].action.ApplyBindingOverride(1+i, actionReferences[numOfActions].action.bindings[0].effectivePath);
-                settingsManager.getSettingsPreferences().keyBindings[i] = actionReferences[numOfActions].action.bindings[0].effectivePath;
-                buttonTexts[i].text = GetButtonTextMove(i);
-                break;
-            case 1:
-                actionReferences[numOfActions].action.Enable();
-                actionReferences[i].action.ApplyBindingOverride(0, actionReferences[numOfActions].action.bindings[0].effectivePath);
-                settingsManager.getSettingsPreferences().keyBindings[i] = actionReferences[numOfActions].action.bindings[0].effectivePath;
-                buttonTexts[i].text = GetButtonText(i);
-                break;
-            case 2:
-                actionReferences[i].action.Enable();
-                settingsManager.getSettingsPreferences().keyBindings[i] = actionReferences[i].action.bindings[0].effectivePath;
-                buttonTexts[i].text = GetButtonText(i);
-                break;
+            errorText.SetActive(true);
+            switch (type)
+            {
+                case 0:
+                    buttonTexts[i].text = GetButtonTextMove(i);
+                    break;
+                case 1:
+                    buttonTexts[i].text = GetButtonText(i);
+                    break;
+            }
+        }
+        else
+        {
+            errorText.SetActive(false);
+            switch (type)
+            {
+                case 0:
+                    actionReferences[i].action.ApplyBindingOverride(1+i, actionReferences[numOfActions].action.bindings[0].effectivePath);
+                    buttonTexts[i].text = GetButtonTextMove(i);
+                    break;
+                case 1:
+                    actionReferences[i].action.ApplyBindingOverride(0, actionReferences[numOfActions].action.bindings[0].effectivePath);
+                    buttonTexts[i].text = GetButtonText(i);
+                    break;
+            }
+            settingsManager.getSettingsPreferences().keyBindings[i] = actionReferences[numOfActions].action.bindings[0].effectivePath;
         }
         
         SaveSystem.SaveSettingsPreferences(settingsManager.getSettingsPreferences());

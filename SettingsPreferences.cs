@@ -23,4 +23,15 @@ public class SettingsPreferences
     {
         return "Sound volume: "+soundEffectsVolume+"; music volume: "+musicVolume+"; prompts: "+showPrompts+"; warnings: "+showWarningsScreen+"; sensitivity: "+sensitivity+"; language: "+languageIndex;
     }
+
+    public bool isBindingExist(string binding)
+    {
+        foreach(string keyBinding in keyBindings)
+        {
+            if(binding==keyBinding)
+                return true;
+        }
+
+        return false;
+    }
 }
