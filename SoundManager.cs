@@ -10,7 +10,7 @@ public class SoundManager : MonoBehaviour
     //Reference to the listener
     public AudioMixer mixer;
     public AudioSource musicSource, uiSoundSource;
-    public AudioClip buttonSound, keyPressedSound, victorySound, lostSound, fallRestartSound, belowZeroRestartSound;
+    public AudioClip buttonSound, keyPressedSound, victorySound, lostSound, fallRestartSound, belowZeroRestartSound, underwaterRestartSound;
     //Reference to sound
     public MusicLengths[] musics;
     //private Coroutine changeValueSoundPlaying=null;
@@ -102,6 +102,12 @@ public class SoundManager : MonoBehaviour
     public void playfallBelowZeroSound()
     {
         uiSoundSource.PlayOneShot(belowZeroRestartSound);
+    }
+
+
+    public void playFallUnderwaterSound()
+    {
+        uiSoundSource.PlayOneShot(underwaterRestartSound);
     }
 
 

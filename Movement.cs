@@ -16,7 +16,9 @@ public class Movement : MonoBehaviour
     [SerializeField]
     private float maxFallDistance = 8;
     [SerializeField]
-    private GameObject redScreen, blackScreen;
+    private GameObject redScreen, blackScreen, blueScreen;
+    [SerializeField]
+    private bool waterLevel = false;
     
     public UIManager uIManager;
     public LevelManager levelManager;
@@ -47,7 +49,7 @@ public class Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(uIManager.getCursorlocked() && levelManager.getCanMove())
+        if(uIManager.getCursorlocked() && levelManager.getCanMove() && groundCheck.isGrounded)
         {
             float targetMovingSpeed;
             if (IsRunning)
@@ -57,36 +59,51 @@ public class Movement : MonoBehaviour
 
             // Apply movement.
             rigidbody.linearVelocity = transform.rotation * new Vector3(moveInput.x* targetMovingSpeed, rigidbody.linearVelocity.y, moveInput.y* targetMovingSpeed);
+        
+            lastYpositionOnGround = transform.position.y;
         }
+
+        //Debug.Log("Y speed: "+rigidbody.linearVelocity.y);
 
         if(groundCheck.isGrounded && transform.position.y-lastYpositionOnGround<-maxFallDistance && waitToEnd==null)
         {
             levelManager.setStopCounting(true);
             soundManager.playFallDamageSound();
             redScreen.SetActive(true);
-            waitToEnd = StartCoroutine(waitForRestart());
+            waitToEnd = StartCoroutine(waitForRestart(2f));
         }
 
-        if(groundCheck.isGrounded)
-            lastYpositionOnGround = transform.position.y;
+        /*if(groundCheck.isGrounded)
+            lastYpositionOnGround = transform.position.y;*/
 
         if(transform.position.y<minYHeight && waitToEnd==null)
         {
             levelManager.setStopCounting(true);
-            soundManager.playfallBelowZeroSound();
-            blackScreen.SetActive(true);
-            waitToEnd = StartCoroutine(waitForRestart());
+
+            if(waterLevel)
+            {
+                soundManager.playFallUnderwaterSound();
+                blueScreen.SetActive(true);
+                waitToEnd = StartCoroutine(waitForRestart(3.5f));
+            }
+            else
+            {
+                soundManager.playfallBelowZeroSound();
+                blackScreen.SetActive(true);
+                waitToEnd = StartCoroutine(waitForRestart(2f));
+            }
         }
     }
 
 
-    private IEnumerator<WaitForSeconds> waitForRestart()
+    private IEnumerator<WaitForSeconds> waitForRestart(float waitForSec)
     {
         levelManager.setCanMove(false);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(waitForSec);
         levelManager.setStopCounting(false);
         redScreen.SetActive(false);
         blackScreen.SetActive(false);
+        blueScreen.SetActive(false);
         levelManager.setCanMove(true);
         waitToEnd = null;
         uIManager.yesRerecord();
