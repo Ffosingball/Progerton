@@ -49,6 +49,18 @@ public class Movement : MonoBehaviour
 
     void FixedUpdate()
     {
+        if(transform.position.y-lastYpositionOnGround<-maxFallDistance && waitToEnd==null)
+        {
+            if(groundCheck.isGrounded)
+            {
+                levelManager.setStopCounting(true);
+                soundManager.playFallDamageSound();
+                redScreen.SetActive(true);
+                waitToEnd = StartCoroutine(waitForRestart(2f));
+            }
+        }
+
+
         if(uIManager.getCursorlocked() && levelManager.getCanMove() && groundCheck.isGrounded)
         {
             float targetMovingSpeed;
@@ -63,15 +75,7 @@ public class Movement : MonoBehaviour
             lastYpositionOnGround = transform.position.y;
         }
 
-        //Debug.Log("Y speed: "+rigidbody.linearVelocity.y);
-
-        if(groundCheck.isGrounded && transform.position.y-lastYpositionOnGround<-maxFallDistance && waitToEnd==null)
-        {
-            levelManager.setStopCounting(true);
-            soundManager.playFallDamageSound();
-            redScreen.SetActive(true);
-            waitToEnd = StartCoroutine(waitForRestart(2f));
-        }
+        //Debug.Log("Well: "+lastYpositionOnGround+"; dist: "+(transform.position.y-lastYpositionOnGround))
 
         /*if(groundCheck.isGrounded)
             lastYpositionOnGround = transform.position.y;*/
@@ -107,6 +111,7 @@ public class Movement : MonoBehaviour
         levelManager.setCanMove(true);
         waitToEnd = null;
         uIManager.yesRerecord();
+        lastYpositionOnGround = transform.position.y;
     }
 
 
