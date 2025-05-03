@@ -47,6 +47,7 @@ public class GateButtonBehaviour : MonoBehaviour
     {
         buttonAnimator.SetBool("pushed", false);
         buttonAnimator.Play("button_off_idle_");
+        //Debug.Log(""+correspondingGate);
         triggersManager.setGate(correspondingGate, false);
         firstTime = true;
     }

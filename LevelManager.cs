@@ -64,11 +64,10 @@ public class LevelManager : MonoBehaviour
         //moveCamera = false;
         character.GetComponent<Rigidbody>().linearVelocity = new Vector3(0,0,0);
         character.transform.position = initialPositionsCharacter[round];
-        character.transform.localRotation = Quaternion.Euler(initialRotationsCharacter[round]);
     
-        Vector3 newRotation = initialRotationsCharacter[round];
         // Convert rotation to match script's `velocity`
-        personLook.setVelocity(new Vector2(0, -newRotation.x)); 
+        personLook.setVelocity(new Vector2(initialRotationsCharacter[round].y, 0));
+        //Debug.Log("L: "+character.transform.localRotation);
     }
 
 
