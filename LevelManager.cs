@@ -63,6 +63,7 @@ public class LevelManager : MonoBehaviour
         //moveCamera = false;
         character.GetComponent<Rigidbody>().linearVelocity = new Vector3(0,0,0);
         character.transform.position = initialPositionsCharacter[round];
+        character.GetComponent<Movement>().setLastPositionOnGround(initialPositionsCharacter[round].y);
     
         // Convert rotation to match script's `velocity`
         personLook.setVelocity(new Vector2(initialRotationsCharacter[round].y, 0));

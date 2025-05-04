@@ -21,6 +21,8 @@ public class PlatformBehaviour : MonoBehaviour
 
     private Rigidbody rigidbody;
     private Transform transform;
+    private bool initDirectionUp;
+    public Vector3 platformVelocity;
 
 
     void Awake()
@@ -28,6 +30,7 @@ public class PlatformBehaviour : MonoBehaviour
         // Get the rigidbody on this.
         rigidbody = GetComponent<Rigidbody>();
         transform = GetComponent<Transform>();
+        initDirectionUp = directionUp;
         resetPosition();
     }
 
@@ -36,23 +39,26 @@ public class PlatformBehaviour : MonoBehaviour
     {
         rigidbody.linearVelocity = new Vector3(0,0,0);
         transform.position = initialPosition;
+        directionUp = initDirectionUp;
     }
 
 
-    void Update()
+    void FixedUpdate()
     {
         if(triggersManager.getMovePlatforms())
         {
             if(directionUp)
             {
-                rigidbody.linearVelocity = new Vector3(0,speed*Time.deltaTime,0);
+                platformVelocity = new Vector3(0,speed,0);
+                rigidbody.linearVelocity = platformVelocity;
 
                 if(transform.position.y>maxHeight)
                     directionUp = false;
             }
             else
             {
-                rigidbody.linearVelocity = new Vector3(0,-speed*Time.deltaTime,0);
+                platformVelocity = new Vector3(0,-speed,0);
+                rigidbody.linearVelocity = platformVelocity;
 
                 if(transform.position.y<minHeight)
                     directionUp = true;
@@ -63,6 +69,7 @@ public class PlatformBehaviour : MonoBehaviour
         }
         else
         {
+            platformVelocity = new Vector3(0,0,0);
             rigidbody.linearVelocity = new Vector3(0,0,0);
 
             if(soundSource.isPlaying)

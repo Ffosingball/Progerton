@@ -32,12 +32,14 @@ public class Movement : MonoBehaviour
     private Vector2 mouseInput = new Vector2(0,0);
     private float lastYpositionOnGround;
     private Coroutine waitToEnd=null;
+    private Vector3 externalVelocity = new Vector3(0,0,0);
 
 
     //Getter for IsRunning
     public bool getIsRunning(){return IsRunning;}
     public Vector2 getMouseInput() {return mouseInput;}
     public void setMoveInput(Vector2 moveInput){this.moveInput = moveInput;}
+    public void setLastPositionOnGround(float lastYpositionOnGround){this.lastYpositionOnGround=lastYpositionOnGround;}
 
 
     void Awake()
@@ -45,6 +47,30 @@ public class Movement : MonoBehaviour
         // Get the rigidbody on this.
         rigidbody = GetComponent<Rigidbody>();
         transform = GetComponent<Transform>();
+    }
+
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+            PlatformBehaviour platform = collision.gameObject.GetComponent<PlatformBehaviour>();
+            if (platform != null)
+            {
+                // Apply only vertical platform velocity
+                externalVelocity = new Vector3(0, platform.platformVelocity.y, 0);
+            }
+        }
+    }
+
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+            externalVelocity = new Vector3(0,0,0);
+            // Stop applying platform movement
+        }
     }
 
 
@@ -70,9 +96,11 @@ public class Movement : MonoBehaviour
             else
                 targetMovingSpeed = speed;
 
-            // Apply movement.
-            rigidbody.linearVelocity = transform.rotation * new Vector3(moveInput.x* targetMovingSpeed, rigidbody.linearVelocity.y, moveInput.y* targetMovingSpeed);
-        
+            if(externalVelocity.y==0)
+                rigidbody.linearVelocity = transform.rotation * new Vector3(moveInput.x* targetMovingSpeed, rigidbody.linearVelocity.y, moveInput.y* targetMovingSpeed);
+            else
+                rigidbody.linearVelocity = transform.rotation * new Vector3(moveInput.x* targetMovingSpeed, externalVelocity.y, moveInput.y* targetMovingSpeed);
+
             lastYpositionOnGround = transform.position.y;
         }
 

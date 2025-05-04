@@ -293,13 +293,13 @@ public class UIManager : MonoBehaviour
 
     public void outputCountdown(float countdownTime)
     {
-        countdownText.text = countdownTime+"";
+        countdownText.text = countdownTime.ToString();
     }
 
 
     public void outputTimer(float time)
     {
-        timerText.text = time+"";
+        timerText.text = time.ToString("F2");
     }
 
 
