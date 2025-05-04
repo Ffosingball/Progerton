@@ -76,6 +76,7 @@ public class SettingsManager : MonoBehaviour
 
         textSliderSound.text = (Math.Round(settingsPreferences.soundEffectsVolume*100))+"%";
         soundManager.updateSoundVolume(settingsPreferences.soundEffectsVolume);
+        soundManager.ResumeSound();
         sliderSound.value = settingsPreferences.soundEffectsVolume;
 
         sliderSensitivity.value = settingsPreferences.sensitivity;

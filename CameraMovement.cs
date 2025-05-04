@@ -30,6 +30,7 @@ public class CameraMovement : MonoBehaviour
 
 
     public Vector2 getMouseInput() {return mouseInput;}
+    public void setMoveInput(Vector2 moveInput){this.moveInput = moveInput;}
 
 
 

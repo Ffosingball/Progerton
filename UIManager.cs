@@ -83,7 +83,7 @@ public class UIManager : MonoBehaviour
     public AudioSource countdownAudioSource;
 
     private bool cursorlocked, musicIsMuffled;
-    private Coroutine disappearText=null;
+    private Coroutine disappearText=null, disappearText2=null;
     private LevelData data;
     private GameObject curScreen;
     private int roundNum=-1;
@@ -120,6 +120,7 @@ public class UIManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape) && cursorlocked)//open pause menu
         {
+            soundManager.PauseSound();
             soundManager.playKeyPressedSound();
             cursorlocked=false;
             Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.ForceSoftware);
@@ -223,6 +224,7 @@ public class UIManager : MonoBehaviour
         MakeMusicClear();
         countdownAudioSource.UnPause();
         Time.timeScale = 1f;
+        soundManager.ResumeSound();
     }
 
 
@@ -269,7 +271,23 @@ public class UIManager : MonoBehaviour
 
     public void OutputErrorText()
     {
+        if(disappearText2!=null)
+        {
+            StopCoroutine(disappearText2);
+            disappearText2=null;
+        }
+
         errorText.text = _currentStringTable["error_message"].LocalizedValue;
+        disappearText2 = StartCoroutine(hideTextError());
+    }
+
+
+
+    private IEnumerator<WaitForSeconds> hideTextError()
+    {
+        yield return new WaitForSeconds(timeBeforeTextDisappear);
+        errorText.text = "";
+        disappearText2 = null;
     }
 
 

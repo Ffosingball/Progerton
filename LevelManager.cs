@@ -22,7 +22,6 @@ public class LevelManager : MonoBehaviour
 
     
     public GameObject character;
-    public GameObject cameraOfTheCharacter;
     public GameObject camera;
     public UIManager uIManager;
     public SavePlayerMovements savePlayerMovements;
@@ -130,6 +129,7 @@ public class LevelManager : MonoBehaviour
         //camera.GetComponent<Rigidbody>().linearVelocity = new Vector3(0,0,0);
         gameMode = false;
         canMove=false;
+        character.GetComponent<Movement>().setMoveInput(new Vector2(0,0));
         uIManager.setLevelOverviewScreen();
     }
 
@@ -166,6 +166,7 @@ public class LevelManager : MonoBehaviour
             camera.SetActive(false);
             character.SetActive(true);
             gameMode = true;
+            camera.GetComponent<CameraMovement>().setMoveInput(new Vector2(0,0));
             recording = StartCoroutine(countdown());
         }
     }

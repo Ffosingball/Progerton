@@ -16,6 +16,7 @@ public class SoundManager : MonoBehaviour
     //private Coroutine changeValueSoundPlaying=null;
 
     private bool musicStoped=false;
+    private float soundVolume;
 
 
     //It starts play background music
@@ -57,6 +58,18 @@ public class SoundManager : MonoBehaviour
             musicSource.Pause();
             musicStoped = true;
         }
+    }
+
+
+    public void PauseSound()
+    {
+        mixer.SetFloat("SoundVolume", -80f);
+    }
+
+
+    public void ResumeSound()
+    {
+        mixer.SetFloat("SoundVolume", Mathf.Log10(soundVolume) * 20);
     }
 
 
@@ -119,7 +132,8 @@ public class SoundManager : MonoBehaviour
 
     public void updateSoundVolume(float soundVolume)
     {
-        mixer.SetFloat("SoundVolume", Mathf.Log10(soundVolume) * 20);
+        this.soundVolume = soundVolume;
+        mixer.SetFloat("UISoundVolume", Mathf.Log10(soundVolume) * 20);
     }
 }
 

@@ -37,6 +37,7 @@ public class Movement : MonoBehaviour
     //Getter for IsRunning
     public bool getIsRunning(){return IsRunning;}
     public Vector2 getMouseInput() {return mouseInput;}
+    public void setMoveInput(Vector2 moveInput){this.moveInput = moveInput;}
 
 
     void Awake()
