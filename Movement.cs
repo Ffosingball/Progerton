@@ -96,6 +96,8 @@ public class Movement : MonoBehaviour
             else
                 targetMovingSpeed = speed;
 
+            //rigidbody.linearVelocity = transform.rotation * new Vector3(moveInput.x* targetMovingSpeed, rigidbody.linearVelocity.y, moveInput.y* targetMovingSpeed);
+
             if(externalVelocity.y==0)
                 rigidbody.linearVelocity = transform.rotation * new Vector3(moveInput.x* targetMovingSpeed, rigidbody.linearVelocity.y, moveInput.y* targetMovingSpeed);
             else

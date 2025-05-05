@@ -37,7 +37,6 @@ public class PlatformBehaviour : MonoBehaviour
 
     public void resetPosition()
     {
-        rigidbody.linearVelocity = new Vector3(0,0,0);
         transform.position = initialPosition;
         directionUp = initDirectionUp;
     }
@@ -47,10 +46,12 @@ public class PlatformBehaviour : MonoBehaviour
     {
         if(triggersManager.getMovePlatforms())
         {
+
             if(directionUp)
             {
                 platformVelocity = new Vector3(0,speed,0);
-                rigidbody.linearVelocity = platformVelocity;
+                Vector3 newPosition = transform.position + new Vector3(0,speed * Time.fixedDeltaTime,0);
+                rigidbody.MovePosition(newPosition);
 
                 if(transform.position.y>maxHeight)
                     directionUp = false;
@@ -58,7 +59,8 @@ public class PlatformBehaviour : MonoBehaviour
             else
             {
                 platformVelocity = new Vector3(0,-speed,0);
-                rigidbody.linearVelocity = platformVelocity;
+                Vector3 newPosition = transform.position + new Vector3(0,-speed * Time.fixedDeltaTime,0);
+                rigidbody.MovePosition(newPosition);
 
                 if(transform.position.y<minHeight)
                     directionUp = true;
@@ -70,7 +72,7 @@ public class PlatformBehaviour : MonoBehaviour
         else
         {
             platformVelocity = new Vector3(0,0,0);
-            rigidbody.linearVelocity = new Vector3(0,0,0);
+
 
             if(soundSource.isPlaying)
                 soundSource.Pause();

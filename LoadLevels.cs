@@ -81,7 +81,7 @@ public class LoadLevels : MonoBehaviour
 
             button.onClick.AddListener(() => ButtonClicked(sceneIndex));
 
-            if(data.locked[i])
+            /*if(data.locked[i])
             {
                 button.interactable = false;
                 button.image.sprite = lockedLevelImage;
@@ -90,7 +90,8 @@ public class LoadLevels : MonoBehaviour
             {
                 button.interactable = true;
                 button.image.sprite = unlockedLevelImage[i];
-            }
+            }*/
+            button.image.sprite = unlockedLevelImage[i];
 
             RectTransform transform = newBut.GetComponent<RectTransform>();
             transform.localScale = new Vector3(1f,1f,1f);
@@ -137,14 +138,8 @@ public class LoadLevels : MonoBehaviour
 
     public void ButtonClicked(int num)
     {
-        //REMOVE IF WHEN GAME IS COMPLETE
-        if(num!=0)
-        {
-            GameInfo.currentLevel = num;
-            StartCoroutine(LoadSceneAsync(data.sceneName[num]));
-        }
-        else
-            StartCoroutine(LoadSceneAsync("levelTemplate"));
+        GameInfo.currentLevel = num;
+        StartCoroutine(LoadSceneAsync(data.sceneName[num]));
     }
 
 

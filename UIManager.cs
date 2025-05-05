@@ -340,6 +340,7 @@ public class UIManager : MonoBehaviour
         MuffleMusic();
         Time.timeScale = 0f;
         changeModeScreen.SetActive(true);
+        soundManager.PauseSound();
     }
 
 
@@ -351,6 +352,7 @@ public class UIManager : MonoBehaviour
         MakeMusicClear();
         Time.timeScale = 1f;
         changeModeScreen.SetActive(false);
+        soundManager.ResumeSound();
     }
 
 
@@ -363,6 +365,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
         changeModeScreen.SetActive(false);
         levelManager.changeToOverviewMode();
+        soundManager.ResumeSound();
     }
 
 
@@ -374,6 +377,7 @@ public class UIManager : MonoBehaviour
         MuffleMusic();
         Time.timeScale = 0f;
         rerecordScreen.SetActive(true);
+        soundManager.PauseSound();
     }
 
 
@@ -385,6 +389,7 @@ public class UIManager : MonoBehaviour
         MakeMusicClear();
         Time.timeScale = 1f;
         rerecordScreen.SetActive(false);
+        soundManager.ResumeSound();
     }
 
 
@@ -397,6 +402,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
         rerecordScreen.SetActive(false);
         levelManager.rerecordMoves();
+        soundManager.ResumeSound();
     }
 
 
@@ -408,6 +414,7 @@ public class UIManager : MonoBehaviour
         MuffleMusic();
         Time.timeScale = 0f;
         endRecordingScreen.SetActive(true);
+        soundManager.PauseSound();
     }
 
 
@@ -419,6 +426,7 @@ public class UIManager : MonoBehaviour
         MakeMusicClear();
         Time.timeScale = 1f;
         endRecordingScreen.SetActive(false);
+        soundManager.ResumeSound();
     }
 
 
@@ -440,6 +448,7 @@ public class UIManager : MonoBehaviour
         soundManager.PauseMusic();
         Time.timeScale = 0f;
         endRoundScreen.SetActive(true);
+        soundManager.PauseSound();
     }
 
 
@@ -452,6 +461,7 @@ public class UIManager : MonoBehaviour
         soundManager.PauseMusic();
         Time.timeScale = 0f;
         winScreen.SetActive(true);
+        soundManager.PauseSound();
 
         timeText2.text = _currentStringTable["time"].LocalizedValue+levelManager.getTime();
 
@@ -474,6 +484,7 @@ public class UIManager : MonoBehaviour
         soundManager.PauseMusic();
         Time.timeScale = 0f;
         lostScreen.SetActive(true);
+        soundManager.PauseSound();
     }
 
 
@@ -487,6 +498,7 @@ public class UIManager : MonoBehaviour
         MakeMusicClear();
         Time.timeScale = 1f;
         levelManager.goToNextRound();
+        soundManager.ResumeSound();
     }
 
 
@@ -500,6 +512,7 @@ public class UIManager : MonoBehaviour
         MakeMusicClear();
         Time.timeScale = 1f;
         levelManager.goToPreviousRound();
+        soundManager.ResumeSound();
     }
 
 
@@ -532,6 +545,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
         endRoundScreen.SetActive(false);
         levelManager.rerecordMoves();
+        soundManager.ResumeSound();
     }
 
 
@@ -543,6 +557,7 @@ public class UIManager : MonoBehaviour
         MuffleMusic();
         Time.timeScale = 0f;
         prevRoundScreen.SetActive(true);
+        soundManager.PauseSound();
     }
 
 
@@ -554,6 +569,7 @@ public class UIManager : MonoBehaviour
         MakeMusicClear();
         Time.timeScale = 1f;
         prevRoundScreen.SetActive(false);
+        soundManager.ResumeSound();
     }
 
 

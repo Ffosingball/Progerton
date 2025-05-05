@@ -127,6 +127,10 @@ public class LevelManager : MonoBehaviour
 
         character.SetActive(false);
         camera.SetActive(true);
+
+        GameObject personLook = camera.transform.GetChild(0).gameObject;
+        personLook.GetComponent<PersonLook>().setFrameVelocity(new Vector2(0,0));
+
         //camera.GetComponent<Rigidbody>().linearVelocity = new Vector3(0,0,0);
         gameMode = false;
         canMove=false;

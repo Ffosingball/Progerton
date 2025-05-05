@@ -19,6 +19,7 @@ public class PersonLook : MonoBehaviour
 
 
     public void setVelocity(Vector2 velocity){this.velocity = velocity;}
+    public void setFrameVelocity(Vector2 frameVelocity){this.frameVelocity = frameVelocity;}
 
 
     void Update()
