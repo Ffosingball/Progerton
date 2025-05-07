@@ -108,6 +108,7 @@ public class ReplayMovements : MonoBehaviour
     //Sets position of the repeater to the start
     public void Reset()
     {
+        //Debug.Log("Reseted!");
         Vector3 position = initialPosition;
         position.y += yOffset;
         transform.position = position;

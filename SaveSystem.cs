@@ -10,7 +10,7 @@ public static class SaveSystem
         //Create path to the file
         //Application.persistentDataPath is useful to create files for crossplatforms games
         //After add name and extension of the binary file
-        string path = Application.persistentDataPath + "/listOfLevels.omg";
+        string path = Application.persistentDataPath + "/listOfLevels2.omg";
         //Create a file
         FileStream stream = new FileStream(path, FileMode.Create);
         //Write data in that file
@@ -21,7 +21,7 @@ public static class SaveSystem
 
     public static LevelData LoadLevelData()
     {
-        string path = Application.persistentDataPath + "/listOfLevels.omg";
+        string path = Application.persistentDataPath + "/listOfLevels2.omg";
         if(File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

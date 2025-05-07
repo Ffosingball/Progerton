@@ -36,10 +36,15 @@ public class TriggerBehaviour : MonoBehaviour
         //Debug.Log("Entered");
         if (other.CompareTag(targetTag)) // Check tag of the object
         {
+            //Debug.Log("Player");
             triggersManager.setFlag(correspondingFlag, true);
             renderer.material = triggerOn;
             triggerAnimator.SetBool("isOn", true);
+
             numOfObjectsInside++;
+            if(numOfObjectsInside==0)
+                numOfObjectsInside=1;
+            //Debug.Log(numOfObjectsInside);
 
             if(numOfObjectsInside==1)
                 soundSource.PlayOneShot(leverPull);
@@ -52,13 +57,18 @@ public class TriggerBehaviour : MonoBehaviour
         //Debug.Log("Exited");
         if (other.CompareTag(targetTag)) // Check tag of the object
         {
+            //Debug.Log("PlayerX");
             numOfObjectsInside--;
+            if(numOfObjectsInside<0)
+                numOfObjectsInside=0;
+            //Debug.Log(numOfObjectsInside);
             if (numOfObjectsInside == 0) //Check if somebody still there
             {
                 triggersManager.setFlag(correspondingFlag, false);
                 renderer.material = triggerOff;
                 triggerAnimator.SetBool("isOn", false);
                 soundSource.PlayOneShot(leverPull);
+                //Debug.Log("No one inside!");
             }
         }
     }
@@ -67,6 +77,7 @@ public class TriggerBehaviour : MonoBehaviour
     {
         //Debug.Log("Disabled");
         numOfObjectsInside=0;
+        //Debug.Log(numOfObjectsInside);
         triggersManager.setFlag(correspondingFlag, false);
         renderer.material = triggerOff;
         triggerAnimator.SetBool("isOn", false);

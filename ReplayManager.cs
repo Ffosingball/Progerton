@@ -145,14 +145,15 @@ public class ReplayManager : MonoBehaviour
     //Stops all repetition
     public void StopReplay()
     {
-        triggersManager.disableAllTriggers();
-        triggersManager.stopAllAnimations();
-
         for(int i=0; i<currentRound; i++)
         {
             ReplayMovements rep = allReplayers[i].GetComponent<ReplayMovements>();
             rep.StopReplaying();
         }
+
+        //Debug.Log("Stop them!");
+        triggersManager.disableAllTriggers();
+        triggersManager.stopAllAnimations();
 
         isReplaying = false;
     }
