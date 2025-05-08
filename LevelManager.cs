@@ -51,7 +51,10 @@ public class LevelManager : MonoBehaviour
     public void Start()
     {
         camera.transform.position = initialPositionCamera;
-        camera.transform.rotation = Quaternion.Euler(initialRotationCamera);
+
+        GameObject cameraCamera = camera.transform.GetChild(0).gameObject;
+        cameraCamera.GetComponent<PersonLook>().setVelocity(new Vector2(initialRotationCamera.y, initialRotationCamera.x));
+
         canMove=false;
     }
 
