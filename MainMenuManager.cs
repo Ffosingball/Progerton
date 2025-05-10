@@ -33,6 +33,7 @@ public class MainMenuManager : MonoBehaviour
         OpenMainMenuScreen();
         updateText();
         Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.ForceSoftware);
+        GameInfo.getStatistics();
     }
 
 
@@ -55,6 +56,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void ExitGame()
     {
+        GameInfo.SaveData();
         Application.Quit();
     }
 

@@ -471,6 +471,9 @@ public class UIManager : MonoBehaviour
         if(data.bestTime[GameInfo.currentLevel]>levelManager.getTime())
             data.bestTime[GameInfo.currentLevel] = levelManager.getTime();
 
+        GameInfo.setTime(levelManager.getTime());
+        GameInfo.SaveData();
+
         SaveSystem.SaveLevelData(data);
     }
 
@@ -518,6 +521,7 @@ public class UIManager : MonoBehaviour
 
     public void exitLevel()
     {
+        GameInfo.SaveData();
         StartCoroutine(LoadSceneAsync("MainMenu"));
     }
 
@@ -525,13 +529,15 @@ public class UIManager : MonoBehaviour
     public void nextLevel()
     {
         GameInfo.currentLevel++;
+        GameInfo.SaveData();
         StartCoroutine(LoadSceneAsync("level"+(GameInfo.currentLevel)));
     }
 
 
     public void startLevelAgain()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        GameInfo.SaveData();
+        StartCoroutine(LoadSceneAsync(SceneManager.GetActiveScene().name));
     }
 
 

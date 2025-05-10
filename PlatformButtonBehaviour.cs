@@ -38,10 +38,16 @@ public class PlatformButtonBehaviour : MonoBehaviour
             triggersManager.setMovePlatforms(true);
             buttonPlatformAnimator.SetBool("someoneInside", true);
             renderer.material = triggerOn;
+
             numOfObjectsInside++;
+            if(numOfObjectsInside==0)
+                numOfObjectsInside=1;
 
             if(numOfObjectsInside==1)
+            {
                 soundSource.PlayOneShot(buttonPush);
+                GameInfo.gameStatistics.platformsActivated++;
+            }
         }
     }
 
@@ -51,13 +57,14 @@ public class PlatformButtonBehaviour : MonoBehaviour
         if (other.CompareTag(targetTag)) // Check tag of the object
         {
             numOfObjectsInside--;
+            if(numOfObjectsInside<0)
+                numOfObjectsInside=0;
+
             if (numOfObjectsInside == 0) //Check if somebody still there
             {
                 renderer.material = triggerOff;
                 buttonPlatformAnimator.SetBool("someoneInside", false);
-
-                if(numOfObjectsInside==0)
-                    triggersManager.setActiveButton(-1);
+                triggersManager.setActiveButton(-1);
             }
 
             if(triggersManager.getActiveButton()==0)

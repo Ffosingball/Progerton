@@ -51,6 +51,7 @@ public class LevelManager : MonoBehaviour
     public void Start()
     {
         camera.transform.position = initialPositionCamera;
+        camera.GetComponent<CameraMovement>().setPreviousPosition(initialPositionCamera);
 
         GameObject cameraCamera = camera.transform.GetChild(0).gameObject;
         cameraCamera.GetComponent<PersonLook>().setVelocity(new Vector2(initialRotationCamera.y, initialRotationCamera.x));
@@ -67,6 +68,7 @@ public class LevelManager : MonoBehaviour
         character.GetComponent<Rigidbody>().linearVelocity = new Vector3(0,0,0);
         character.transform.position = initialPositionsCharacter[round];
         character.GetComponent<Movement>().setLastPositionOnGround(initialPositionsCharacter[round].y);
+        character.GetComponent<Movement>().setPreviousPosition(initialPositionsCharacter[round]);
     
         // Convert rotation to match script's `velocity`
         personLook.setVelocity(new Vector2(initialRotationsCharacter[round].y, 0));

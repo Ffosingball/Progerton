@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -33,6 +34,7 @@ public class Movement : MonoBehaviour
     private float lastYpositionOnGround;
     private Coroutine waitToEnd=null;
     private Vector3 externalVelocity = new Vector3(0,0,0);
+    private Vector3 previousPosition;
 
 
     //Getter for IsRunning
@@ -40,6 +42,7 @@ public class Movement : MonoBehaviour
     public Vector2 getMouseInput() {return mouseInput;}
     public void setMoveInput(Vector2 moveInput){this.moveInput = moveInput;}
     public void setLastPositionOnGround(float lastYpositionOnGround){this.lastYpositionOnGround=lastYpositionOnGround;}
+    public void setPreviousPosition(Vector3 position){previousPosition = position;}
 
 
     void Awake()
@@ -128,6 +131,10 @@ public class Movement : MonoBehaviour
                 waitToEnd = StartCoroutine(waitForRestart(2f));
             }
         }
+
+        float distanceWalked = (float)Math.Sqrt(Math.Pow((double)(transform.position.x-previousPosition.x),2)+Math.Pow((double)(transform.position.y-previousPosition.y),2)+Math.Pow((double)(transform.position.z-previousPosition.z),2));
+        GameInfo.gameStatistics.distanceWalked+=distanceWalked;
+        previousPosition = transform.position;
     }
 
 

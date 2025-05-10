@@ -131,6 +131,7 @@ public class LoadLevels : MonoBehaviour
     public void ButtonClicked(int num)
     {
         GameInfo.currentLevel = num;
+        GameInfo.SaveData();
         StartCoroutine(LoadSceneAsync(data.sceneName[num]));
     }
 

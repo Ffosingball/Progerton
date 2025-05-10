@@ -131,6 +131,8 @@ public class ReplayManager : MonoBehaviour
         if(isReplaying)
             StopReplay();
 
+        GameInfo.gameStatistics.numOfReplaysMade++;
+
         //call replay for repeaters
         for(int i=0; i<currentRound; i++)
         {

@@ -47,7 +47,10 @@ public class TriggerBehaviour : MonoBehaviour
             //Debug.Log(numOfObjectsInside);
 
             if(numOfObjectsInside==1)
+            {
+                GameInfo.gameStatistics.bridgesActivated++;
                 soundSource.PlayOneShot(leverPull);
+            }
         }
     }
 

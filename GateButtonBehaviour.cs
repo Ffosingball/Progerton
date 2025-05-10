@@ -37,6 +37,7 @@ public class GateButtonBehaviour : MonoBehaviour
             if(firstTime)
             {
                 soundSource.PlayOneShot(buttonPush);
+                GameInfo.gameStatistics.gatesOpened++;
                 firstTime = false;
             }
         }
