@@ -6,25 +6,35 @@ public class InputManagerOverview : MonoBehaviour
     public LevelManager levelManager;
     public ReplayManager replayManager;
     public SoundManager soundManager;
+    public UIManager uIManager;
 
 
     void OnReplay_moves(InputValue value)
     {
-        soundManager.playKeyPressedSound();
-        replayManager.StartReplay();
+        if(uIManager.getCursorlocked())
+        {
+            soundManager.playKeyPressedSound();
+            replayManager.StartReplay();
+        }
     }
 
 
     void OnStart_recording(InputValue value)
     {
         //soundManager.playKeyPressedSound();
-        levelManager.ChangeMode();
+        if(uIManager.getCursorlocked())
+        {
+            levelManager.ChangeMode();
+        }
     }
 
 
     void OnPrev_round(InputValue value)
     {
-        soundManager.playKeyPressedSound();
-        levelManager.handlePreviousRound();
+        if(uIManager.getCursorlocked())
+        {
+            soundManager.playKeyPressedSound();
+            levelManager.handlePreviousRound();
+        }
     }
 }

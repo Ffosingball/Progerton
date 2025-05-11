@@ -82,7 +82,7 @@ public class UIManager : MonoBehaviour
     public SoundManager soundManager;
     public AudioSource countdownAudioSource;
 
-    private bool cursorlocked, musicIsMuffled;
+    private bool cursorlocked, musicIsMuffled, otherScreenOpened=false;
     private Coroutine disappearText=null, disappearText2=null;
     private LevelData data;
     private GameObject curScreen;
@@ -132,7 +132,8 @@ public class UIManager : MonoBehaviour
         }
         else if(Input.GetKeyDown(KeyCode.Escape)) //return to game
         {
-            ReturnToGame();
+            if(!otherScreenOpened)
+                ReturnToGame();
         }
 
         //Check status and return
@@ -341,6 +342,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 0f;
         changeModeScreen.SetActive(true);
         soundManager.PauseSound();
+        otherScreenOpened = true;
     }
 
 
@@ -353,6 +355,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
         changeModeScreen.SetActive(false);
         soundManager.ResumeSound();
+        otherScreenOpened = false;
     }
 
 
@@ -366,6 +369,7 @@ public class UIManager : MonoBehaviour
         changeModeScreen.SetActive(false);
         levelManager.changeToOverviewMode();
         soundManager.ResumeSound();
+        otherScreenOpened = false;
     }
 
 
@@ -378,6 +382,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 0f;
         rerecordScreen.SetActive(true);
         soundManager.PauseSound();
+        otherScreenOpened = true;
     }
 
 
@@ -390,6 +395,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
         rerecordScreen.SetActive(false);
         soundManager.ResumeSound();
+        otherScreenOpened = false;
     }
 
 
@@ -403,6 +409,7 @@ public class UIManager : MonoBehaviour
         rerecordScreen.SetActive(false);
         levelManager.rerecordMoves();
         soundManager.ResumeSound();
+        otherScreenOpened = false;
     }
 
 
@@ -415,6 +422,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 0f;
         endRecordingScreen.SetActive(true);
         soundManager.PauseSound();
+        otherScreenOpened = true;
     }
 
 
@@ -427,6 +435,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
         endRecordingScreen.SetActive(false);
         soundManager.ResumeSound();
+        otherScreenOpened = false;
     }
 
 
@@ -449,6 +458,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 0f;
         endRoundScreen.SetActive(true);
         soundManager.PauseSound();
+        otherScreenOpened = true;
     }
 
 
@@ -469,12 +479,16 @@ public class UIManager : MonoBehaviour
             data.locked[GameInfo.currentLevel+1] = false;
         
         if(data.bestTime[GameInfo.currentLevel]>levelManager.getTime())
+        {
             data.bestTime[GameInfo.currentLevel] = levelManager.getTime();
+            GameInfo.setTime(levelManager.getTime());
+        }
 
-        GameInfo.setTime(levelManager.getTime());
         GameInfo.SaveData();
 
         SaveSystem.SaveLevelData(data);
+
+        otherScreenOpened = true;
     }
 
 
@@ -488,6 +502,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 0f;
         lostScreen.SetActive(true);
         soundManager.PauseSound();
+        otherScreenOpened = true;
     }
 
 
@@ -502,6 +517,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
         levelManager.goToNextRound();
         soundManager.ResumeSound();
+        otherScreenOpened = false;
     }
 
 
@@ -516,6 +532,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
         levelManager.goToPreviousRound();
         soundManager.ResumeSound();
+        otherScreenOpened = false;
     }
 
 
@@ -552,6 +569,7 @@ public class UIManager : MonoBehaviour
         endRoundScreen.SetActive(false);
         levelManager.rerecordMoves();
         soundManager.ResumeSound();
+        otherScreenOpened = false;
     }
 
 
@@ -564,6 +582,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 0f;
         prevRoundScreen.SetActive(true);
         soundManager.PauseSound();
+        otherScreenOpened = true;
     }
 
 
@@ -576,6 +595,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
         prevRoundScreen.SetActive(false);
         soundManager.ResumeSound();
+        otherScreenOpened = false;
     }
 
 

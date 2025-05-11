@@ -5,11 +5,12 @@ public class InputManagerGame : MonoBehaviour
 {
     public LevelManager levelManager;
     public SoundManager soundManager;
+    public UIManager uIManager;
 
 
     void OnRerecord_moves(InputValue value)
     {
-        if(levelManager.getCanMove())
+        if(levelManager.getCanMove() && uIManager.getCursorlocked())
         {
             soundManager.playKeyPressedSound();
             levelManager.handleRerecordMoves();
@@ -19,7 +20,7 @@ public class InputManagerGame : MonoBehaviour
 
     void OnSwitch_overview(InputValue value)
     {
-        if(levelManager.getCanMove())
+        if(levelManager.getCanMove()  && uIManager.getCursorlocked())
         {
             soundManager.playKeyPressedSound();
             levelManager.ChangeMode();
@@ -29,7 +30,7 @@ public class InputManagerGame : MonoBehaviour
 
     void OnEnd_recording(InputValue value)
     {
-        if(levelManager.getCanMove())
+        if(levelManager.getCanMove()  && uIManager.getCursorlocked())
         {
             soundManager.playKeyPressedSound();
             levelManager.handleEndRecording();

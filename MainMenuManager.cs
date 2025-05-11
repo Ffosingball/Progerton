@@ -18,7 +18,11 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField]
     private GameObject settingsScreen;
     [SerializeField]
+    private GameObject statisticsScreen;
+    [SerializeField]
     private TMP_Text madeBy;
+    [SerializeField]
+    private TMP_Text bridgesValue, gatesValue, platformsValue, replaysValue, shortestValue, shortestLevel, longestValue, longestLevel, walkedValue, flewValue, timeSpentValue;
     [SerializeField]
     private string username;
     [SerializeField]
@@ -26,6 +30,7 @@ public class MainMenuManager : MonoBehaviour
     private StringTable _currentStringTable;
 
     public SettingsManager settingsManager;
+    public GameTimeCounter gameTimeCounter;
 
 
     private void Start()
@@ -33,7 +38,8 @@ public class MainMenuManager : MonoBehaviour
         OpenMainMenuScreen();
         updateText();
         Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.ForceSoftware);
-        GameInfo.getStatistics();
+        if(GameInfo.gameStatistics==null)
+            GameInfo.getStatistics();
     }
 
 
@@ -43,6 +49,8 @@ public class MainMenuManager : MonoBehaviour
         {
             updateText();
         }
+
+        timeSpentValue.text = gameTimeCounter.GetFormattedTime();
     }
 
 
@@ -57,6 +65,7 @@ public class MainMenuManager : MonoBehaviour
     public void ExitGame()
     {
         GameInfo.SaveData();
+        Debug.Log("Saved");
         Application.Quit();
     }
 
@@ -80,10 +89,49 @@ public class MainMenuManager : MonoBehaviour
         mainMenuScreen.SetActive(true);
         levelsScreen.SetActive(false);
         settingsScreen.SetActive(false);
+        statisticsScreen.SetActive(false);
     }
 
     public string getTextForKeyRebinding()
     {
         return _currentStringTable["press_key"].LocalizedValue;
+    }
+
+
+    public void OpenStatisticsScreen()
+    {
+        mainMenuScreen.SetActive(false);
+
+        bridgesValue.text = GameInfo.gameStatistics.bridgesActivated.ToString();
+        gatesValue.text = GameInfo.gameStatistics.gatesOpened.ToString();
+        platformsValue.text = GameInfo.gameStatistics.platformsActivated.ToString();
+        replaysValue.text = GameInfo.gameStatistics.numOfReplaysMade.ToString();
+
+        if(GameInfo.gameStatistics.shortestTime==99999)
+        {
+            shortestValue.text = _currentStringTable["none"].LocalizedValue;
+            shortestLevel.text = _currentStringTable["none"].LocalizedValue;
+        }
+        else
+        {
+            shortestValue.text = GameInfo.gameStatistics.shortestTime.ToString();
+            shortestLevel.text = (GameInfo.gameStatistics.shortestTimeAtLevel+1).ToString();
+        }
+
+        if(GameInfo.gameStatistics.longestTime==0)
+        {
+            longestValue.text = _currentStringTable["none"].LocalizedValue;
+            longestLevel.text = _currentStringTable["none"].LocalizedValue;
+        }
+        else
+        {
+            longestValue.text = GameInfo.gameStatistics.longestTime.ToString();
+            longestLevel.text = (GameInfo.gameStatistics.longestTimeAtLevel+1).ToString();
+        }
+
+        walkedValue.text = GameInfo.convertDistance(GameInfo.gameStatistics.distanceWalked);
+        flewValue.text = GameInfo.convertDistance(GameInfo.gameStatistics.distanceFlew);
+
+        statisticsScreen.SetActive(true);
     }
 }

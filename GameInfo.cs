@@ -1,4 +1,7 @@
+using System;
+using Unity.Mathematics;
 using UnityEngine;
+
 
 public static class GameInfo
 {
@@ -28,10 +31,33 @@ public static class GameInfo
             gameStatistics.shortestTimeAtLevel = currentLevel;
         }
 
-        if(time>gameStatistics.longestTime)
+        float maxTime = time;
+        int atLevel = currentLevel;
+        //Debug.Log("curTime "+maxTime+"; level "+atLevel);
+        LevelData data = SaveSystem.LoadLevelData();
+        for(int i=0; i<data.locked.Count; i++)
         {
-            gameStatistics.longestTime = time;
-            gameStatistics.longestTimeAtLevel = currentLevel;
+            if(!data.locked[i] && i!=currentLevel)
+            {
+                //Debug.Log("i "+i+"; time "+data.bestTime[i]);
+                if(maxTime<data.bestTime[i] && data.bestTime[i]!=99999)
+                {
+                    maxTime = data.bestTime[i];
+                    atLevel = i;
+                }
+            }
         }
+
+        gameStatistics.longestTime = maxTime;
+        gameStatistics.longestTimeAtLevel = atLevel;
+    }
+
+
+    public static string convertDistance(float distance)
+    {
+        if(distance>1000)
+            return Math.Round((double)(distance/1000))+" km "+Math.Round((double)(distance%1000)) +" m";
+        else
+            return Math.Round((double)distance)+" m";
     }
 }

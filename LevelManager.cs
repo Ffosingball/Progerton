@@ -57,6 +57,9 @@ public class LevelManager : MonoBehaviour
         cameraCamera.GetComponent<PersonLook>().setVelocity(new Vector2(initialRotationCamera.y, initialRotationCamera.x));
 
         canMove=false;
+
+        if(GameInfo.gameStatistics==null)
+            GameInfo.getStatistics();
     }
 
 

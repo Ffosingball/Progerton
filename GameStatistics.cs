@@ -9,8 +9,8 @@ public class GameStatistics
     public int numOfReplaysMade=0;
     public float shortestTime=99999;
     public float longestTime=0;
-    public int shortestTimeAtLevel=0;
-    public int longestTimeAtLevel=0;
+    public int shortestTimeAtLevel=-1;
+    public int longestTimeAtLevel=-1;
     public float distanceWalked=0;
     public float distanceFlew=0;
     public float timeSpentInGame=0;
