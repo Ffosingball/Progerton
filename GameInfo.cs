@@ -60,4 +60,14 @@ public static class GameInfo
         else
             return Math.Round((double)distance)+" m";
     }
+
+
+    public static string GetFormattedTime()
+    {
+        int hours = Mathf.FloorToInt(gameStatistics.timeSpentInGame / 3600f);
+        int hoursRemainder = Mathf.FloorToInt(gameStatistics.timeSpentInGame % 3600f);
+        int minutes = Mathf.FloorToInt(hoursRemainder / 60f);
+        int seconds = Mathf.FloorToInt(hoursRemainder % 60f);
+        return $"{hours:00}:{minutes:00}:{seconds:00}";
+    }
 }

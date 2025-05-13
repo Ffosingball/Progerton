@@ -40,6 +40,8 @@ public class MainMenuManager : MonoBehaviour
         Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.ForceSoftware);
         if(GameInfo.gameStatistics==null)
             GameInfo.getStatistics();
+        
+        Time.timeScale = 1f;
     }
 
 
@@ -50,7 +52,7 @@ public class MainMenuManager : MonoBehaviour
             updateText();
         }
 
-        timeSpentValue.text = gameTimeCounter.GetFormattedTime();
+        timeSpentValue.text = GameInfo.GetFormattedTime();
     }
 
 
