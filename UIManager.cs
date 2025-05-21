@@ -81,8 +81,9 @@ public class UIManager : MonoBehaviour
     public AudioMixer mixer;
     public SoundManager soundManager;
     public AudioSource countdownAudioSource;
+    public Movement playerMovement;
 
-    private bool cursorlocked, musicIsMuffled, otherScreenOpened=false;
+    private bool cursorlocked, musicIsMuffled, otherScreenOpened = false;
     private Coroutine disappearText=null, disappearText2=null;
     private LevelData data;
     private GameObject curScreen;
@@ -118,21 +119,22 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape) && cursorlocked)//open pause menu
+        if (Input.GetKeyDown(KeyCode.Escape) && cursorlocked)//open pause menu
         {
             soundManager.PauseSound();
             soundManager.playKeyPressedSound();
-            cursorlocked=false;
+            cursorlocked = false;
             Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.ForceSoftware);
             Cursor.lockState = CursorLockMode.None;
             escapeScreen.SetActive(true);
             Time.timeScale = 0f;
             MuffleMusic();
             countdownAudioSource.Pause();
+            playerMovement.dealWithFilter();
         }
-        else if(Input.GetKeyDown(KeyCode.Escape)) //return to game
+        else if (Input.GetKeyDown(KeyCode.Escape)) //return to game
         {
-            if(!otherScreenOpened)
+            if (!otherScreenOpened)
                 ReturnToGame();
         }
 
@@ -216,7 +218,7 @@ public class UIManager : MonoBehaviour
     public void ReturnToGame()
     {
         soundManager.playKeyPressedSound();
-        cursorlocked=true;
+        cursorlocked = true;
         Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
         Cursor.lockState = CursorLockMode.Locked;
         escapeScreen.SetActive(false);
@@ -226,6 +228,7 @@ public class UIManager : MonoBehaviour
         countdownAudioSource.UnPause();
         Time.timeScale = 1f;
         soundManager.ResumeSound();
+        playerMovement.dealWithFilter();
     }
 
 

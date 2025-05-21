@@ -35,10 +35,11 @@ public class Movement : MonoBehaviour
     private Coroutine waitToEnd=null;
     private Vector3 externalVelocity = new Vector3(0,0,0);
     private Vector3 previousPosition;
+    private GameObject currentFilterActive = null;
 
 
     //Getter for IsRunning
-    public bool getIsRunning(){return IsRunning;}
+    public bool getIsRunning() { return IsRunning; }
     public Vector2 getMouseInput() {return mouseInput;}
     public void setMoveInput(Vector2 moveInput){this.moveInput = moveInput;}
     public void setLastPositionOnGround(float lastYpositionOnGround){this.lastYpositionOnGround=lastYpositionOnGround;}
@@ -86,6 +87,7 @@ public class Movement : MonoBehaviour
                 levelManager.setStopCounting(true);
                 soundManager.playFallDamageSound();
                 redScreen.SetActive(true);
+                currentFilterActive = redScreen;
                 waitToEnd = StartCoroutine(waitForRestart(2f));
             }
         }
@@ -122,12 +124,14 @@ public class Movement : MonoBehaviour
             {
                 soundManager.playFallUnderwaterSound();
                 blueScreen.SetActive(true);
+                currentFilterActive = blueScreen;
                 waitToEnd = StartCoroutine(waitForRestart(3.5f));
             }
             else
             {
                 soundManager.playfallBelowZeroSound();
                 blackScreen.SetActive(true);
+                currentFilterActive = blackScreen;
                 waitToEnd = StartCoroutine(waitForRestart(2f));
             }
         }
@@ -143,9 +147,8 @@ public class Movement : MonoBehaviour
         levelManager.setCanMove(false);
         yield return new WaitForSeconds(waitForSec);
         levelManager.setStopCounting(false);
-        redScreen.SetActive(false);
-        blackScreen.SetActive(false);
-        blueScreen.SetActive(false);
+        currentFilterActive.SetActive(false);
+        currentFilterActive = null;
         levelManager.setCanMove(true);
         waitToEnd = null;
         uIManager.yesRerecord();
@@ -153,11 +156,23 @@ public class Movement : MonoBehaviour
     }
 
 
+    public void dealWithFilter()
+    {
+        if (currentFilterActive != null)
+        {
+            if (currentFilterActive.activeSelf)
+                currentFilterActive.SetActive(false);
+            else
+                currentFilterActive.SetActive(true);
+        }    
+    }
+
+
     public void OnSprint(InputValue value)
     {
-        if(value.isPressed && value.Get<float>()==1)
+        if (value.isPressed && value.Get<float>() == 1)
         {
-            IsRunning=true;
+            IsRunning = true;
         }
         else
         {
