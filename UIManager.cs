@@ -239,15 +239,21 @@ public class UIManager : MonoBehaviour
             StopCoroutine(disappearText);
             disappearText=null;
         }
-	
-        switch(output)
+
+        switch (output)
         {
             case 1:
                 lastFirstRoundText.text = _currentStringTable["first_round"].LocalizedValue;
-            break;
+                lastFirstRoundText.color = Color.red;
+                break;
             case 2:
                 lastFirstRoundText.text = _currentStringTable["last_round"].LocalizedValue;
-            break;
+                lastFirstRoundText.color = Color.red;
+                break;
+            case 3:
+                lastFirstRoundText.text = _currentStringTable["prevRoundMessage"].LocalizedValue;
+                lastFirstRoundText.color = new Color(1f, 1f, 1f);
+                break;
         }
         disappearText = StartCoroutine(hideTextTimer());
     }

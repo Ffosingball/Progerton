@@ -96,7 +96,7 @@ public class ReplayManager : MonoBehaviour
         currentRound--;
 
         //Check if its the first round
-        if(currentRound==-1)
+        if (currentRound == -1)
         {
             uIManager.OutputRoundStatus(1);
             currentRound++;
@@ -105,11 +105,11 @@ public class ReplayManager : MonoBehaviour
         {
             levelManager.resetPosition();
             levelManager.setOverviewMode();
-            uIManager.OutputRoundNumber(currentRound+1);
+            uIManager.OutputRoundNumber(currentRound + 1);
 
             //destroy last created repeater
-            Destroy(allReplayers[currentRound+1]);
-            allReplayers.RemoveAt(currentRound+1);
+            Destroy(allReplayers[currentRound + 1]);
+            allReplayers.RemoveAt(currentRound + 1);
 
             //Set last recorded position and rotation to the savePlayerMovement
             //from the repeater in the current level
@@ -119,6 +119,8 @@ public class ReplayManager : MonoBehaviour
 
             //Hide the repeater of the current round 
             allReplayers[currentRound].SetActive(false);
+            
+            uIManager.OutputRoundStatus(3);
         }
     }
 

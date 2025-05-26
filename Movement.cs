@@ -28,7 +28,7 @@ public class Movement : MonoBehaviour
 
     private Rigidbody rigidbody;
     private Transform transform;
-    private bool IsRunning;
+    private bool IsRunning, flybyCancelled;
     private Vector2 moveInput = new Vector2(0,0);
     private Vector2 mouseInput = new Vector2(0,0);
     private float lastYpositionOnGround;
@@ -93,7 +93,7 @@ public class Movement : MonoBehaviour
         }
 
 
-        if(uIManager.getCursorlocked() && levelManager.getCanMove() && groundCheck.isGrounded)
+        if (uIManager.getCursorlocked() && levelManager.getCanMove() && groundCheck.isGrounded)
         {
             float targetMovingSpeed;
             if (IsRunning)
@@ -103,12 +103,22 @@ public class Movement : MonoBehaviour
 
             //rigidbody.linearVelocity = transform.rotation * new Vector3(moveInput.x* targetMovingSpeed, rigidbody.linearVelocity.y, moveInput.y* targetMovingSpeed);
 
-            if(externalVelocity.y==0)
-                rigidbody.linearVelocity = transform.rotation * new Vector3(moveInput.x* targetMovingSpeed, rigidbody.linearVelocity.y, moveInput.y* targetMovingSpeed);
+            if (externalVelocity.y == 0)
+                rigidbody.linearVelocity = transform.rotation * new Vector3(moveInput.x * targetMovingSpeed, rigidbody.linearVelocity.y, moveInput.y * targetMovingSpeed);
             else
-                rigidbody.linearVelocity = transform.rotation * new Vector3(moveInput.x* targetMovingSpeed, externalVelocity.y, moveInput.y* targetMovingSpeed);
+                rigidbody.linearVelocity = transform.rotation * new Vector3(moveInput.x * targetMovingSpeed, externalVelocity.y, moveInput.y * targetMovingSpeed);
 
             lastYpositionOnGround = transform.position.y;
+            flybyCancelled = false;
+        }
+
+
+        if (!groundCheck.isGrounded && !flybyCancelled)
+        {
+            if (!IsRunning)
+                rigidbody.linearVelocity = new Vector3(rigidbody.linearVelocity.x/2, rigidbody.linearVelocity.y/2, rigidbody.linearVelocity.z/2);
+
+            flybyCancelled = true;
         }
 
         //Debug.Log("Well: "+lastYpositionOnGround+"; dist: "+(transform.position.y-lastYpositionOnGround))
@@ -116,11 +126,11 @@ public class Movement : MonoBehaviour
         /*if(groundCheck.isGrounded)
             lastYpositionOnGround = transform.position.y;*/
 
-        if(transform.position.y<minYHeight && waitToEnd==null)
+        if (transform.position.y < minYHeight && waitToEnd == null)
         {
             levelManager.setStopCounting(true);
 
-            if(waterLevel)
+            if (waterLevel)
             {
                 soundManager.playFallUnderwaterSound();
                 blueScreen.SetActive(true);

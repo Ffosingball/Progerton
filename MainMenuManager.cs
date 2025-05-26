@@ -18,7 +18,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField]
     private GameObject settingsScreen;
     [SerializeField]
-    private GameObject statisticsScreen;
+    private GameObject statisticsScreen, creditsScreen;
     [SerializeField]
     private TMP_Text madeBy;
     [SerializeField]
@@ -86,12 +86,20 @@ public class MainMenuManager : MonoBehaviour
     }
 
 
+    public void OpenCreditsScreen()
+    {
+        mainMenuScreen.SetActive(false);
+        creditsScreen.SetActive(true);
+    }
+
+
     public void OpenMainMenuScreen()
     {
         mainMenuScreen.SetActive(true);
         levelsScreen.SetActive(false);
         settingsScreen.SetActive(false);
         statisticsScreen.SetActive(false);
+        creditsScreen.SetActive(false);
     }
 
     public string getTextForKeyRebinding()
