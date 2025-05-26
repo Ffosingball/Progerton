@@ -31,6 +31,7 @@ public class MainMenuManager : MonoBehaviour
 
     public SettingsManager settingsManager;
     public GameTimeCounter gameTimeCounter;
+    public LoadLevels loadLevels;
 
 
     private void Start()
@@ -38,9 +39,9 @@ public class MainMenuManager : MonoBehaviour
         OpenMainMenuScreen();
         updateText();
         Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.ForceSoftware);
-        if(GameInfo.gameStatistics==null)
+        if (GameInfo.gameStatistics == null)
             GameInfo.getStatistics();
-        
+
         Time.timeScale = 1f;
     }
 
@@ -82,7 +83,7 @@ public class MainMenuManager : MonoBehaviour
     public void OpenLevelsScreen()
     {
         mainMenuScreen.SetActive(false);
-        levelsScreen.SetActive(true);
+        loadLevels.OpenLevelsScreen();
     }
 
 

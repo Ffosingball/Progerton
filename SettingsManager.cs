@@ -14,6 +14,8 @@ public class SettingsManager : MonoBehaviour
     private GameObject keyBindingScreen;
     [SerializeField]
     private GameObject otherSettingsScreen;
+    [SerializeField]
+    private GameObject otherScreen;
     /*[SerializeField]
     private Button otherSettingsBut;
     [SerializeField]
@@ -105,6 +107,9 @@ public class SettingsManager : MonoBehaviour
     {
         keyBindingScreen.SetActive(true);
         otherSettingsScreen.SetActive(false);
+
+        if (otherScreen != null)
+            otherScreen.SetActive(false);
     }
 
 
@@ -112,12 +117,23 @@ public class SettingsManager : MonoBehaviour
     {
         keyBindingScreen.SetActive(false);
         otherSettingsScreen.SetActive(true);
+
+        if (otherScreen != null)
+            otherScreen.SetActive(false);
+    }
+
+
+    public void SwitchToOther()
+    {
+        keyBindingScreen.SetActive(false);
+        otherSettingsScreen.SetActive(false);
+        otherScreen.SetActive(true);
     }
 
 
     public void ChangeLanguage(int languageIndex)
     {
-        if(languageIndex > 4)
+        if (languageIndex > 4)
             languageIndex = 4;
 
         if (!isInitialized)
@@ -131,9 +147,9 @@ public class SettingsManager : MonoBehaviour
         SaveSystem.SaveSettingsPreferences(settingsPreferences);
         UpdateFont();
 
-        languageChanged=true;
+        languageChanged = true;
 
-        if(changeLanguage!=null)
+        if (changeLanguage != null)
         {
             StopCoroutine(changeLanguage);
             changeLanguage = null;

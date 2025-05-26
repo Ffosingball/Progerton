@@ -13,7 +13,7 @@ public class LoadLevels : MonoBehaviour
     [SerializeField]
     private GameObject levelButton;
     [SerializeField]
-    private GameObject levelScreen;
+    private GameObject levelScreen, outerLevelScreen;
     [SerializeField]
     private int tempNumOfLevels = 40, actualNumOfLevels = 4;
     [SerializeField]
@@ -31,6 +31,10 @@ public class LoadLevels : MonoBehaviour
     private GameObject loadingScreen;
     [SerializeField]
     private Image loadingFillBar;
+    [SerializeField]
+    private GameObject thanksScreen, askForTutorialScreen;
+    [SerializeField]
+    private Button tutorialButton, thanksButton;
 
     private LevelData data;
     private GameObject[] levelButtons;
@@ -47,12 +51,12 @@ public class LoadLevels : MonoBehaviour
         // Get the current size
         Vector2 size = panel.sizeDelta;
         // Change the height while keeping the width unchanged
-        size.y = sizeOfOneRow*(float)Math.Ceiling(tempNumOfLevels/4f);
+        size.y = sizeOfOneRow * (float)Math.Ceiling(tempNumOfLevels / 4f);
         // Apply the new size
         panel.sizeDelta = size;
 
         data = SaveSystem.LoadLevelData();
-        if(data==null)
+        if (data == null)
             data = createFile();
 
         // 2. Wait for the table to load asynchronously
@@ -63,9 +67,9 @@ public class LoadLevels : MonoBehaviour
         string levelText = _currentStringTable["level"].LocalizedValue;
         string bestTimeText = _currentStringTable["best_time"].LocalizedValue;
 
-        for(int i=0; i<actualNumOfLevels; i++)
+        for (int i = 0; i < actualNumOfLevels; i++)
         {
-            GameObject newBut = Instantiate(levelButton, new Vector3(0,0,0), Quaternion.Euler(0,0,0));
+            GameObject newBut = Instantiate(levelButton, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
             levelButtons[i] = newBut;
             newBut.transform.SetParent(levelScreen.transform);
 
@@ -75,7 +79,7 @@ public class LoadLevels : MonoBehaviour
 
             button.onClick.AddListener(() => ButtonClicked(sceneIndex));
 
-            if(data.locked[i])
+            if (data.locked[i])
             {
                 button.interactable = false;
                 button.image.sprite = lockedLevelImage;
@@ -88,16 +92,46 @@ public class LoadLevels : MonoBehaviour
             //button.image.sprite = unlockedLevelImage[i];
 
             RectTransform transform = newBut.GetComponent<RectTransform>();
-            transform.localScale = new Vector3(1f,1f,1f);
+            transform.localScale = new Vector3(1f, 1f, 1f);
         }
 
         setButtonText();
+
+        if(GameInfo.otherGameInfo==null)
+            GameInfo.getOtherInfo();
+
+        if (!GameInfo.otherGameInfo.seenThanksScreen && data.bestTime[actualNumOfLevels - 1] != 99999)
+            openThanksScreen();
+
+        if (GameInfo.otherGameInfo.startedTraining)
+            tutorialButton.interactable = true;
+        else
+            tutorialButton.interactable = false;
+
+        if (GameInfo.otherGameInfo.seenThanksScreen)
+            thanksButton.interactable = true;
+        else
+            thanksButton.interactable = false;
+    }
+
+
+    public void openThanksScreen()
+    {
+        thanksScreen.SetActive(true);
+    }
+
+
+    public void closeThanksScreen()
+    {
+        thanksScreen.SetActive(false);
+        GameInfo.otherGameInfo.seenThanksScreen = true;
+        GameInfo.SaveGameInfo();
     }
 
 
     private void Update()
     {
-        if(settingsManager.getLanguageChanged())
+        if (settingsManager.getLanguageChanged())
         {
             setButtonText();
         }
@@ -153,6 +187,36 @@ public class LoadLevels : MonoBehaviour
     }
 
 
+    public void OpenLevelsScreen()
+    {
+        if (!GameInfo.otherGameInfo.startedTraining)
+            askForTutorialScreen.SetActive(true);
+        else
+            outerLevelScreen.SetActive(true);
+    }
+
+
+    public void yesOpenTutorial()
+    {
+        GameInfo.currentLevel = -1;
+        GameInfo.SaveData();
+        StartCoroutine(LoadSceneAsync("levelTemplate"));
+    }
+
+
+    public void noOpenTutorial()
+    {
+        GameInfo.otherGameInfo.startedTraining = true;
+        GameInfo.otherGameInfo.finishedTraining = true;
+        GameInfo.SaveGameInfo();
+
+        tutorialButton.interactable = true;
+
+        askForTutorialScreen.SetActive(false);
+        outerLevelScreen.SetActive(true);
+    }
+
+
     public LevelData createFile()
     {
         data = new LevelData();
@@ -162,10 +226,10 @@ public class LoadLevels : MonoBehaviour
         List<float> bestTime = new List<float>();
         List<int> pictureRef = new List<int>();
 
-        for(int i=0; i<actualNumOfLevels; i++)
+        for (int i = 0; i < actualNumOfLevels; i++)
         {
-            levelNames.Add("Level "+(i+1));
-            sceneName.Add("level"+i);
+            levelNames.Add("Level " + (i + 1));
+            sceneName.Add("level" + i);
             locked.Add(true);
             bestTime.Add(99999);
             pictureRef.Add(i);

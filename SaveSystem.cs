@@ -22,7 +22,7 @@ public static class SaveSystem
     public static LevelData LoadLevelData()
     {
         string path = Application.persistentDataPath + "/listOfLevels2.omg";
-        if(File.Exists(path))
+        if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
@@ -57,7 +57,7 @@ public static class SaveSystem
     public static SettingsPreferences LoadSettingsPreferences()
     {
         string path = Application.persistentDataPath + "/settingsPref4.omg";
-        if(File.Exists(path))
+        if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
@@ -92,7 +92,7 @@ public static class SaveSystem
     public static GameStatistics LoadGameData()
     {
         string path = Application.persistentDataPath + "/gameStats.omg";
-        if(File.Exists(path))
+        if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
@@ -106,5 +106,40 @@ public static class SaveSystem
             //Debug.LogError("File does not exist "+path);
             return null;
         }
+    }
+
+
+    public static OtherGameInfo LoadOtherGameData()
+    {
+        string path = Application.persistentDataPath + "/gameInfo.omg";
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+            //Read data from the file
+            OtherGameInfo data = formatter.Deserialize(stream) as OtherGameInfo;
+            stream.Close();
+            return data;
+        }
+        else
+        {
+            //Debug.LogError("File does not exist "+path);
+            return null;
+        }
+    }
+    
+
+    public static void SaveOtherGameData(OtherGameInfo data)
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+        //Create path to the file
+        //Application.persistentDataPath is useful to create files for crossplatforms games
+        //After add name and extension of the binary file
+        string path = Application.persistentDataPath + "/gameInfo.omg";
+        //Create a file
+        FileStream stream = new FileStream(path, FileMode.Create);
+        //Write data in that file
+        formatter.Serialize(stream, data);
+        stream.Close();
     }
 }

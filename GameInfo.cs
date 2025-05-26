@@ -5,15 +5,26 @@ using UnityEngine;
 
 public static class GameInfo
 {
-    public static int currentLevel=0;
+    public static int currentLevel=-1;
     public static GameStatistics gameStatistics=null;
+    public static OtherGameInfo otherGameInfo=null;
 
 
     public static void getStatistics()
     {
         gameStatistics = SaveSystem.LoadGameData();
-        if(gameStatistics==null)
+
+        if (gameStatistics == null)
             gameStatistics = new GameStatistics();
+    }
+
+
+    public static void getOtherInfo()
+    {
+        otherGameInfo = SaveSystem.LoadOtherGameData();
+
+        if (otherGameInfo == null)
+            otherGameInfo = new OtherGameInfo();
     }
 
 
@@ -23,9 +34,15 @@ public static class GameInfo
     }
 
 
+    public static void SaveGameInfo()
+    {
+        SaveSystem.SaveOtherGameData(otherGameInfo);
+    }
+
+
     public static void setTime(float time)
     {
-        if(time<gameStatistics.shortestTime)
+        if (time < gameStatistics.shortestTime)
         {
             gameStatistics.shortestTime = time;
             gameStatistics.shortestTimeAtLevel = currentLevel;
@@ -35,12 +52,12 @@ public static class GameInfo
         int atLevel = currentLevel;
         //Debug.Log("curTime "+maxTime+"; level "+atLevel);
         LevelData data = SaveSystem.LoadLevelData();
-        for(int i=0; i<data.locked.Count; i++)
+        for (int i = 0; i < data.locked.Count; i++)
         {
-            if(!data.locked[i] && i!=currentLevel)
+            if (!data.locked[i] && i != currentLevel)
             {
                 //Debug.Log("i "+i+"; time "+data.bestTime[i]);
-                if(maxTime<data.bestTime[i] && data.bestTime[i]!=99999)
+                if (maxTime < data.bestTime[i] && data.bestTime[i] != 99999)
                 {
                     maxTime = data.bestTime[i];
                     atLevel = i;

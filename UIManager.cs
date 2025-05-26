@@ -484,13 +484,16 @@ public class UIManager : MonoBehaviour
 
         timeText2.text = _currentStringTable["time"].LocalizedValue+levelManager.getTime();
 
-        if(data.sceneName.Count!=GameInfo.currentLevel-1)
-            data.locked[GameInfo.currentLevel+1] = false;
-        
-        if(data.bestTime[GameInfo.currentLevel]>levelManager.getTime())
+        if (GameInfo.currentLevel != -1)
         {
-            data.bestTime[GameInfo.currentLevel] = levelManager.getTime();
-            GameInfo.setTime(levelManager.getTime());
+            if (data.sceneName.Count != GameInfo.currentLevel - 1)
+                data.locked[GameInfo.currentLevel + 1] = false;
+
+            if (data.bestTime[GameInfo.currentLevel] > levelManager.getTime())
+            {
+                data.bestTime[GameInfo.currentLevel] = levelManager.getTime();
+                GameInfo.setTime(levelManager.getTime());
+            }
         }
 
         GameInfo.SaveData();
