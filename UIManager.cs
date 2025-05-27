@@ -83,7 +83,7 @@ public class UIManager : MonoBehaviour
     public AudioSource countdownAudioSource;
     public Movement playerMovement;
 
-    private bool cursorlocked, musicIsMuffled, otherScreenOpened = false;
+    private bool cursorlocked, otherScreenOpened = false;
     private Coroutine disappearText=null, disappearText2=null;
     private LevelData data;
     private GameObject curScreen;
@@ -105,7 +105,6 @@ public class UIManager : MonoBehaviour
         errorText.text = "";
         Time.timeScale = 1f;
         mixer.SetFloat("muffleFrequency", 22000f);
-        musicIsMuffled = false;
         
 
         data = SaveSystem.LoadLevelData();
@@ -641,11 +640,11 @@ public class UIManager : MonoBehaviour
     {
         mixer.SetFloat("muffleFrequency", 320f);
         float currentVolume;
-        if(!musicIsMuffled)
+        if(!GameInfo.musicIsMuffled)
         {
             mixer.GetFloat("MusicVolume", out currentVolume);
             mixer.SetFloat("MusicVolume", currentVolume-5);
-            musicIsMuffled = true;
+            GameInfo.musicIsMuffled = true;
         }
     }
 
@@ -653,12 +652,12 @@ public class UIManager : MonoBehaviour
     public void MakeMusicClear()
     {
         mixer.SetFloat("muffleFrequency", 22000f);
-        if(musicIsMuffled)
+        if(GameInfo.musicIsMuffled)
         {
             float currentVolume;
             mixer.GetFloat("MusicVolume", out currentVolume);
             mixer.SetFloat("MusicVolume", currentVolume+5);
-            musicIsMuffled = false;
+            GameInfo.musicIsMuffled = false;
         }
     }
 

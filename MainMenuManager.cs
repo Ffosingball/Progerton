@@ -4,6 +4,7 @@ using TMPro;
 using System.Collections;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Tables;
+using UnityEngine.Audio;
 
 /*This class manages all ui changes in main menu*/
 
@@ -32,6 +33,7 @@ public class MainMenuManager : MonoBehaviour
     public SettingsManager settingsManager;
     public GameTimeCounter gameTimeCounter;
     public LoadLevels loadLevels;
+    public AudioMixer mixer;
 
 
     private void Start()
@@ -43,12 +45,13 @@ public class MainMenuManager : MonoBehaviour
             GameInfo.getStatistics();
 
         Time.timeScale = 1f;
+        MakeMusicClear();
     }
 
 
     private void Update()
     {
-        if(settingsManager.getLanguageChanged())
+        if (settingsManager.getLanguageChanged())
         {
             updateText();
         }
@@ -61,7 +64,7 @@ public class MainMenuManager : MonoBehaviour
     {
         _currentStringTable = _localizedStringTable.GetTable();
 
-        madeBy.text = _currentStringTable["madeBy"].LocalizedValue+" "+username;
+        madeBy.text = _currentStringTable["madeBy"].LocalizedValue + " " + username;
     }
 
 
@@ -118,7 +121,7 @@ public class MainMenuManager : MonoBehaviour
         platformsValue.text = GameInfo.gameStatistics.platformsActivated.ToString();
         replaysValue.text = GameInfo.gameStatistics.numOfReplaysMade.ToString();
 
-        if(GameInfo.gameStatistics.shortestTime==99999)
+        if (GameInfo.gameStatistics.shortestTime == 99999)
         {
             shortestValue.text = _currentStringTable["none"].LocalizedValue;
             shortestLevel.text = _currentStringTable["none"].LocalizedValue;
@@ -126,10 +129,10 @@ public class MainMenuManager : MonoBehaviour
         else
         {
             shortestValue.text = GameInfo.gameStatistics.shortestTime.ToString();
-            shortestLevel.text = (GameInfo.gameStatistics.shortestTimeAtLevel+1).ToString();
+            shortestLevel.text = (GameInfo.gameStatistics.shortestTimeAtLevel + 1).ToString();
         }
 
-        if(GameInfo.gameStatistics.longestTime==0)
+        if (GameInfo.gameStatistics.longestTime == 0)
         {
             longestValue.text = _currentStringTable["none"].LocalizedValue;
             longestLevel.text = _currentStringTable["none"].LocalizedValue;
@@ -137,12 +140,25 @@ public class MainMenuManager : MonoBehaviour
         else
         {
             longestValue.text = GameInfo.gameStatistics.longestTime.ToString();
-            longestLevel.text = (GameInfo.gameStatistics.longestTimeAtLevel+1).ToString();
+            longestLevel.text = (GameInfo.gameStatistics.longestTimeAtLevel + 1).ToString();
         }
 
         walkedValue.text = GameInfo.convertDistance(GameInfo.gameStatistics.distanceWalked);
         flewValue.text = GameInfo.convertDistance(GameInfo.gameStatistics.distanceFlew);
 
         statisticsScreen.SetActive(true);
+    }
+    
+
+    public void MakeMusicClear()
+    {
+        mixer.SetFloat("muffleFrequency", 22000f);
+        if(GameInfo.musicIsMuffled)
+        {
+            float currentVolume;
+            mixer.GetFloat("MusicVolume", out currentVolume);
+            mixer.SetFloat("MusicVolume", currentVolume+5);
+            GameInfo.musicIsMuffled = false;
+        }
     }
 }

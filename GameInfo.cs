@@ -6,7 +6,8 @@ using UnityEngine;
 public static class GameInfo
 {
     public static int currentLevel=-1;
-    public static GameStatistics gameStatistics=null;
+    public static bool musicIsMuffled = false;
+    public static GameStatistics gameStatistics = null;
     public static OtherGameInfo otherGameInfo=null;
 
 
