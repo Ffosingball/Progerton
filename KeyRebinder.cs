@@ -31,16 +31,24 @@ public class KeyRebinder : MonoBehaviour
 
     public void updateText()
     {
-        for (int i=0; i<4; i++)
+        for (int i = 0; i < 4; i++)
         {
-            actionReferences[i].action.ApplyBindingOverride(1+i,settingsManager.getSettingsPreferences().keyBindings[i]);
+            actionReferences[i].action.ApplyBindingOverride(1 + i, settingsManager.getSettingsPreferences().keyBindings[i]);
             buttonTexts[i].text = GetButtonTextMove(i);
         }
 
-        for (int i=4; i<numOfActions; i++)
+        for (int i = 4; i < numOfActions; i++)
         {
-            actionReferences[i].action.ApplyBindingOverride(0,settingsManager.getSettingsPreferences().keyBindings[i]);
+            actionReferences[i].action.ApplyBindingOverride(0, settingsManager.getSettingsPreferences().keyBindings[i]);
             buttonTexts[i].text = GetButtonText(i);
+        }
+
+        if (uIManager != null)
+        {
+            errorText.SetActive(true);
+            errorText.GetComponent<TMP_Text>().color = new Color(1f, 1f, 1f);
+            //Debug.Log("here");
+            errorText.GetComponent<TMP_Text>().text = uIManager.getReloadLevelText();
         }
     }
 
@@ -53,7 +61,7 @@ public class KeyRebinder : MonoBehaviour
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(0,0))
+            .OnComplete(operation => RebindComplete(0, 0))
             .Start();
     }
 
@@ -65,7 +73,7 @@ public class KeyRebinder : MonoBehaviour
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(1,0))
+            .OnComplete(operation => RebindComplete(1, 0))
             .Start();
     }
 
@@ -77,7 +85,7 @@ public class KeyRebinder : MonoBehaviour
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(2,0))
+            .OnComplete(operation => RebindComplete(2, 0))
             .Start();
     }
 
@@ -89,7 +97,7 @@ public class KeyRebinder : MonoBehaviour
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(3,0))
+            .OnComplete(operation => RebindComplete(3, 0))
             .Start();
     }
 
@@ -101,7 +109,7 @@ public class KeyRebinder : MonoBehaviour
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(4,1))
+            .OnComplete(operation => RebindComplete(4, 1))
             .Start();
     }
 
@@ -113,7 +121,7 @@ public class KeyRebinder : MonoBehaviour
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(5,1))
+            .OnComplete(operation => RebindComplete(5, 1))
             .Start();
     }
 
@@ -125,7 +133,7 @@ public class KeyRebinder : MonoBehaviour
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(6,1))
+            .OnComplete(operation => RebindComplete(6, 1))
             .Start();
     }
 
@@ -137,7 +145,7 @@ public class KeyRebinder : MonoBehaviour
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(7,1))
+            .OnComplete(operation => RebindComplete(7, 1))
             .Start();
     }
 
@@ -149,7 +157,7 @@ public class KeyRebinder : MonoBehaviour
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(8,1))
+            .OnComplete(operation => RebindComplete(8, 1))
             .Start();
     }
 
@@ -161,7 +169,7 @@ public class KeyRebinder : MonoBehaviour
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(9,1))
+            .OnComplete(operation => RebindComplete(9, 1))
             .Start();
     }
 
@@ -173,7 +181,7 @@ public class KeyRebinder : MonoBehaviour
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(10,1))
+            .OnComplete(operation => RebindComplete(10, 1))
             .Start();
     }
 
@@ -185,7 +193,7 @@ public class KeyRebinder : MonoBehaviour
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(11,1))
+            .OnComplete(operation => RebindComplete(11, 1))
             .Start();
     }
 
@@ -197,16 +205,22 @@ public class KeyRebinder : MonoBehaviour
         rebindingOperation = actionReferences[numOfActions].action.PerformInteractiveRebinding(0)
             .WithControlsExcluding("Mouse")
             .OnMatchWaitForAnother(0.1f)
-            .OnComplete(operation => RebindComplete(12,1))
+            .OnComplete(operation => RebindComplete(12, 1))
             .Start();
     }
 
     private void RebindComplete(int i, int type)
     {
         actionReferences[numOfActions].action.Enable();
-        if(settingsManager.getSettingsPreferences().isBindingExist(actionReferences[numOfActions].action.bindings[0].effectivePath))
+        if (settingsManager.getSettingsPreferences().isBindingExist(actionReferences[numOfActions].action.bindings[0].effectivePath))
         {
             errorText.SetActive(true);
+            if (uIManager != null)
+            {
+                errorText.GetComponent<TMP_Text>().color = new Color(0.7f, 0f, 0f);
+                errorText.GetComponent<TMP_Text>().text = uIManager.getBindingErrorText();
+            }
+            
             switch (type)
             {
                 case 0:
@@ -219,32 +233,40 @@ public class KeyRebinder : MonoBehaviour
         }
         else
         {
-            errorText.SetActive(false);
-            switch (type)
+            if (uIManager != null)
             {
-                case 0:
-                    actionReferences[i].action.ApplyBindingOverride(1+i, actionReferences[numOfActions].action.bindings[0].effectivePath);
-                    buttonTexts[i].text = GetButtonTextMove(i);
-                    break;
-                case 1:
-                    actionReferences[i].action.ApplyBindingOverride(0, actionReferences[numOfActions].action.bindings[0].effectivePath);
-                    buttonTexts[i].text = GetButtonText(i);
-                    break;
+                errorText.SetActive(true);
+                errorText.GetComponent<TMP_Text>().color = new Color(1f, 1f, 1f);
+                errorText.GetComponent<TMP_Text>().text = uIManager.getReloadLevelText();
             }
+            else
+                errorText.SetActive(false);
+
+            switch (type)
+                {
+                    case 0:
+                        actionReferences[i].action.ApplyBindingOverride(1 + i, actionReferences[numOfActions].action.bindings[0].effectivePath);
+                        buttonTexts[i].text = GetButtonTextMove(i);
+                        break;
+                    case 1:
+                        actionReferences[i].action.ApplyBindingOverride(0, actionReferences[numOfActions].action.bindings[0].effectivePath);
+                        buttonTexts[i].text = GetButtonText(i);
+                        break;
+                }
             settingsManager.getSettingsPreferences().keyBindings[i] = actionReferences[numOfActions].action.bindings[0].effectivePath;
         }
-        
+
         SaveSystem.SaveSettingsPreferences(settingsManager.getSettingsPreferences());
         rebindingOperation.Dispose();
 
-        if(uIManager!=null)
+        if (uIManager != null)
             uIManager.updateText();
     }
 
     public string GetButtonTextMove(int i)
     {
         return InputControlPath.ToHumanReadableString(
-            actionReferences[i].action.bindings[1+i].effectivePath,
+            actionReferences[i].action.bindings[1 + i].effectivePath,
             InputControlPath.HumanReadableStringOptions.OmitDevice);
     }
 
@@ -258,9 +280,15 @@ public class KeyRebinder : MonoBehaviour
 
     private void setTextForButton(int index)
     {
-        if(uIManager!=null)
+        if (uIManager != null)
             buttonTexts[index].text = uIManager.getTextForKeyRebinding();
         else
             buttonTexts[index].text = mainMenuManager.getTextForKeyRebinding();
+    }
+
+
+    public void turnOffErrorText()
+    {
+        errorText.SetActive(false);
     }
 }

@@ -93,26 +93,31 @@ public class UIManager : MonoBehaviour
     //Getter for cursorLocked
     public bool getCursorlocked(){return cursorlocked;}
 
-    
+
     void Start()
     {
         Cursor.SetCursor(null, Vector2.zero, CursorMode.ForceSoftware);
 
         // Lock the mouse cursor to the game screen.
         Cursor.lockState = CursorLockMode.Locked;
-        cursorlocked=true;
+        cursorlocked = true;
         lastFirstRoundText.text = "";
         errorText.text = "";
         Time.timeScale = 1f;
         mixer.SetFloat("muffleFrequency", 22000f);
-        
+
 
         data = SaveSystem.LoadLevelData();
 
-        if(data.sceneName.Count==GameInfo.currentLevel-1)
+        if (data.sceneName.Count == GameInfo.currentLevel - 1)
             nextLevelBut.interactable = false;
         else
             nextLevelBut.interactable = true;
+
+        updateText();
+
+        /*Debug.Log("Num: "+GameInfo.currentLevel);
+        Debug.Log("Time: "+data.bestTime[GameInfo.currentLevel]);*/
     }
 
 
@@ -270,11 +275,23 @@ public class UIManager : MonoBehaviour
     {
         return _currentStringTable["press_key"].LocalizedValue;
     }
+    
+
+    public string getBindingErrorText()
+    {
+        return _currentStringTable["errorBinding"].LocalizedValue;
+    }
+
+
+    public string getReloadLevelText()
+    {
+        return _currentStringTable["reloadLevel"].LocalizedValue;
+    }
 
 
     public void OutputRoundNumber(int num)
     {
-        roundNum=num;
+        roundNum = num;
     }
 
 
@@ -485,14 +502,17 @@ public class UIManager : MonoBehaviour
 
         if (GameInfo.currentLevel != -1)
         {
-            if (data.sceneName.Count != GameInfo.currentLevel - 1)
+            if (data.sceneName.Count - 1 != GameInfo.currentLevel)
                 data.locked[GameInfo.currentLevel + 1] = false;
 
             if (data.bestTime[GameInfo.currentLevel] > levelManager.getTime())
             {
                 data.bestTime[GameInfo.currentLevel] = levelManager.getTime();
                 GameInfo.setTime(levelManager.getTime());
+                //Debug.Log("New time set!");
             }
+
+            //Debug.Log("Checked time!");
         }
 
         GameInfo.SaveData();

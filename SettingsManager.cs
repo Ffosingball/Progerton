@@ -107,6 +107,7 @@ public class SettingsManager : MonoBehaviour
     {
         keyBindingScreen.SetActive(true);
         otherSettingsScreen.SetActive(false);
+        keyRebinder.turnOffErrorText();
 
         if (otherScreen != null)
             otherScreen.SetActive(false);
